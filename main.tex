@@ -1,0 +1,999 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{siunitx}
+\usepackage[ngerman]{babel}
+\usepackage{csquotes}
+\usepackage[
+    backend=biber,
+    style=ieee,
+    sorting=none
+]{biblatex}
+\addbibresource{literatur.bib}
+\usepackage{amsmath}
+\usepackage[
+    top=2.5cm,
+    bottom=2.5cm,
+    left=3cm,
+    right=3cm,
+    headheight=14pt 
+]{geometry}
+\usepackage{setspace}
+\usepackage{fancyhdr}
+% \usepackage{minted} for code
+
+%  Logo in der Ecke 
+%\pagestyle{fancy}
+%\fancyhf{} 
+%\fancyhead[R]{\includegraphics[width=3cm]{Image.jpg}} 
+%\fancyfoot[C]{\thepage} 
+%\renewcommand{\headrulewidth}{0pt}
+%\renewcommand{\footrulewidth}{0pt} 
+%\geometry{
+%  top=2cm,
+%  %left=2.5cm,
+%  %right=2.5cm,
+%  bottom=2cm,
+%  %headheight=1.5cm % Passt die Höhe der Kopfzeile an, damit das Logo Platz hat
+%}
+
+
+\pagenumbering{gobble}
+\begin{document}
+\begin{titlepage}
+
+	% Fehler "destination with the same identifier" unterdrücken...
+  \setcounter{page}{-1}
+
+	% Titelseite
+	\begin{figure}[h]
+		\begin{minipage}[b]{12 cm}
+			{\sffamily
+				{\Large HfT Stuttgart } \\
+				Fakultät  C
+			}
+		\end{minipage}
+	\end{figure}
+
+	\vfill
+	
+	\begin{center}
+		% Seminararbeit 
+		\noindent { \huge
+			Interdisziplinäres Projekt \\
+			{Flexible Roboterprogrammierung für Montage und Demontage}\\
+		}
+		\vspace{14mm}
+		% Titel
+		\noindent \textbf{\huge
+		  Abschlussbericht\\
+		}
+		\vspace{20mm}	
+  \noindent { 
+			Prof. Dr.-Ing. Darko Katic\\
+		}
+	\end{center}
+	
+	\vfill
+	
+\noindent\textbf{Valentin Bäuerle}
+
+\noindent\rule{\textwidth}{0.4mm}
+
+\noindent\href{mailto:21bava1bif@hft-stuttgart.de}{21bava1bif@hft-stuttgart.de}
+
+\noindent Informatik
+
+\noindent Matr.-Nr. 1004286
+
+\end{titlepage}
+
+\newpage
+\section*{Eidesstattliche Erklärung}
+Hiermit erkläre ich Valentin Bäuerle (1004286), dass ich den vorliegenden Abschlussbericht selbstständig und ohne fremde Hilfe bzw. unerlaubte Hilfsmittel angefertigt, andere als die angegebenen Quellen und Hilfsmittel nicht benutzt und die den benutzten Quellen wörtlich oder inhaltlich entnommenen Stellen als solche kenntlich gemacht habe.
+
+\section*{Sperrvermerk}
+Die vorliegende Arbeit beinhaltet interne und vertrauliche Informationen der HFT Stuttgart.
+Valentin Bäuerle verpflichtet sich, alle im Rahmen der Arbeit gewonnenen Informationen und Erkenntnisse für einen Zeitraum von 5 Jahren vertraulich zu behandeln, d.h. sie nicht Dritten zugänglich zu machen oder anderweitig zu verwerten. 
+Dies gilt auch für Familienangehörige oder Personen, die bei der Erstellung der Arbeit – sei es durch Korrekturlesen oder ähnliches - behilflich sind. Die Arbeit darf den betreuenden Professoren ausschließlich zur fachlichen Bewertung vorgelegt werden.
+Die Weitergabe des Inhalts der Arbeit im Gesamten oder in Teilen sowie das Anfertigen von Kopien oder Abschriften – auch in digitaler Form – sind grundsätzlich untersagt. Publikationen jeglicher Art (gilt auch für die Aufnahme im hochschuleigenen Bibliotheksbestand) bedürfen der schriftlichen Genehmigung der HFT Stuttgart.\\ \\
+
+
+\noindent Waiblingen, den 15.05.2026
+
+\begin{figure}[h!] % Optionale Positionierungsparameter
+    \includegraphics[width=0.5\textwidth]{Unterschrift.png} % Pfad und Dateiname deines Bildes
+    \label{fig:meinbild} % Ein eindeutiges Label, um auf das Bild zu verweisen
+\end{figure}
+
+\noindent ……………………………………
+
+\noindent Unterschrift (Valentin Bäuerle)
+
+
+\newpage
+
+\vspace*{-2cm}  % Wert anpassen bis es passt
+\tableofcontents
+
+\newpage
+
+\pagenumbering{arabic}
+
+\section{Einleitung}
+
+\subsection{Einstieg}
+Das manuelle Montieren und Demontieren von Bauteilen ist ein zentrales Element moderner Fertigungsprozesse, insbesondere bei der Montage von Elektronikkomponenten, der Automobilproduktion und der Luft- und Raumfahrt \cite{manuelle_montage}. Da manuelle Montageprozesse zeit- und kostenintensiv sind, ist deren Automatisierung ein zentrales Ziel in der Robotik \cite{automation_aufwand}, um Effizienz, Präzision und Sicherheit zu erhöhen. Roboterarme werden zunehmend eingesetzt, um diese Aufgaben zu übernehmen\cite{robotics_manufacturing_replacement}.
+
+Hierbei besteht die Herausforderung darin, dass Bauteile fertigungsbedingt stets Lage- und Orientierungstoleranzen aufweisen \cite{orientation_tolerances}. Selbst geringe Lageabweichungen können dazu führen, dass klassische, deterministische Programme versagen, da sie keine Mechanismen zur Lagekorrektur oder Fehlertoleranz besitzen \cite{orientation_tolerances}.
+
+Diese Einschränkungen motivieren den Einsatz lernbasierter Verfahren wie Reinforcement Learning oder Imitation Learning, die sich an variierende Umgebungsbedingungen anpassen und vorgegebene Aufgaben dennoch zuverlässig ausführen können \cite{RL_continuous_control}.
+Da reale Experimente aufwendig und fehleranfällig sind, werden solche Verfahren häufig zunächst in physikbasierten Simulationsumgebungen entwickelt und evaluiert.
+Im Folgenden wird die daraus resultierende Problemstellung dieser Arbeit näher erläutert.
+	
+\subsection{Motivation und Problemstellung}
+Diese Vorarbeit verfolgt einen explorativen Ansatz: Anstatt einen einzelnen Algorithmus zu implementieren und zu evaluieren, werden bestehende Verfahren zur roboterbasierten Montage und Demontage systematisch untersucht und verglichen.
+
+Die zentrale technische Herausforderung liegt darin, dass klassische Steuerungsansätze an den unvermeidlichen Lage- und Orientierungstoleranzen realer Bauteile scheitern \cite{orientation_tolerances}, was den Einsatz adaptiverer Verfahren motiviert.
+
+Eine zusätzliche, strukturell eigenständige Herausforderung ergibt sich aus dem sogenannten Sim-to-Real-Gap: Verfahren, die in der Simulation erfolgreich trainiert oder erprobt werden, lassen sich häufig nicht direkt auf reale Systeme übertragen \cite{sim_to_real_gap}. Reibung, Sensorungenauigkeiten und mechanische Toleranzen erzeugen eine Diskrepanz zwischen Simulations- und Realverhalten \cite{sim_to_real_gap}, die eine gesonderte Behandlung erfordert. Lernbasierte Verfahren, insbesondere Reinforcement Learning und Imitation Learning, versprechen, beide Herausforderungen zu adressieren: Sie können sich an variierende Umgebungsbedingungen anpassen und prinzipiell in der Simulation trainiertes Verhalten auf reale Systeme übertragen \cite{RL_continuous_control}. Allerdings gehen sie mit erheblichem Implementierungsaufwand und hohem Datenbedarf einher \cite{RL_continuous_control}. 
+
+Um eine fundierte Entscheidung für die anschließende Bachelorarbeit treffen zu können, ist ein systematischer Vergleich der verfügbaren Ansätze anhand klar definierter Kriterien notwendig, darunter Adaptivität gegenüber Lageabweichungen, Implementierungsaufwand sowie Sim-to-Real-Fähigkeit.
+Ziel dieser Vorarbeit ist es, bestehende Ansätze systematisch zu vergleichen und denjenigen zu identifizieren, der sich am besten für den Einsatz an einem realen Roboterarm und eine vertiefte Untersuchung im Rahmen der Bachelorarbeit eignet.
+
+\subsection{Stand der Technik}
+Es existiert ein breites Spektrum an Verfahren zur roboterbasierten Montage und Demontage. Diese reichen von klassischen, planungsbasierten Ansätzen über lernbasierte Methoden bis hin zu neueren, modellbasierten Großarchitekturen. Alle Ansätze sind aktiver Forschungsgegenstand und werden kontinuierlich weiterentwickelt \cite[vgl. Kap.~2]{ecker2023interaktionsbasierte_verfahren}.
+
+Klassische Bewegungsplanungsverfahren, etwa auf Basis von RRT oder PRM, erzeugen kollisionsfreie Trajektorien in bekannten Umgebungen zuverlässig und nachvollziehbar \cite{Sampling-based}. 
+Ihre grundlegende Einschränkung besteht jedoch darin, dass sie eine vollständige und genaue Umgebungsrepräsentation voraussetzen. Das bedeutet sobald Bauteile von ihrer erwarteten Lage abweichen, liefern sie keine Korrekturmechanismen und scheitern \cite{orientation_tolerances}.
+
+Ein praxisnäherer Ansatz stellt das sogenannte Drag-to-Teach dar: Eine menschliche Fachkraft führt den Roboterarm manuell durch eine Aufgabe und die aufgezeichnete Trajektorie wird anschließend wiederholt \cite{drag_to_teach}.
+Dieses Verfahren erfordert keinerlei Programmierkenntnisse, ist jedoch grundsätzlich auf exakt reproduzierbare Umgebungsbedingungen angewiesen, sodass Lageabweichungen unmittelbar zum Versagen der aufgezeichneten Bewegung führen \cite{drag_to_teach_survey}.
+
+Lernbasierte Verfahren setzen an dieser Grenze an. Reinforcement Learning (RL) ermöglicht es einem Agenten, durch wiederholte Interaktion mit einer Umgebung eine Strategie zu erlernen, die eine vorgegebene Belohnungsfunktion maximiert \cite{RL_continuous_control}. 
+Herausforderungen bleiben jedoch der hohe Stichprobenbedarf, die aufwendige Gestaltung geeigneter Belohnungsfunktionen sowie der Transfer von der Simulation auf reale Systeme \cite{RL_continuous_control}. 
+
+Imitation Learning (IL), auch Learning from Demonstration genannt, umgeht den Bedarf an expliziter Belohnungsdefinition, indem aus menschlichen Demonstrationen direkt eine Strategie abgeleitet wird \cite{IL}.
+Erreichte Ergebnisse zeigen, dass IL als Alternative mit geringerem Datenbedarf an expliziter Belohnung untersucht wurde. IL umgeht die Belohnungsdefinition, verlagert den Datenbedarf jedoch auf die Demonstrationen selbst \cite{IL}. 
+
+Beiden Ansätzen gemeinsam ist das Problem des Sim-to-Real-Gaps: In der Simulation erlernte Strategien lassen sich aufgrund von Diskrepanzen in Dynamik, Reibung und Sensorverhalten häufig nicht direkt übertragen \cite{sim_to_real_gap}.
+
+Die jüngste Entwicklung in der robotischen Manipulation sind sogenannte Foundation Models und Vision-Language Models (VLMs): große, auf umfangreichen Datensätzen vortrainierte Modelle, die Wahrnehmung und Sprachverständnis kombinieren und Aufgaben auf Basis natürlichsprachlicher Anweisungen ausführen können \cite{openvlaopensourcevisionlanguageactionmodel}. 
+Ihr Potenzial liegt in der Generalisierung über Aufgaben und Objekte hinweg, ohne aufgabenspezifisches Neutraining \cite{openvlaopensourcevisionlanguageactionmodel}.
+Zum aktuellen Zeitpunkt befinden sich diese Ansätze noch im experimentellen Stadium: Latenz, Rechenanforderungen und Inferenzgeschwindigkeit schließen einen produktiven Einsatz unter realen Montagebedingungen derzeit aus; hinzu kommt die fehlende Integration in die Embedded-Controller kompakter, ressourcenbeschränkter Roboterarme \cite{openvlaopensourcevisionlanguageactionmodel}.
+
+Ein systematischer Vergleich dieser Ansätze (klassisch, lernbasiert und modellbasiert) speziell für kompakte Roboterarme mit Hardware-Einschränkungen unter realen Montagebedingungen ist nach aktuellem Kenntnisstand nicht umfassend dokumentiert. Bestehende Arbeiten evaluieren einzelne Verfahren überwiegend isoliert oder unter idealisierten Laborbedingungen; eine kriteriengeleitete Gegenüberstellung, die Adaptivität, Implementierungsaufwand und Sim-to-Real-Fähigkeit gleichzeitig berücksichtigt, liegt nach Kenntnis des Autors nicht vor. Diese Lücke motiviert den in Abschnitt 1.2 beschriebenen Ansatz dieser Vorarbeit.
+
+\subsection{Aufbau des Berichts}
+Der vorliegende Bericht gliedert sich in vier Kapitel. Kapitel 2 legt die theoretischen Grundlagen dar: Es führt den Dobot Magician als Hardwareplattform ein, beschreibt die verwendete Simulationsumgebung und definiert zentrale Begriffe wie Flexibilität im Kontext roboterbasierter Montage. Kapitel 3 stellt die betrachteten Verfahren – klassische Planungsansätze, lernbasierte Methoden sowie Foundation Models – systematisch vor und bewertet sie anhand definierter Kriterien in einer Bewertungsmatrix. Kapitel 4 fasst die Ergebnisse des Vergleichs zusammen und leitet daraus eine begründete Empfehlung für die vertiefte Untersuchung im Rahmen der Bachelorarbeit ab.
+
+\newpage
+
+\section{Grundlagen und theoretischer Rahmen}
+Dieses Kapitel beschreibt die technischen und theoretischen Grundlagen der vorliegenden Arbeit. Zunächst wird der verwendete Roboterarm Dobot Magician als experimentelle Plattform vorgestellt. Anschließend werden die eingesetzte Simulationsumgebung sowie die Definition von Flexibilität im Kontext der Arbeit erläutert. Abschließend erfolgt eine Einordnung von Montage- und Demontageaufgaben als Robotikproblem. Die dargestellten Grundlagen bilden die Basis für die Entwicklung und Bewertung der eingesetzten Lernverfahren.
+
+\subsection{Der Dobot Magician als Plattform}
+\label{sec:dobot_magician-chapter2}
+Im folgenden Abschnitt werden die technischen Spezifikationen des Roboterarms vorgestellt und beschrieben. Diese Informationen sind entscheidend, um die Anforderungen an die im folgenden Kapiteln behandelten Lernansätze zu verstehen und bewerten. Die Spezifikationen wurden aus dem offiziellen Datenblatt des Dobot Magician entnommen und in Bezug auf die Anforderungen der Montage- und Demontageaufgaben analysiert.
+
+\subsubsection{Grundaufbau}
+Der Dobot Magician ist ein kompakter, vierachsiger Roboterarm, der häufig für Bildungszwecke und Forschungsaufgaben eingesetzt wird.
+
+Er verfügt über eine Tischmontage sowie eine integrierte Steuerung in der Basis. Der Arm besteht aus Aluminium und ABS-Kunststoff und besitzt ein Eigengewicht von 3,4\,kg (ohne Werkzeug beziehungsweise Endeffektor) \cite{dobot_datasheet}.
+
+Die vier Achsen des Roboterarms sind wie folgt konfiguriert: J1 (Basisrotation), J2 (Schultergelenk), J3 (Ellenbogengelenk) sowie J4 (Handgelenk beziehungsweise Greiferrotation). Diese Konfiguration ermöglicht ein breites Bewegungspektrum, das für Montage- und Demontageaufgaben relevant sind\cite{dobot_datasheet}. 
+
+\subsubsection{Bewegung \& Präzision}
+Die maximale Reichweite des Dobot Magician beträgt 320\,mm \cite{dobot_datasheet} und definiert damit den Arbeitsraum des Benchmark-Tasks.
+
+Die Lernansätze müssen in der Lage sein, innerhalb dieses Bereichs präzise zu agieren. 
+Die Wiederholgenauigkeit liegt bei ±0,2\,mm \cite{dobot_datasheet} und stellt damit die physikalische Obergrenze der erreichbaren sowie die untere Grenze der reproduzierbaren Positionsgenauigkeit des Systems dar.
+
+Daraus ergibt sich die Anforderung, dass alle Ansätze diese Toleranz einhalten oder übertreffen müssen, um sicherzustellen, dass die Hardware nicht zum limitierenden Faktor wird.
+Die maximale Gelenkgeschwindigkeit beträgt 320°/s bei einer Nutzlast von 250\,g, während das Rotationsservo bis zu 480°/s erreicht \cite{dobot_datasheet}. Diese dynamischen Grenzen bestimmen die Anforderungen an Stabilität und Reaktionsfähigkeit der eingesetzten Lernverfahren. 
+
+\subsubsection{Nutzlast \& Dynamik}
+\label{sec:dobot-nutzlast-dynamik}
+Die maximale Traglast des Dobot Magician beträgt 500\,g \cite{dobot_datasheet}. Bei einer Nutzlast von 250\,g wird die Höchstgeschwindigkeit erreicht, während  höhere Lasten die Dynamik des Systems reduzieren.
+
+Diese Einschränkung begrenzt die Auswahl geeigneter Benchmark-Objekte. Montage- und Demontageobjekte müssen innerhalb der spezifizierten Traglast liegen, um einen stabilen und reproduzierbaren Betrieb des Systems sicherzustellen. Objekte mit einer Masse oberhalb von 500\,g werden daher ausgeschlossen.
+
+\subsubsection{Schnittstellen \& Kommunikation}
+Angesteuert wird der Dobot Magician standardmäßig über USB. Kabellose Kommunikation via WLAN oder Bluetooth ist ausschließlich bei Modellen mit \enquote{Advanced Communication}-Erweiterung verfügbar \cite{dobot_datasheet}.
+
+Die I/O-Schnittstelle an der Basis stellt zwei schaltbare 12-V- und zwei 5-V-Ausgänge sowie vier 3,
+3-V-Ein-/Ausgänge bereit, von denen zwei als PWM-Ausgänge (Pulsweitenmodulation) und zwei als ADC-Eingänge (Analog-Digital-Converter) konfiguriert sind, zusätzlich sind drei RS232-Schnittstellen verfügbar \cite{dobot_datasheet}. Am Arm selbst stehen zwei schaltbare 12-V-Ausgänge sowie sieben 3,3-V-Ein-/Ausgänge zur Verfügung, davon drei PWM- und vier ADC-Kanäle \cite{dobot_datasheet}.
+
+Zur Steuerung wird standardmäßig die Software DOBOTStudio eingesetzt, die für Windows und macOS verfügbar ist \cite{dobot_datasheet}. Sie unterstützt grundlegende Programmierung und Bewegungssteuerung, bietet jedoch keine native Integration in Simulationsumgebungen oder Middleware-Frameworks wie ROS.
+
+\subsubsection{Betrieb \& Umgebung}
+Der Dobot Magician ist für den Laborbetrieb konzipiert und entspricht der Schutzklasse IP20. Daher ist er ist ausschließlich in trockenen Innenräumen zu betreiben \cite{dobot_datasheet}. Die zulässige Umgebungstemperatur liegt zwischen \SI{-10}{\degreeCelsius} bis \SI{60}{\degreeCelsius} \cite{dobot_datasheet}.
+
+Die Stromversorgung erfolgt über 100–240 V AC, der intern auf 12 V DC bei maximal 7 A gewandelt wird. Die maximale Leistungsaufnahme beträgt 60 W \cite{dobot_datasheet}.
+
+\subsubsection{Zubehör (Vision-Kit)}
+Das Vision-Kit stellt die primäre Schnittstelle zwischen dem Roboterarm und der visuellen Wahrnehmung dar. Es umfasst eine 3-Megapixel-HD-Farbkamera mit einem 1/2 Zoll -CMOS-Sensor, die über USB 2.0 angebunden ist und einen manuellen Fokus ab 0,3 m ermöglicht \cite{dobot_datasheet}. Die integrierte Beleuchtungseinheit mit 48 LEDs erreicht eine Lichtstärke von 40.000 Lux \cite{dobot_datasheet} und gewährleistet damit eine gleichmäßige und intensive Ausleuchtung des Arbeitsbereichs, was insbesondere für eine zuverlässige Objekterkennung unter wechselnden Umgebungsbedingungen von Bedeutung ist.
+Der nutzbare Arbeitsabstand des Vision-Kits liegt zwischen 35 und 110 mm \cite{dobot_datasheet}. Dieser Bereich definiert den räumlichen Korridor, innerhalb dessen eine visuelle Lagekorrektur direkt am Roboterarm möglich ist, und stellt damit eine wesentliche geometrische Randbedingung für den Einsatz bildbasierter Regelungsverfahren dar.
+Im Kontext von Vision-Language-Model-Ansätzen (VLM) spielt das Vision-Kit eine zentrale Rolle, da es die Bilddaten bereitstellt, auf die Modelle wie OpenVLA als Eingangsgröße angewiesen sind. Gleichzeitig sind die technischen Grenzen des Systems zu berücksichtigen: Die vergleichsweise geringe Auflösung von 3 Megapixeln sowie der eng begrenzte Arbeitsabstand können die Leistungsfähigkeit VLM-basierter Ansätze einschränken, etwa hinsichtlich der Erkennungsgenauigkeit bei kleinen oder filigranen Objekten sowie der räumlichen Flexibilität bei der Positionierung.
+
+\subsection{Entwicklungs- und Simulationsumgebung}
+
+\subsubsection{Virtuelle Maschine \& Betriebssystem}
+Als Betriebssystem wird Ubuntu Server 22.04 LTS (Desktop-Version) für ARM eingesetzt, das in einer virtuellen Maschine per VMware Fusion auf einem MacBook Air mit Apple-M5-Prozessor betrieben wird. Die Wahl fiel auf diese Distribution, da sie sich aufgrund ihres umfangreichen Software-Ökosystems, der breiten Unterstützung gängiger Robotik-Frameworks wie ROS sowie der Kompatibilität mit Simulationsumgebungen wie MuJoCo als De-facto-Standard in der Robotikforschung etabliert hat \cite{quigley2009ros}.
+Die Verwendung der Desktop-Variante gegenüber der Server-Edition begründet sich in den grafischen Anforderungen der eingesetzten Simulationsumgebungen, die eine visuelle Ausgabe voraussetzen. Der Betrieb als virtuelle Maschine auf Apple-Silicon-Hardware erfolgt nativ auf ARM64-Basis, wodurch eine hohe Kompatibilität mit modernen Robotik-Paketen gewährleistet ist, die zunehmend für diese Architektur bereitgestellt werden.
+
+\subsubsection{ROS2 \& RViz}
+Bei ROS2 (Robot Operating System 2) handelt es sich um ein Open-Source-Middleware-Framework, das als Kommunikationsschicht zwischen Hardware, Sensoren und Softwarekomponenten in der Robotik dient. Entgegen seiner Bezeichnung ist ROS2 kein Betriebssystem im klassischen Sinne, sondern eine Abstraktionsschicht, die die Interaktion verschiedener Komponenten über sogenannte Topics, Services und Actions ermöglicht \cite{ros2__paper_overview}. 
+
+Die Kommunikation innerhalb ROS2 basiert auf dem Data Distribution Service (DDS), einem standardisierten Publish-Subscribe-Protokoll, das eine dezentrale, echtzeitfähige Datenkommunikation zwischen Knoten (Nodes) ermöglicht. Gegenüber seinem Vorgänger ROS1 bietet ROS2 damit verbesserte Echtzeiteigenschaften, eine robustere Multi-Roboter-Unterstützung sowie eine aktiv gepflegte Codebasis, da ROS1 im Jahr 2025 das offizielle End-of-Life erreichte \cite{ros2__paper_overview}.
+
+ROS2 spielt in diesem Setup eine zentrale Rolle, 
+da es die Kommunikation zwischen dem Dobot-Treiber, der MuJoCo-Simulation und der Steuerungslogik koordiniert. Über ROS2 werden Sensordaten, Befehle und Statusinformationen ausgetauscht, was eine nahtlose Integration der verschiedenen Komponenten ermöglicht.
+\\
+\\
+RViz (ROS Visualization) ist ein 3D-Visualisierungstool für ROS, das die Darstellung von Roboterzuständen, Gelenkwinkeln, Koordinatensystemen (TF-Frames) sowie geplanten Trajektorien in Echtzeit ermöglicht \cite{ros2_docs_rviz}. 
+Es dient hauptsächlich der Überprüfung von Kinematik, TF-Frames und geplanten Trajektorien vor der realen Ausführung, bietet jedoch keine physikalische Simulation, Kollisionsberechnung oder Lernumgebung \cite{ros2_docs_rviz}. RViz dient in dieser Arbeit somit primär als Visualisierungs- und Debugging-Tool, zur Verifikation kinematischer Zusammenhänge, der Überprüfung von TF-Frames sowie geplanten Bewegungspfaden vor der Ausführung auf realer Hardware.
+ 
+\subsubsection{MuJoCo als Lernumgebung}
+MuJoCo (Multi-Joint dynamics with Contact) ist eine physikbasierte Simulationsumgebung, die auf präzise Kontakt- und Reibungsmodellierung spezialisiert ist und von DeepMind entwickelt sowie als Open-Source-Projekt bereitgestellt wird \cite{mujoco_overview}.
+
+Im Vergleich zu alternativen Simulationsumgebungen wie Gazebo, die primär auf vollständige Robotersystemsimulation ausgelegt sind, zeichnet sich MuJoCo durch eine höhere Recheneffizienz sowie eine für Reinforcement-Learning-Anwendungen optimierte Physik-Engine aus \cite{mujoco_overview}. Insbesondere die Genauigkeit der Kontaktkraftmodellierung macht MuJoCo zur bevorzugten Umgebung für das Training von Policies in Greif- und Montageaufgaben, bei denen Reibung, Gelenkmechanik und Kontaktkräfte eine zentrale Rolle spielen.
+
+Der Dobot Magician wird in MuJoCo über eine URDF-Modelldatei abgebildet, die Gelenke, Massen und Kollisionsgeometrien des Arms beschreibt. Das verwendete Modell stammt aus einem internen GitLab-Repository der HFT Stuttgart \cite{dobot_mujoco_repo}.
+
+MuJoCo wird in dieser Arbeit in Kombination mit Gymnasium, dem standardisierten Nachfolger der OpenAI-Gym-Bibliothek, verwendet \cite{openai_gym}. Gymnasium stellt eine einheitliche Schnittstelle für RL-Umgebungen bereit, über die Aktionsraum, Beobachtungs-raum sowie der Interaktionszyklus zwischen Agent und Umgebung (Observation, Action, Reward, Terminated) definiert werden. Diese Standardisierung ermöglicht die weitgehend modulare Austauschbarkeit von RL-Algorithmen und Simulationsumgebungen.
+
+Ein wesentlicher Vorteil von MuJoCo für RL-basierte Ansätze liegt in der Möglichkeit, 
+mehrere Simulationsinstanzen parallel auszuführen, wodurch ein erheblich beschleunigtes Training ohne Verschleiß physischer Hardware realisiert werden kann \cite{mujoco_rl_benefits}. Die Qualität des Sim-to-Real-Transfers hängt dabei maßgeblich davon ab, wie präzise die Simulation physikalische Eigenschaften wie Reibung, Trägheit und Kontaktkräfte abbildet, je realistischer das Simulationsmodell, desto robuster die Übertragung der trainierten Policy auf den echten Dobot Magician.
+
+\subsubsection{Konzept des Sim-to-Real-Transfer}
+\label{sec:sim-to-real}
+Der Sim-to-Real-Transfer bezeichnet die Übertragung einer in einer Simulationsumgebung trainierten Policy auf reale Hardware. Die Simulation dient dabei als kostengünstiger und risikofreier Trainingsraum, in dem eine nahezu unbegrenzte Anzahl von Trainingsepisoden ohne Verschleiß oder Sicherheitsrisiken durchgeführt werden kann \cite{sim_to_real_gap}.
+
+In der Praxis zeigt sich jedoch, dass in der Simulation erfolgreich trainierte Policies auf realer Hardware häufig deutlich schlechter abschneiden oder gänzlich versagen. Ursache hierfür ist die sogenannte \textit{Reality Gap}, also die Gesamtheit aller Unterschiede zwischen dem Simulationsmodell und der realen Welt \cite{reality_gap}. 
+Diese umfasst unter anderem ungenaue Massenverteilungen, nicht modellierte Gelenkreibung, Kameraverzeichnung sowie systembedingte Latenzen. Da kein Simulationsmodell die Realität vollständig abbilden kann, ist die Reality Gap ein fundamentales Problem des simulationsbasierten Lernens.
+
+Zur Überbrückung dieser Lücke haben sich in der Literatur mehrere Strategien etabliert \cite{domain_randomization_tobin}:\textit{Domain Randomization} variiert Simulationsparameter wie Masse, Reibungskoeffizienten, Beleuchtung und Texturen während des Trainings zufällig, sodass die Policy eine inhärente Robustheit gegenüber Parameterabweichungen entwickelt. \textit{Domain Adaptation} verfolgt den komplementären Ansatz, Simulation und Realität durch gezielte Kalibrierung des Simulationsmodells anhand realer Messdaten anzunähern \cite{domain_adaptation}. 
+Darüber hinaus existieren Methoden wie \textit{System Identification}, bei der reale physikalische Parameter systematisch gemessen und ins Modell eingespeist werden, sowie \textit{Residual Learning}, das einen klassischen Regler mit einem lernbasierten Korrekturterm kombiniert, um Modellungenauigkeiten zur Laufzeit zu kompensieren \cite{residual_learning}.
+
+Für Greif- und Montageaufgaben ist der Sim-to-Real-Transfer besonders anspruchsvoll, da diese Aufgaben in hohem Maße kontaktsensitiv sind. Bereits kleine Fehler in der Reibungsmodellierung können zu grundlegend abweichendem Greifverhalten in der Realität führen. Somit ist dies ein Aspekt, der die Wahl von MuJoCo als Simulationsumgebung mit präziser Kontaktmodellierung zusätzlich begründet (vgl. Abschnitt 2.2.3).
+
+Ein zusätzlicher, bei VLM-basierten Ansätzen besonders kritischer Aspekt ist der visuelle Sim-to-Real-Gap: Während Simulationen idealisierte, rauschfreie Bilder erzeugen, liefert das eingesetzte Vision-Kit in der Realität Bilder mit begrenzter Auflösung, Sensorrauschen und variierenden Lichtverhältnissen. Diese Diskrepanz kann die Erkennungsleistung von Vision-Language-Modellen wie OpenVLA erheblich beeinträchtigen \cite{vlm_sim_to_real}.
+
+Da alle in dieser Arbeit untersuchten Lernansätze (Reinforcement Learning, Imitation Learning sowie VLM-basierte Steuerung) zumindest teilweise in MuJoCo trainiert werden, stellt die Übertragbarkeit auf den echten Dobot Magician ein durchgängiges Bewertungskriterium dar und wird in der vergleichenden Analyse in Kapitel 3 explizit berücksichtigt.
+
+\subsection{Definition von Flexibilität im Kontext dieser Arbeit}
+
+Der Begriff \enquote{Flexibilität} wird in der Robotik nicht einheitlich verwendet \cite{flexibility} und bedarf daher im Kontext dieser Arbeit einer klaren Definition. Grundsätzlich lassen sich zwei Verständnisse unterscheiden: Zum einen die vollständige Generalisierung, also die Fähigkeit eines Systems, mit beliebigen unbekannten Objekten oder Aufgaben umzugehen \cite{kroemer2020reviewrobotlearningmanipulation}. Zum anderen die aufgabenbezogene Robustheit, die Fähigkeit, innerhalb eines bekannten Aufgabenraums trotz kleiner Abweichungen zuverlässig zu funktionieren \cite{robustness}.
+
+Im Rahmen dieser Arbeit wird Flexibilität im zweiten Sinne verstanden. Ein System gilt als flexibel, wenn es bekannte Bauteile in den folgenden drei Szenarien korrekt greifen und montieren kann, ohne manuelle Neuprogrammierung: (1) bei geometrischen Lageabweichungen, (2) bei veränderten visuellen Eigenschaften wie abweichender Farbe sowie (3) bei strukturellen Veränderungen wie Beschädigungen.
+
+Die geometrische Flexibilität, adressiert die erste und in der Praxis am häufigsten auftretende Dimension \cite{geometrische_flexi}: Ein Bauteil liegt 5–15 mm versetzt oder leicht verdreht auf der Arbeitsfläche. Der Roboter soll die Abweichung selbstständig erkennen und seine Greifposition entsprechend anpassen, ohne dass ein Bediener eingreifen oder die Trajektorie neu programmieren muss. Diese Dimension ist vergleichsweise gut handhabbar, da klassische Bildverarbeitung in vielen Fällen ausreicht, um Versatz oder Verdrehung zu detektieren und die Greifposition entsprechend anzupassen.
+
+Die zweite Dimension betrifft visuelle Veränderungen, konkret Farbabweichungen. Klassische Bildverarbeitungsansätze arbeiten häufig mit festen Farbschwellen~\cite{digital_image_processing} und würden bei einem andersfarbigen Bauteil nicht zuverlässig funktionieren~\cite{color_variation}.Ein flexibles System muss das Objekt stattdessen form- oder semantikbasiert identifizieren. Dies erfordert bereits ein tieferes, semantisches Verständnis des Objekts, da rein farbbasierte Erkennungsansätze hier versagen.
+
+Die dritte und anspruchsvollste Dimension ist strukturelle Flexibilität: Das Bauteil ist beschädigt, etwa verrostet, verformt oder verschmutzt. Hier reicht es nicht mehr aus, eine angepasste Greifposition zu berechnen, sondern das System muss beurteilen, ob ein Greifen überhaupt noch möglich ist, und eine definierte Fehlerbehandlung einleiten wie zum Beispiel das Bauteil als nicht greifbar klassifizieren und einen Fehler signalisieren. Dies ist die anspruchsvollste Dimension, da sich die Objektgeometrie selbst verändert und damit die Grundlage klassischer wie auch lernbasierter Erkennungsverfahren direkt betroffen ist.
+
+Diese drei Dimensionen orientieren sich an realen industriellen Anforderungen. Sie spiegeln Variationen wider, die in realen industriellen Montageprozessen regelmäßig auftreten~\cite{industrie_4}:
+Bauteile kommen selten exakt positioniert, immer gleich gefärbt und unbeschädigt an. Ein System, das nur unter Idealbedingungen funktioniert, ist für den praktischen Einsatz nicht ausreichend.
+
+Die vollständige Generalisierung auf beliebige, unbekannte Objekte oder Aufgaben liegt damit bewusst außerhalb des Rahmens dieser Arbeit. Dies begründet sich zum einen in den in Abschnitt~\ref{sec:dobot-nutzlast-dynamik} beschriebenen hardwareseitigen Grenzen des Dobot Magician, insbesondere hinsichtlich Nutzlast und Arbeitsraum, zum anderen darin, dass die drei definierten Dimensionen bereits einen für den Anwendungskontext praxisrelevanten Flexibilitätsbegriff abdecken.
+
+In Kapitel~3 dienen die drei Dimensionen als durchgängiges Bewertungskriterium für die untersuchten Lernansätze. Es wird explizit analysiert, inwieweit die verschiedenen Ansätze in der Lage sind, mit den jeweiligen Herausforderungen umzugehen und welche Grenzen sich dabei zeigen.
+
+\subsection{Montage und Demontage als Robotikproblem}
+
+%Greifplanung (Grasp Planning)
+Greifplanung (Grasp Planning) ist die algorithmische Berechnung einer stabilen Greifkonfiguration für den Roboter-Greifer. Sie bestimmt präzise die Kontaktpunkte, die Greifgeometrie sowie die Greifkräfte und -Momente, mit denen das Objekt gefasst werden soll. Ziel ist ein sicheres Halten und Manipulieren, das ein Abrutschen verhindert, oft unter Nutzung von Konzepten wie Formschluss oder Kraftschluss. Dies berücksichtigt Objektgeometrie, Oberflächenbeschaffenheit und die geplante Manipulationsaufgabe.
+
+Da die optimale Greifposition von Objektgeometrie, Masse, Schwerpunkt, Oberflächenbeschaffenheit und der nachfolgenden Aufgabe abhängt und all das gleichzeitig berücksichtigt werden muss, ist die Greifplanung nicht trivial. Es gibt analytische Methoden und lernbasierte Methoden, die aus Daten stabile Greifpositionen ableiten~\cite{grasp_synthesis_survey}. Bei Montageaufgaben ist Greifplanung besonders anspruchsvoll, weil das Bauteil nicht nur stabil gegriffen, sondern auch präzise positioniert und orientiert werden muss~\cite{grasp_planning_survey}. Zum Beispiel muss der Griff die nachfolgende Fügebewegung ermöglichen, ohne das Bauteil neu ausrichten zu müssen.
+
+%Kontakterkennung
+Die Fähigkeit des Systems, den Moment und die Art des physischen Kontakts zwischen Greifer und Objekt zu erkennen wird in der Robotik als Kontakterkennung bezeichnet. Dies erfolgt typischerweise über dedizierte Kraft- oder taktile Sensoren oder indirekt mittels Methoden wie der Strommessung der Motoren.
+Bei Montageaufgaben ist Kontakterkennung besonders kritisch, da kontrolliertes Fügen gefordert ist: Ein zu früher Kontakt birgt das Risiko von Kollisionen, ein zu später erfolgender Kontakt das Risiko einer Fehlpositionierung. Ohne zuverlässige Kontakterkennung bleibt das Fügen blind und fehleranfällig. Herausfordernd ist deshalb, dass der Dobot Magician über keine dedizierten Kraft- oder Taktilsensoren verfügt, siehe Abschnitt~\ref{sec:dobot_magician-chapter2}. Kontakt kann lediglich indirekt über erhöhte Motorströme oder positionsbasierte Abweichungen erkannt werden, was die Kontakterkennung erheblich erschwert.
+Als Alternativen zu direkter Kontakterkennung kommen Impedanzregelung, nachgiebige Greiferdesigns (compliant grippers) oder visuelle Schätzung des Kontakts anhand von Kameradaten infrage.
+
+%Kraft-Momenten-Steuerung
+Kraft-Momenten-Steuerung bezeichnet eine Regelungsstrategie, bei der nicht nur die Position des Endeffektors, sondern auch die auf den Roboter wirkenden Kräfte und Momente aktiv geregelt werden. Der Roboter erfasst dabei den mechanischen Widerstand seiner Umgebung und passt seine Bewegung entsprechend an.
+Bei Montageaufgaben ist diese Fähigkeit grundlegend notwendig, da Fügeoperationen kontrollierte Kontaktkräfte erfordern: Zu hohe Kräfte beschädigen das Bauteil oder die Aufnahme, während zu geringe Kräfte ein vollständiges Fügen verhindern. 
+Als etablierte Regelungsarten sind die Impedanzregelung (bei der Steifigkeit und Dämpfung vorgegeben werden), die Admittanzregelung (bei der Kraft als Eingang und Bewegung als Ausgang dient) sowie hybride Kraft-Position-Regelungsansätze zu nennen~\cite{siciliano2009robotics}. Der Dobot Magician verfügt jedoch über keine integrierte Kraft-Momenten-Sensorik (siehe Abschnitt~\ref{sec:dobot_magician-chapter2}), weshalb eine echte Kraft-Momenten-Steuerung ohne externe Sensorerweiterung nicht realisierbar ist. Dies stellt eine wesentliche Einschränkung bei Montageaufgaben mit engen Toleranzen dar.
+
+%Kollisionsvermeidung bei engen Toleranzen
+Kollisionsvermeidung bei engen Toleranzen bedeutet im Kontext von Montageaufgaben, dass der Roboter Bauteile präzise in enge Aufnahmen fügen muss, ohne dabei angrenzende Strukturen zu berühren. Bei Toleranzen im Millimeterbereich stellt dies eine erhebliche Herausforderung dar. 
+Klassische Methoden umfassen geometriebasierte Planungsverfahren wie RRT (Rapidly-exploring Random Trees)~\cite{RRT} oder PRM (Probabilistic Roadmap Methods)~\cite{PRM}, sowie potentialfeldbasierte Ansätze. Daneben existieren lernbasierte Ansätze, die Kollisionsvermeidung implizit aus Demonstrationen ableiten. Letztere sind bei engen Toleranzen jedoch problematisch, da lernbasierte Methoden grundsätzlich generalisieren und dabei Ungenauigkeiten entstehen können (siehe Abschnitt~\ref{sec:sim-to-real}), die klassische Planungsalgorithmen durch exakte geometrische Modellierung vermeiden.
+
+%Besonderheiten der Demontage
+Die Demontage stellt gegenüber der Montage eine grundlegend schwierigere Aufgabe dar. Während bei der Montage der Ausgangszustand bekannt und kontrollierbar ist, sind bei der Demontage die Verbindungszustände häufig unbekannt: Schrauben können festgerostet, Clips verformt oder Bauteile verklebt sein. 
+Konkret bedeutet dies, dass der Roboter weder weiß, ob eine Verbindung überhaupt lösbar ist, noch wie viel Kraft dafür aufgewendet werden muss oder ob das Bauteil nach dem Lösen frei beweglich oder noch anderweitig fixiert ist. 
+Verbindungen wie Clips, Presspassungen oder korrodierte Schrauben erfordern oft deutlich mehr Lösekraft als die ursprüngliche Fügekraft, wobei diese Kraft vorab in der Regel nicht bekannt ist. Unkontrollierte Demontage birgt daher das Risiko, Bauteile oder angrenzende Komponenten zu beschädigen, was besonders bei Recycling- oder Reparaturanwendungen kritisch ist, in denen Bauteile wiederverwendet werden sollen.
+
+Lernbasierte Systeme könnten diesem Problem durch taktiles Feedback, Kraftprofilanalyse (anhand charakteristischer Kraft-Weg-Kurven beim Lösen)~\cite{force-torque} begegnen oder durch eine Klassifikation des Verbindungstyps vor der Demontage begegnen. 
+
+Für VLM-basierte Ansätze ist die Demontage besonders interessant, da VLMs potenziell in der Lage sind, den Verbindungstyp direkt aus dem Kamerabild zu identifizieren und die Demontagestrategie semantisch abzuleiten beispielsweise indem der Verbindungstyp identifiziert und die Lösungsrichtung daraus ermittelt wird.
+Im industriellen Kontext gewinnt automatisierte Demontage durch Kreislaufwirtschaft, Recyclingpflichten und Reparierbarkeitsanforderungen (etwa die EU Right to Repair-Regulierung)~\cite{eu2024righttorepair} zunehmend an Bedeutung und ist ein aktives Forschungsfeld.
+
+\newpage
+
+\section{Lernansätze und Frameworks im Vergleich}
+
+Dieses Kapitel stellt die untersuchten Steuerungs- und Lernansätze für den Dobot Magician systematisch vor. Für jeden Ansatz werden Funktionsprinzip, relevante Algorithmen und Werkzeuge sowie Stärken und Schwächen beschrieben. Abschließend fasst eine Bewertungsmatrix in Kapitel 4 die Ergebnisse vergleichend zusammen.
+ 
+% ------------------------------------------------------------
+\subsection{Classical Motion Planning (Baseline)}
+\label{sec:classical_planning}
+% ------------------------------------------------------------
+
+\subsubsection*{Funktionsprinzip}
+
+Klassische Bewegungsplanung berechnet eine kollisionsfreie Trajektorie von einer Ausgangskonfiguration zu einer Zielkonfiguration auf Grundlage eines geometrischen Umgebungsmodells \cite{lavalle2006planning}.
+Die Suche findet im Konfigurationsraum des Roboters statt: Jeder Punkt in diesem Raum entspricht einer vollständigen Gelenkstellung, und der Planer sucht einen kontinuierlichen, hindernisfreien Pfad zwischen zwei solchen Punkten.
+
+Für die praktische Umsetzung hat sich die \textit{Open Motion Planning Library} (OMPL) als Standard etabliert \cite{sucan2012ompl}.
+OMPL stellt eine Vielzahl stichprobenbasierter Planer bereit, darunter RRT (\textit{Rapidly-exploring Random Trees}) \cite{RRT}, RRT* und PRM (\textit{Probabilistic Roadmap Method}) \cite{PRM}, die sich besonders für hochdimensionale Konfigurationsräume eignen, wie sie bei Roboterarmen auftreten. Im ROS2-Ökosystem ist OMPL über \textit{MoveIt\,2} eingebunden, das Kollisionsprüfung, Trajektorienplanung und Hardwarekommunikation in einem einheitlichen Framework zusammenführt und eine direkte Anbindung an den Dobot über den jeweiligen Hardware-Treiber ermöglicht \cite{moveit2}.
+
+\subsubsection*{Stärken und Schwächen}
+
+Der entscheidende Vorteil klassischer Planer liegt in ihrer Deterministik: Bei gleichen Eingaben liefert der Planer reproduzierbare Ergebnisse, ohne dass vorheriges Training oder das Sammeln von Erfahrungsdaten nötig wäre. Gerade für einen Einstieg in die Roboterprogrammierung ist das ein erheblicher Vorteil, weil Fehler direkt im geometrischen Modell lokalisiert und behoben werden können. Die umfangreiche Dokumentation und die weite Verbreitung von MoveIt\,2 in der Forschungsgemeinschaft erleichtern die Einarbeitung zusätzlich \cite{moveit2}.
+
+Die grundlegende Schwäche klassischer Planer liegt in ihrer Starrheit gegenüber unmodellierten Abweichungen. Der Planer arbeitet auf einem festen Weltmodell: Liegt ein Bauteil auch nur wenige Millimeter versetzt, stimmt die geplante Trajektorie nicht mehr mit der Realität überein. Eine implizite Robustheit gegenüber Streuungen in der Bauteilposition ist nicht vorhanden. Für Montageaufgaben, bei denen Bauteile manuell eingelegt werden und Lagetoleranzen unvermeidlich sind, ist das ein strukturelles Problem, das sich durch Parametrierung allein nicht lösen lässt \cite{siciliano2009robotics}.
+
+\subsubsection*{Eignung für den Dobot-Kontext}
+
+Classical Motion Planning ist für den Dobot Magician in der Simulation und für klar definierte Aufgaben gut geeignet. Die Hardware unterstützt die nötigen Schnittstellen, MoveIt\,2 stellt ein fertiges URDF-Modell bereit, und der Aufwand für eine erste funktionsfähige Demo ist vergleichsweise gering.
+
+Für das eigentliche Ziel dieser Arbeit, flexible Reaktion auf variable Bauteillagen, stößt der Ansatz jedoch an eine prinzipielle Grenze. Da jede Abweichung explizit im Modell hinterlegt sein muss, skaliert der Aufwand linear mit der Anzahl möglicher Variationen. In industriellen Umgebungen wird dieses Problem häufig durch hochpräzise Zuführsysteme oder Kamerasysteme mit Lageerkennung umgangen \cite{siciliano2009robotics}, was den Implementierungsaufwand jedoch erheblich erhöht und die Flexibilität nur scheinbar steigert. Für den Rahmen dieses IDPs dient Classical Motion Planning daher primär als Baseline, an der die Leistungsfähigkeit lernbasierter Ansätze gemessen wird.
+
+% ------------------------------------------------------------
+% ------------------------------------------------------------
+\subsection{Drag-to-Teach}
+\label{sec:drag_to_teach}
+% ------------------------------------------------------------
+
+\subsubsection*{Funktionsprinzip}
+
+Drag-to-Teach bezeichnet ein kinästhetisches Lehrverfahren, bei dem der Roboterarm von einer Person physisch entlang der gewünschten Bahn geführt wird \cite{billard2008robot}. Der Dobot Magician unterstützt diesen Modus nativ: In einem speziellen Betriebszustand werden die Gelenke kraftarm geschaltet, sodass der Arm ohne nennenswerten Widerstand bewegt werden kann. Die dabei aufgezeichneten Gelenkwinkelverläufe werden als Trajektorie gespeichert und können anschließend direkt wiedergegeben werden \cite{dobotmagician2024}. 
+
+Im Gegensatz zu modellbasierten Ansätzen entfällt die explizite Programmierung von Zielpositionen vollständig. Die Aufnahme einer Demonstration dauert typischerweise nur wenige Minuten, was den Einstieg erheblich erleichtert. Konzeptionell rückt das Verfahren damit in die Nähe des \textit{Learning from Demonstration} (vgl.\ Abschnitt~\ref{sec:lfd}), unterscheidet sich jedoch in einem wesentlichen Punkt: Die aufgezeichnete Trajektorie wird direkt wiederholt, ohne dass ein anschließender Lernschritt stattfindet. Es handelt sich also um Programmierung durch Vorführung, nicht um Lernen aus Vorführung.
+
+\subsubsection*{Stärken und Schwächen}
+
+Der offensichtlichste Vorteil von Drag-to-Teach ist die niedrige Einstiegshürde. Weder Programmierkenntnisse noch ein geometrisches Umgebungsmodell sind erforderlich. Folglich kann eine Person mit Kenntnis der gewünschten Bewegung den Roboter in wenigen Minuten einrichten \cite{billard2008robot}. Für klar definierte, sich wiederholende Aufgaben in kontrollierten Umgebungen ist das ein erheblicher praktischer Vorteil gegenüber klassischer Bewegungsplanung.
+
+Die strukturelle Schwäche des Verfahrens liegt in der fehlenden Generalisierung. Da die aufgezeichnete Trajektorie als feste Sequenz von Gelenkwinkeln gespeichert wird, reagiert der Roboter nicht auf Veränderungen in der Umgebung \cite{argall2009survey}. Liegt ein Bauteil auch nur geringfügig versetzt, führt die Wiederholung der ursprünglichen Trajektorie zu einem Fehler. Hinzu kommt, dass die Qualität der Demonstration direkt die Qualität der Ausführung bestimmt: Zittrige oder inkonsistente Handbewegungen übertragen sich unmittelbar auf die gespeicherte Bahn.
+
+\subsubsection*{Eignung für den Dobot-Kontext}
+
+Drag-to-Teach ist für den Dobot Magician technisch ohne Aufwand einsetzbar, da der Modus werkseitig unterstützt wird und keine zusätzliche Software oder Kalibrierung erfordert. Für die Zielstellung dieser Arbeit, also flexible Reaktion auf variable Bauteillagen, ist der Ansatz jedoch grundsätzlich ungeeignet. Da keine Lageerkennung stattfindet und die Trajektorie starr wiederholt wird, ist das Verfahren auf Szenarien beschränkt, in denen die Umgebung zwischen Demonstration und Ausführung identisch bleibt \cite{argall2009survey}. In einem realen Montageszenario mit manuell eingelegten Bauteilen ist diese Voraussetzung praktisch nie erfüllt.
+
+Drag-to-Teach wird in dieser Arbeit dennoch als Referenzpunkt betrachtet, weil es den konzeptionell einfachsten Weg darstellt, den Roboter auf eine neue Aufgabe einzustellen, und damit eine sinnvolle untere Schranke für den Vergleich mit lernbasierten Ansätzen bildet.
+
+% ------------------------------------------------------------
+\subsection{Reinforcement Learning}
+\label{sec:rl}
+% ------------------------------------------------------------
+
+\subsubsection*{Funktionsprinzip}
+
+Beim Reinforcement Learning (RL) interagiert ein Agent iterativ mit einer Umgebung, erhält nach jeder Aktion ein skalares Belohnungssignal und optimiert durch dieses Feedbackprinzip eine Policy, die den kumulierten zukünftigen Reward maximiert \cite{sutton2018reinforcement}.
+
+Im Gegensatz zu klassischer Bewegungsplanung wird dem Agenten kein Lösungsweg vorgegeben, sondern er erarbeitet sich eine Strategie ausschließlich durch wiederholte Interaktion mit der Umgebung, was RL konzeptionell flexibler, aber auch deutlich aufwendiger macht \cite{sutton2018reinforcement}.
+
+Für Robotikarme mit kontinuierlichem Aktionsraum haben sich zwei modellfreie Policy-Gradient-Verfahren als besonders geeignet erwiesen. \textit{Proximal Policy Optimization} (PPO) zeichnet sich durch numerische Stabilität und robuste Konvergenzeigenschaften aus und gilt in der Literatur als zuverlässiger Einstiegsalgorithmus für Robotik-Tasks \cite{schulman2017ppo}.
+\textit{Soft Actor-Critic} (SAC) verfolgt einen anderen Ansatz: Durch eine zusätzliche Entropieregularisierung wird die Policy nicht nur auf maximalen Reward, sondern gleichzeitig auf maximale Exploration optimiert, was in der Praxis zu einer deutlich höheren Sample-Effizienz als bei PPO führt \cite{haarnoja2018sac}. SAC eignet sich daher besonders für physikalisch realistische Simulationen wie MuJoCo, in denen jede Interaktion rechenintensiv ist und Dateneffizienz eine entscheidende Rolle spielt.
+
+\subsubsection*{Stärken und Schwächen}
+
+Ein wesentlicher Vorteil von RL gegenüber klassischer Bewegungsplanung besteht darin, dass der Agent implizit Robustheit gegenüber Lageabweichungen erwerben kann, sofern das Training ausreichend variiert wird, etwa durch Domain Randomization der Zielposition \cite{domain_randomization_tobin}. Diese Robustheit entsteht ohne explizite Modellierung der Varianz, was einen grundlegenden konzeptionellen Unterschied zu planungsbasierten Ansätzen darstellt.
+
+Dem stehen erhebliche strukturelle Nachteile gegenüber. Der Stichprobenbedarf moderner RL-Algorithmen liegt typischerweise im Bereich von Millionen von Umgebungsinteraktionen \cite{sutton2018reinforcement}, was ein direktes Training am realen Roboter ohne Simulation praktisch ausschließt. Hinzu kommt die Herausforderung des Reward-Engineerings: Eine schlecht gewählte Belohnungsfunktion kann dazu führen, dass der Agent unerwünschte Strategien erlernt, die formal den Reward maximieren, ohne die eigentliche Aufgabe zu lösen \cite{amodei2016concreteproblemsaisafety}. Schließlich ist der Sim-to-Real-Transfer aufgrund unvermeidlicher Modelldiskrepanzen zwischen Simulation und realer Hardware ein aktives Forschungsproblem, das auch für den Dobot Magician nicht trivial zu lösen ist \cite{zhao2020simtoreal}.
+
+\subsubsection*{Eignung für den Dobot-Kontext}
+
+Reinforcement Learning ist für die Zielstellung dieser Arbeit konzeptionell der vielversprechendste Ansatz, weil er als einziger der untersuchten Verfahren in der Lage ist, Robustheit gegenüber variablen Bauteillagen ohne explizite Programmierung zu erwerben. Die Voraussetzung dafür ist jedoch eine funktionierende Simulationsumgebung, die den Dobot hinreichend genau abbildet, da ein vollständiges Training direkt an der Hardware aufgrund des Stichprobenbedarfs nicht realisierbar ist \cite{haarnoja2018sac, schulman2017ppo}.
+
+Die wesentliche offene Frage für den Dobot-Kontext ist die Qualität des Sim-to-Real-Transfers: Das in MuJoCo trainierte Modell muss auf einem realen Arm funktionieren, dessen Gelenkreibung, Trägheit und Latenz von der Simulation abweichen. Wie groß diese Lücke in der Praxis ist und ob sie durch Techniken wie Domain Randomization überbrückt werden kann, lässt sich theoretisch nicht abschließend beurteilen und ist Gegenstand der Experimente in Kapitel~\ref{chap:experimente}.
+
+% ------------------------------------------------------------
+\subsection{Imitation Learning / Learning from Demonstration}
+\label{sec:lfd}
+% ------------------------------------------------------------
+
+\subsubsection*{Funktionsprinzip}
+
+Imitation Learning (IL), auch als \textit{Learning from Demonstration} (LfD) bezeichnet, verfolgt einen grundlegend anderen Ansatz als RL: Statt durch Trial-and-Error lernt der Agent aus menschlichen oder simulierten Demonstrationen, was das aufwendige manuelle Reward-Design entfallen lässt \cite{argall2009survey}. 
+
+Die einfachste Variante ist \textit{Behavior Cloning} (BC), bei dem die beobachtete Zustand-Aktion-Zuordnung direkt als überwachtes Lernproblem behandelt wird \cite{pomerleau1991efficient}. BC ist konzeptionell unkompliziert, leidet aber unter dem sogenannten \textit{Covariate Shift}: Sobald der Agent in einen Zustand gerät, der in den Demonstrationsdaten nicht vorkommt, fehlt ihm jede Orientierung \cite{ross2011dagger}. 
+\textit{Inverse Reinforcement Learning} (IRL) geht einen Schritt weiter und rekonstruiert das zugrundeliegende Belohnungssignal aus den Demonstrationen, was eine bessere Generalisierung ermöglicht, aber einen deutlich höheren Rechenaufwand erfordert \cite{ziebart2008maxent}. 
+
+Zwei neuere Verfahren sind für den Kontext dieser Arbeit besonders relevant. \textit{Action Chunking with Transformers} (ACT) lernt ganze Aktionssequenzen auf einmal statt einzelner Schritte, was die Empfindlichkeit gegenüber kleinen Zustandsabweichungen reduziert und insbesondere bei kontaktreichen Aufgaben hohe Robustheit zeigt \cite{zhao2023act}.
+\textit{Diffusion Policy} modelliert die Policy als iterativen Denoising-Prozess und erzielt hohe Präzision bei multimodalen Aufgabenstellungen, in denen mehrere korrekte Lösungspfade existieren \cite{chi2023diffusionpolicy}.
+
+\subsubsection*{Datenerhebung}
+
+Die Qualität eines LfD-Systems hängt unmittelbar von der Qualität der Demonstrationsdaten ab \cite{argall2009survey}. Als Erhebungsmodalitäten stehen kinästhetisches Führen, also die physische Handführung des Arms (vgl.\ Abschnitt~\ref{sec:drag_to_teach}), und Teleoperation zur Verfügung, bei der der Arm über eine externe Schnittstelle ferngesteuert wird. Beide Methoden erlauben eine intuitive Datenerhebung ohne Programmierkenntnisse, setzen aber voraus, dass die Demonstrationen konsistent und repräsentativ für die Aufgabenvariation sind, der der Roboter später begegnen soll.
+
+\subsubsection*{Stärken und Schwächen}
+
+Der strukturelle Vorteil von Imitation Learning gegenüber RL liegt im deutlich geringeren Datenbedarf: Während RL-Verfahren typischerweise Millionen von Interaktionen benötigen, können LfD-Systeme bereits aus einigen Dutzend bis wenigen Hundert Demonstrationen sinnvolle Policies lernen \cite{argall2009survey, zhao2023act}. Das Entfallen des Reward-Engineerings vereinfacht zudem den Entwicklungsprozess erheblich, weil keine Belohnungsfunktion manuell entworfen und iterativ angepasst werden muss.
+
+Die wesentliche Schwäche liegt in der Abhängigkeit von der Demonstrationsqualität. Inkonsistente oder fehlerhafte Vorführungen übertragen sich direkt auf die gelernte Policy, ohne dass ein korrektives Feedback wie bei RL existiert \cite{pomerleau1991efficient}. Darüber hinaus ist die Generalisierung auf Situationen außerhalb der Trainingsverteilung begrenzt: Ein Modell, das auf Demonstrationen mit einer bestimmten Bauteilposition trainiert wurde, wird bei deutlich abweichenden Lagen mit hoher Wahrscheinlichkeit versagen \cite{ross2011dagger}. Für Montageaufgaben mit variabler Bauteillage ist das eine strukturelle Einschränkung, die ohne aktive Gegenmaßnahmen wie Datenaugmentierung oder gezielte Variation der Demonstrationsbedingungen schwer zu überwinden ist.
+
+\subsubsection*{Eignung für den Dobot-Kontext}
+
+Imitation Learning ist für den Dobot Magician grundsätzlich umsetzbar: Die Hardware unterstützt kinästhetisches Führen nativ (vgl.\ Abschnitt~\ref{sec:drag_to_teach}), und Frameworks wie LeRobot \cite{lerobot2024} stellen fertige Implementierungen von ACT und Diffusion Policy für reale Roboterarme bereit, ohne dass tiefgreifende Kenntnisse in der Modellarchitektur erforderlich sind.
+
+Die entscheidende offene Frage ist, ob eine mit vertretbarem Aufwand erhebbare Demonstrationsmenge ausreicht, um eine Policy zu lernen, die robust gegenüber der im IDP auftretenden Lagevariation ist. Aus der Literatur ist bekannt, dass ACT bereits mit verhältnismäßig wenigen Demonstrationen gute Ergebnisse erzielt \cite{zhao2023act}, jedoch wurde dies vorwiegend an Systemen mit hochauflösender Kamerawahrnehmung demonstriert, die über die Sensorausstattung des Dobot in der Basiskonfiguration hinausgeht. Eine belastbare Einschätzung, ob der Ansatz im konkreten IDP-Kontext praktikabel ist, setzt eigene Versuche voraus, welche im Rahmen dieser Arbeit nicht durchgeführt werden können und daher als offene Frage in die vergleichende Analyse einbezogen werden.
+
+
+% ------------------------------------------------------------
+\subsection{Classical Planning + ML Hybrid}
+\label{sec:hybrid}
+% ------------------------------------------------------------
+
+\subsubsection*{Funktionsprinzip}
+
+Der Hybridansatz kombiniert klassische Bewegungsplanung mit maschinellen Lernverfahren, um die Schwächen beider Ansätze gegenseitig zu kompensieren \cite{silver2019residualpolicylearning}. 
+Die Grundidee ist eine funktionale Aufteilung: Ein klassischer Planer, typischerweise MoveIt\,2, übernimmt die grobe Trajektorienplanung für Annäherung und sichere Pfade im Arbeitsraum, während ein gelernter Anteil die feinen Korrekturen in der Nähe des Zielobjekts übernimmt. Dieser gelernte Anteil wird in der Literatur als \textit{Residual Policy} bezeichnet, weil er nicht die vollständige Steuerung übernimmt, sondern lediglich den Restfehler des klassischen Planers korrigiert \cite{residual_learning}. 
+
+In der Praxis existieren zwei verbreitete Varianten. Bei der ersten wird RL ausschließlich für die letzte Phase einer Aufgabe eingesetzt, etwa für die präzise Insertionsphase beim Fügen von Bauteilen, während die Grobannäherung klassisch geplant wird. Bei der zweiten Variante wird ein gelernter Fehlerkorrektur-Layer kontinuierlich über den gesamten Planungsoutput gelegt, sodass der ML-Anteil zu jedem Zeitpunkt eine additive Korrektur der geplanten Gelenkbefehle ausgibt \cite{silver2019residualpolicylearning}.
+
+\subsubsection*{Stärken und Schwächen}
+
+Der zentrale Vorteil des Hybridansatzes gegenüber reinem RL liegt im deutlich reduzierten Trainingsbedarf. Da der Lernanteil nur einen kleinen Teil des Gesamtablaufs abdeckt, ist der zu erlernende Aktionsraum erheblich kleiner, was die Konvergenz beschleunigt und den Stichprobenbedarf senkt \cite{residual_learning}. Gleichzeitig bleibt die Nachvollziehbarkeit und Sicherheit des klassischen Planers für den Großteil der Bewegung erhalten: Kollisionsvermeidung und Gelenkwinkelbeschränkungen werden weiterhin deterministisch garantiert, was in industriellen Anwendungen ein wesentliches Kriterium ist \cite{siciliano2009robotics}.
+
+Der wesentliche Nachteil liegt in der gestiegenen Architekturkomplexität. 
+Die Schnittstelle zwischen Planer und ML-Komponente muss sorgfältig ausgelegt werden: Der Übergabepunkt, also der Moment, ab dem die Residual Policy aktiv wird, sowie die Skalierung ihrer Korrekturen müssen so gewählt werden, dass keine Instabilitäten entstehen \cite{silver2019residualpolicylearning}. Hinzu kommt, dass der Ansatz eine funktionierende klassische Planungsinfrastruktur voraussetzt, was bedeutet, dass der Implementierungsaufwand gegenüber einem reinen RL-Ansatz in der Summe nicht unbedingt geringer ist.
+
+\subsubsection*{Eignung für den Dobot-Kontext}
+
+Der Hybridansatz ist für den Dobot Magician konzeptionell gut geeignet, weil er die bereits im IDP aufgebaute MoveIt\,2-Infrastruktur direkt weiternutzen kann, anstatt sie durch einen vollständig lernbasierten Ansatz zu ersetzen. Die grobe Trajektorienplanung für Annäherungsbewegungen ist mit Classical Motion Planning zuverlässig lösbar (vgl.\ Abschnitt~\ref{sec:classical_planning}); der gelernte Anteil müsste lediglich die lageabhängige Feinkorrektur in der Nähe des Zielobjekts übernehmen, was den Trainingsaufwand gegenüber reinem RL erheblich reduzieren dürfte \cite{residual_learning}.
+
+Die praktische Herausforderung liegt in der Implementierung der Schnittstelle zwischen MoveIt\,2 und der Residual Policy innerhalb des ROS2-Ökosystems. Entsprechende Referenzimplementierungen existieren in der Literatur \cite{residual_learning}, sind jedoch nicht spezifisch für den Dobot dokumentiert, sodass ein nicht unerheblicher Integrationsaufwand zu erwarten ist. Ob dieser Aufwand im Rahmen eines weiterführenden Projekts realisierbar ist und welche Korrekturleistung die Residual Policy am Dobot tatsächlich erbringen kann, bleibt eine offene Frage, die im Rahmen des IDPs nicht praktisch untersucht wurde und sich als vielversprechender Ansatz für eine Bachelorarbeit anbietet.
+
+
+\newpage
+
+\section{Experimente}
+\label{chap:experimente}
+
+
+\subsection{Versuchsaufbau und gemeinsame Rahmenbedingungen}
+
+\subsubsection*{Simulationsumgebung}
+
+Das Training erfolgte in MuJoCo auf Basis eines URDF-Modells des Dobot Magician,
+eingebettet in eine Gymnasium-konforme Umgebung. Da das vierte Gelenk~$J_4$
+ausschließlich den Greifer um die eigene Achse rotiert, ohne die kartesische
+Position des Endeffektors zu beeinflussen, reduziert sich die relevante Kinematik
+auf die Gelenke~$J_1$, $J_2$ und~$J_3$. $J_4$ verbleibt im Aktionsraum, wird
+jedoch für die Positionsberechnung nicht berücksichtigt.
+
+\subsubsection*{Gymnasium-Schnittstelle}
+
+Die Umgebung folgt der Gymnasium-Standardschnittstelle mit den folgenden
+Komponenten.
+
+Der \textbf{Observation Space} umfasst 14 kontinuierliche Werte: die vier
+Gelenkpositionen, vier Gelenkgeschwindigkeiten, die dreidimensionale
+Endeffektorposition sowie die dreidimensionale Zielposition.
+
+Der \textbf{Action Space} besteht aus vier kontinuierlichen Werten im Intervall
+$[-1, 1]$, die als relative Gelenkwinkeländerungen interpretiert werden. Ein
+Skalierungsfaktor \texttt{action\_scale} bestimmt die maximale Schrittweite pro
+Zeitschritt; frühe Versuche verwendeten $\texttt{action\_scale} = 0{,}3$\,rad,
+was zu ruckartigen Überschreitungen des Ziels führte.
+
+Die \textbf{Reward-Funktion} setzt sich aus drei Komponenten zusammen: dem
+negativen euklidischen Abstand zum Ziel, einem Erfolgsbonus von $+10{,}0$ bei
+Unterschreiten der Zielschwelle sowie einer kleinen Strafe auf betragsmäßig
+große Gelenkgeschwindigkeiten zur Förderung gleichmäßiger Bewegungen.
+
+Eine \textbf{Episode} endet entweder bei Erreichen des Ziels (Abstand unter
+\texttt{target\_threshold} $= 2$\,cm) oder nach maximal 100 Zeitschritten.
+
+\subsubsection*{Bestimmung der Endeffektorposition}
+
+Die korrekte Bestimmung der Endeffektorposition ist für das RL-Training von
+zentraler Bedeutung, da sie sowohl in den Observation Space als auch in die
+Reward-Funktion einfließt. Fehlerhafte Positionsdaten destabilisieren den
+Lernprozess auf zweifache Weise: Der Agent erhält ein Belohnungssignal, das
+nicht seinem tatsächlichen Verhalten entspricht, und die beobachtete
+Endeffektorposition stimmt nicht mit der echten überein, sodass die gelernte
+Policy auf inkonsistenten Zustandsrepräsentationen aufbaut.
+
+Im Verlauf der Experimente wurden drei Ansätze zur Positionsbestimmung
+untersucht und verglichen.
+
+\paragraph{Approximierte Vorwärtskinematik.}
+Der erste Ansatz implementiert eine analytische Näherungslösung direkt in
+Python. Aus vereinfachten Linklängen (entnommen dem URDF-Modell) und den
+aktuellen Gelenkwinkeln wird die kartesische Endeffektorposition über ebene
+Vorwärtskinematik berechnet. Der Vorteil liegt in der vollständigen
+Unabhängigkeit von externen Systemen und der vernachlässigbar geringen
+Rechenzeit. Der wesentliche Nachteil ist die inhärente Ungenauigkeit der
+Näherung: Vereinfachungen in der Gelenkgeometrie sowie fehlende
+Berücksichtigung von Offsets führen zu systematischen Abweichungen zwischen
+berechneter und tatsächlicher Endeffektorposition. Dieser Ansatz wurde in den
+frühen Versuchen (Abschnitt~\ref{sec:fixed_target}) eingesetzt.
+
+\paragraph{TF2-Transformationen.}
+Als Reaktion auf den Verdacht, dass die Ungenauigkeit der approximierten FK
+zum unbefriedigenden Trainingsfortschritt beitragen könnte, wurde die
+Positionsbestimmung auf TF2-Transformationen umgestellt. Dabei wird in jedem
+Zeitschritt die Transformation vom Frame \texttt{dobot\_base\_link} zum Frame
+\texttt{dobot\_end\_effector} über den \texttt{tf2\_ros}-Buffer abgefragt.
+Da MuJoCo die Gelenkzustände kontinuierlich über ROS2 publiziert und TF2 diese
+in einen konsistenten Transformationsbaum überführt, liefert dieser Ansatz
+prinzipiell exakte kartesische Positionen ohne Approximationsfehler.
+
+Ein potenzielles Problem bei dieser Methode liegt in der zeitlichen
+Synchronisation: Die TF2-Transformation spiegelt den zuletzt publizierten
+Gelenkzustand wider, der zum Zeitpunkt der Abfrage bereits veraltet sein kann.
+Um dieses Risiko zu minimieren, ist ein Fallback implementiert, der bei
+fehlgeschlagener TF2-Abfrage auf die approximierte FK zurückgreift. Ob
+Synchronisationsprobleme in der Praxis tatsächlich aufgetreten sind und ob
+die Umstellung auf TF2 den Trainingsfortschritt messbar beeinflusst hat, ließ
+sich aufgrund fehlender paralleler Vergleichsläufe nicht abschließend
+beurteilen.
+
+\paragraph{IKPy-Kinematikkette.}
+Eine dritte Methode wurde im Rahmen des klassischen Pick-and-Place-Versuchs
+eingesetzt (Abschnitt~\ref{sec:pick_cube}): Die Bibliothek IKPy modelliert
+den Dobot als kinematische Kette auf Basis des URDF-Modells und berechnet
+sowohl Vorwärts- als auch Inversekinematik. Für den RL-Trainingsloop wurde
+dieser Ansatz nicht übernommen, da IKPy primär für einmalige IK-Berechnungen
+ausgelegt ist und der zusätzliche Overhead für die tausenfach pro Training
+aufgerufene Positionsabfrage nicht gerechtfertigt erschien.
+
+\subsubsection*{Bewertungskriterien der Experimente}
+Als Erfolgskriterium für die Bewertung der Trainingsläufe wurde der mittlere episodische Reward über die letzten 100 Episoden herangezogen. Dieser Wert bietet eine robuste Kennzahl für die durchschnittliche Performance des Agenten, da er kurzfristige Schwankungen glättet und einen stabilen Indikator für den Lernfortschritt darstellt. Zusätzlich wurden die Erfolgsrate, definiert als der Anteil der Episoden, in denen das Ziel erreicht wurde, sowie die finale Distanz zum Ziel am Ende jeder Episode protokolliert, um ein umfassenderes Bild der Lernentwicklung zu erhalten. Die Konvergenzgeschwindigkeit wurde qualitativ anhand der Reward-Kurven beurteilt, wobei besonderes Augenmerk auf den Zeitpunkt gelegt wurde, ab dem sich der Reward stabilisiert und keine signifikanten Verbesserungen mehr zeigt.
+
+
+\subsection{Classical Motion Planning (pick\_cube.py)}
+\label{sec:pick_cube}
+
+Das Programm implementiert einen klassischen Pick-and-Place-Ablauf für den simulierten Dobot Magician unter Verwendung von ROS 2 und der Bibliothek IKPy. Ziel ist das gezielte Anfahren vordefinierter Wegpunkte sowie das Greifen und Platzieren eines virtuellen Würfels. Im Gegensatz zu lernbasierten Verfahren erfolgt die Bewegungsplanung vollständig deterministisch über inverse Kinematik.
+Zu Beginn wird ein ROS-2-Knoten initialisiert, der sowohl die aktuellen Gelenkzustände des Roboters abonniert als auch Trajektorienbefehle für Arm und Greifer veröffentlicht. Die Gelenkzustände werden kontinuierlich aus dem Topic /joint\_states gelesen und intern gespeichert. Anschließend wird aus der vorhandenen URDF/Xacro-Beschreibung des Roboters ein vereinfachtes kinematisches Modell erzeugt. Dabei werden die Greiferlinks entfernt, sodass ausschließlich die kinematische Kette des Roboterarms für die Inverse Kinematik verwendet wird.
+Die Berechnung der Gelenkwinkel erfolgt über inverse\_kinematic\_optimization aus IKPy. Für jede Zielposition wird ein Optimierungsproblem gelöst, dessen Ziel darin besteht, eine Gelenkkonfiguration zu finden, bei der der Endeffektor die gewünschte Position erreicht. Zusätzlich wird eine Orientierungsvorgabe entlang der Z-Achse berücksichtigt. Als Optimierer wird das Least-Squares-Verfahren eingesetzt. Nach erfolgreicher Berechnung werden die resultierenden Gelenkwinkel über einen JointTrajectory-Controller an den Roboter gesendet.
+
+Der eigentliche Bewegungsablauf basiert auf einer festen Sequenz von Wegpunkten: die Startposition, eine Hover-Position oberhalb des Würfels, die Aufnahmebewegung („Pickup“), das Anheben des Würfels („Lift“), die Ablageposition („Place“) sowie die Rückkehr zur Ausgangsposition.
+
+
+Zwischen einzelnen Wegpunkten werden Greiferbefehle ausgeführt. Der Greifer wird oberhalb des Würfels geöffnet und nach dem Absenken geschlossen, um den virtuellen Würfel aufzunehmen. Nach dem Transport zur Zielposition wird der Greifer erneut geöffnet.
+Für jeden Wegpunkt wird zusätzlich die tatsächliche Endeffektorposition mittels Vorwärtskinematik berechnet und mit der Sollposition verglichen. Die Positionsabweichung wird anschließend ausgewertet und protokolliert.
+
+\subsubsection*{Ergebnis und Beobachtungen}
+Die Ergebnisse zeigen, dass der Roboterarm die definierten Wegpunkte mit hoher Genauigkeit anfahren konnte. Die inverse Kinematik lieferte stabile Lösungen, und die Positionsfehler lagen typischerweise innerhalb des vorgegebenen Toleranzbereichs. Die Trajektorienausführung verlief reproduzierbar und ohne erkennbare Instabilitäten.
+Probleme traten jedoch beim eigentlichen Greifvorgang des virtuellen Würfels auf. Obwohl der Endeffektor die Zielposition korrekt erreichte, konnte der Würfel nicht in allen Fällen zuverlässig aufgenommen beziehungsweise gehalten werden. Während der Bewegungssequenz kam es teilweise dazu, dass das Objekt verrutschte oder nicht korrekt mitgeführt wurde.
+Eine mögliche Ursache liegt in der physikalischen Simulation des Greifers, insbesondere in einer zu geringen Reibung oder unzureichenden Greifkraft innerhalb der Simulationsumgebung. Diese Annahme basiert ausschließlich auf Beobachtungen während der Ausführung. Eine detaillierte physikalische Analyse oder experimentelle Verifikation der Ursache wurde im Rahmen dieser Arbeit nicht durchgeführt.
+
+\subsubsection*{Einordnung als Baseline im Vergleich zu Reinforcement Learning}
+Der vorgestellte Ansatz dient als klassische Baseline für den Vergleich mit Reinforcement-Learning-basierten Verfahren. Die Bewegungssteuerung erfolgt vollständig modellbasiert und setzt voraus, dass Zielpositionen explizit vorgegeben werden. Das System besitzt keine Fähigkeit zur autonomen Anpassung oder Generalisierung auf unbekannte Situationen.
+Ein wesentlicher Vorteil des klassischen Ansatzes liegt in seiner Deterministik und Nachvollziehbarkeit. Bei bekannten Zielkoordinaten können Bewegungen präzise geplant und reproduzierbar ausgeführt werden. Zudem ist kein Trainingsprozess erforderlich, wodurch die Implementierung vergleichsweise ressourcenschonend ist.
+Der klassische IK-basierte Ansatz eignet sich daher insbesondere als Referenzsystem, um die Leistungsfähigkeit lernbasierter Methoden hinsichtlich Robustheit, Generalisierungsfähigkeit und autonomem Verhalten bewerten zu können.
+
+\subsection{Reinforcement Learning: Basisversuche}
+\label{sec:rl_basis}
+
+Zur Bewertung lernbasierter Steuerungsverfahren wurden erste Basisexperimente mit den Reinforcement-Learning-Algorithmen Proximal Policy Optimization (PPO) und Soft Actor-Critic (SAC) durchgeführt. Ziel dieser Versuche war die Untersuchung, ob der Roboterarm eigenständig eine Zielposition im Arbeitsraum erreichen kann. Die Aufgabe bestand dabei ausschließlich aus einem Reach-Task ohne Greifvorgang.
+
+Die Beobachtungen des Agenten umfassen die aktuellen Gelenkzustände sowie die kartesische Position des Endeffektors relativ zum Zielpunkt. Als Aktionen werden kontinuierliche Gelenkbewegungen ausgegeben, die mit einem Skalierungsfaktor auf die tatsächlichen Gelenkänderungen abgebildet werden. Die Reward-Funktion basiert primär auf der Distanz zwischen Endeffektor und Zielposition.
+
+\subsubsection*{Trainingsversuche}
+
+\paragraph{PPO.}
+Für die ersten Experimente wurde der On-Policy-Algorithmus Proximal Policy Optimization (PPO) verwendet. PPO begrenzt große Policy-Updates mithilfe einer Clipping-Funktion und ermöglicht dadurch vergleichsweise stabile Trainingsverläufe in kontinuierlichen Aktionsräumen.
+
+Als Policy wurde eine mehrschichtige neuronale Architektur (\texttt{MlpPolicy}) verwendet. Die Lernrate betrug \(3 \cdot 10^{-4}\), der Discount-Faktor wurde auf \(\gamma = 0.99\) gesetzt. Pro Update wurden 2048 Interaktionsschritte gesammelt (\texttt{n\_steps}), die Batch-Größe betrug 64 bei insgesamt 10 Optimierungsepochen pro Update. Zusätzlich wurde mit \(\lambda = 0.95\) Generalized Advantage Estimation (GAE) verwendet. Der Clipping-Bereich wurde auf 0.2 gesetzt, während ein Entropiekoeffizient von 0.01 exploratives Verhalten förderte.
+
+Die Trainingsverläufe zeigten insgesamt ein stabiles Verhalten. Allerdings reagierte PPO empfindlich auf ungeeignete Aktionsskalierungen, wodurch insbesondere bei großen Bewegungsinkrementen Überschwinger und instabile Trajektorien auftraten.
+
+\paragraph{SAC.}
+Zusätzlich wurde der Off-Policy-Algorithmus Soft Actor-Critic (SAC) untersucht. SAC erweitert klassische Actor-Critic-Verfahren um eine entropiebasierte Optimierung und fördert dadurch exploratives Verhalten innerhalb kontinuierlicher Aktionsräume.
+
+Auch hier wurde eine \texttt{MlpPolicy} eingesetzt. Die Lernrate betrug ebenfalls \(3 \cdot 10^{-4}\), der Discount-Faktor wurde auf \(\gamma = 0.99\) gesetzt. Der Replay-Buffer umfasste 100000 Übergänge, während die Batch-Größe 256 betrug. Das Zielnetzwerk wurde mittels Polyak-Averaging mit \(\tau = 0.005\) aktualisiert. Das eigentliche Training begann nach 1000 initialen Interaktionsschritten (\texttt{learning\_starts}). Pro Umgebungsschritt wurde ein Trainingsschritt durchgeführt (\texttt{train\_freq} = 1, \texttt{gradient\_steps} = 1). Der Entropiekoeffizient wurde automatisch angepasst (\texttt{ent\_coef='auto'}).
+
+Im Vergleich zu PPO zeigte SAC eine stärkere Exploration sowie teilweise schnellere Annäherungen an die Zielposition. Gleichzeitig waren die Trainingsverläufe insbesondere in frühen Phasen deutlich schwankender. Die höhere Stichprobeneffizienz erwies sich jedoch für längere Trainingsläufe als vorteilhaft.
+
+\subsubsection*{Environment-Parameter}
+
+Neben den Algorithmus-Hyperparametern haben drei Umgebungsparameter wesentlichen Einfluss auf den Lernerfolg. Der Aktionsskalierungsfaktor \texttt{action\_scale} sollte für Reach-Tasks im Bereich von 0.1 liegen. Werte um 0.3 führen zu ruckartigen Überschreitungen des Ziels, während sehr kleine Werte von etwa 0.05 verhindern, dass weiter entfernte Ziele innerhalb einer Episode erreicht werden können.
+
+Die maximale Episodenlänge von 100 Schritten entspricht bei realen Ausführungszeiten von etwa 5\,s pro Schritt einer Gesamtdauer von ungefähr 8\,min pro Episode. Für zukünftige Arbeiten bietet sich daher Curriculum Learning an, bei dem zunächst kürzere Episoden verwendet und anschließend schrittweise verlängert werden.
+
+Die Erfolgsschwelle von 2\,cm Zielabstand stellt bereits für einen einfachen Einstiegs-Task eine anspruchsvolle Bedingung dar. Ein Curriculum-Ansatz, der zunächst mit einer größeren Toleranz von beispielsweise 5\,cm beginnt und diese im Verlauf des Trainings reduziert, könnte die Konvergenz des Lernprozesses verbessern.
+
+\subsubsection{Originales Repository (PPO, zufälliger Zielpunkt)}
+\label{sec:ppo_original}
+
+Als erster Einstieg wurde das ursprüngliche Repository ohne Anpassungen
+verwendet. Ein PPO-Lauf über 100\,000 Zeitschritte verbesserte die
+Reward-Kurve um ca.\ 50\,\%, konvergierte jedoch nicht auf die
+Erfolgsschwelle von 2\,cm Zielabstand. Da in dieser Phase weder
+Hyperparameter noch die Umgebung verändert wurden, lassen sich die
+möglichen Ursachen nicht isolieren. Die größte Vermutung ist, dass die
+zufällige Neupositionierung des Ziels bei jedem Reset keine sinnvolle
+Policy entstehen lässt, da der Agent keine konsistente Aufgabenstruktur
+erlernen kann. Weitere limitierende Faktoren wie zu wenig Training, zu
+grobe Aktionsschritte (\texttt{action\_scale}~$= 0{,}3$) sowie die
+approximierte Vorwärtskinematik kommen gleichzeitig in Betracht. Dieser
+Lauf dient als untere Referenz für alle folgenden Versuche.
+
+\subsubsection{Ansteuerung eines festen Zielpunkts (SAC)}
+\label{sec:fixed_target}
+
+Um die Komplexität zu reduzieren und einen ersten messbaren Lernerfolg zu
+erzielen, wurde der zufällige Zielpunkt durch einen festen Punkt ersetzt.
+Als Zielpunkt wurde \texttt{[0.5,~0.0,~0.15]} gewählt, da dieser bereits
+aus dem \texttt{pick\_cube}-Versuch als erreichbar bekannt war
+(vgl.\ Abschnitt~\ref{sec:pick_cube}). Algorithmus und Umgebungsparameter
+blieben weitgehend unverändert; lediglich PPO wurde durch SAC ersetzt, da
+SAC für kontinuierliche Aktionsräume in der Literatur eine höhere
+Sample-Effizienz aufweist \cite{haarnoja2018sac}.
+
+\paragraph{Beobachtetes Trainingsverhalten.}
+
+Abbildung~\ref{fig:sac_fixed_target} zeigt den episodischen Reward über die
+Trainingszeit. Der Verlauf gliedert sich in drei charakteristische Phasen.
+
+In der \textbf{Explorationsphase} (ca.\ erste 250 Episoden,
+$t \approx 0$--$1\,500$\,s) schwankt der Reward stark zwischen $-100$ und
+$-15$; alle Episoden laufen die maximale Länge von 100 Schritten durch.
+Der Agent bewegt sich zwar, findet den Zielpunkt jedoch nicht zuverlässig.
+
+In der \textbf{Lernphase} ($t \approx 1\,500$--$16\,000$\,s) verbessert
+sich der mittlere Reward graduell auf ca.\ $-10$ bis $-15$. Vereinzelt
+treten erstmals kurze Episoden auf, die auf gelegentliches Erreichen des
+Ziels hindeuten. Das Verhalten ist jedoch noch nicht stabil.
+
+Ab $t \approx 16\,000$\,s setzt ein deutlicher \textbf{Durchbruch} ein:
+Der Reward springt auf Werte um $+9$, und die Episodenlängen fallen auf
+typischerweise 5--20 Schritte. Ab diesem Zeitpunkt dominieren
+Erfolgs-Episoden klar, und das Training konvergiert stabil auf diesem Niveau.
+
+ \begin{figure}[h]
+     \centering
+     \includegraphics[width=0.85\textwidth]{training_single_target.png}
+     \caption{Episodischer Reward über die Trainingszeit (SAC, fester
+              Zielpunkt). Die drei Phasen Exploration, Lernen und
+              Konvergenz sind deutlich erkennbar.}
+     \label{fig:sac_fixed_target}
+ \end{figure}
+
+\paragraph{Einordnung.}
+
+Der Versuch zeigt, dass SAC mit den gegebenen Standardparametern in der
+Lage ist, einen festen Zielpunkt zuverlässig zu erlernen. Die lange
+Explorationsphase von ca.\ 16\,000\,s deutet jedoch darauf hin, dass
+\texttt{action\_scale}~$= 0{,}3$ zu groben Bewegungen und damit zu
+ineffizienter Exploration führt: Der Agent überschießt den Zielpunkt
+wiederholt, bevor er eine feinere Strategie entwickelt. Dies motiviert
+die in Abschnitt~\ref{sec:reward_shaping} beschriebene Anpassung der
+Reward-Funktion sowie die schrittweise Erweiterung des Arbeitsraums in
+Abschnitt~\ref{sec:curriculum}.
+
+\subsection{Reward Shaping: Verbesserungsbasierte Zusatzbelohnung}
+\label{sec:reward_shaping}
+
+Die Ergebnisse aus Abschnitt~\ref{sec:fixed_target} zeigten, dass der Agent
+mit \texttt{action\_scale = 0.3} eine ausgeprägte Explorationsphase von mehreren
+tausend Sekunden Trainingszeit benötigte, bevor erstmals zielführende Policies
+entstanden. Als Ursache wurde vermutet, dass das sparse-dominierte Belohnungssignal
+(negativer euklidischer Abstand, Erfolgsbonus erst bei Unterschreitung der
+Zielschwelle) dem Agenten zu wenig Information darüber liefert, ob eine einzelne
+Aktion lokal hilfreich war.
+
+Um dieses Problem zu adressieren, wurde die Reward-Funktion um eine
+verbesserungsbasierte Komponente erweitert. In jedem Zeitschritt wird die
+Differenz zwischen dem Abstand des vorherigen Schritts und dem aktuellen Abstand
+berechnet und mit einem Faktor von $2{,}0$ gewichtet zur Gesamtbelohnung addiert:
+
+\begin{equation}
+    r_t = -d_t + 2{,}0 \cdot (d_{t-1} - d_t) + r_{\text{bonus}}
+    \label{eq:reward_shaping}
+\end{equation}
+
+wobei $d_t$ der euklidische Abstand zwischen Endeffektor und Zielpunkt zum
+Zeitschritt $t$ ist und $r_{\text{bonus}}$ den Erfolgsbonus von $+10$ bei
+Erreichen des Ziels bezeichnet. Im ersten Schritt einer Episode, in dem kein
+Vorgängerabstand vorliegt, entfällt die Verbesserungskomponente.
+
+Implementiert wurde dies durch Speicherung von $d_{t-1}$ als Instanzvariable
+\texttt{\_last\_distance}, die zu Beginn jeder Episode zurückgesetzt wird.
+Die Änderung beschränkt sich auf die Reward-Funktion in \texttt{dobot\_env.py};
+alle übrigen Hyperparameter sowie der Algorithmus (SAC) und der feste Zielpunkt
+\texttt{[0.5, 0.0, 0.15]} blieben gegenüber Abschnitt~\ref{sec:fixed_target}
+unverändert.
+
+Die Verbesserungskomponente führt dazu, dass der Agent bereits für gerichtete
+Bewegungen zum Ziel hin positiv verstärkt wird, ohne den Anreiz für das
+eigentliche Erfolgskriterium zu verwässern. Dieser Ansatz entspricht dem Konzept
+des \textit{potential-based reward shaping} nach \cite{potential_based_reward_shaping}, das unter
+bestimmten Bedingungen die optimale Politik unverändert lässt, die
+Lerngeschwindigkeit jedoch deutlich erhöht.
+
+Aufgrund fehlender Protokollierung während dieses Versuchs liegen keine
+quantitativen Ergebnisse vor. Der Versuch kann daher nicht direkt mit
+Abschnitt~\ref{sec:fixed_target} verglichen werden. Die Erweiterung
+der Reward-Funktion wird dennoch dokumentiert, da sie konzeptionell die
+Grundlage für das anschließende Curriculum Learning
+(Abschnitt~\ref{sec:curriculum}) bildet und die Designentscheidungen
+nachvollziehbar machen soll.
+
+\subsection{Curriculum Learning: Schrittweise Erweiterung des Arbeitsraums}
+\label{sec:curriculum}
+
+Ein grundlegendes Problem beim Training in großen Zustandsräumen ist die
+Effizienz der Exploration. Wird dem Agenten von Beginn an der vollständige
+Arbeitsraum des Dobot Magician als Zielraum präsentiert, muss er zunächst
+zufällig eine Vielzahl von Konfigurationen ausprobieren, bevor überhaupt
+erste Erfolgserlebnisse auftreten können. Dieser Effekt war bereits in
+Abschnitt~\ref{sec:fixed_target} zu beobachten, wo trotz fixierten
+Zielpunkts eine ausgeprägte Explorationsphase nötig war.
+
+Um diesem Problem zu begegnen, wurde ein Curriculum eingeführt, das die
+Schwierigkeit der Aufgabe graduell steigert. Anstatt einen festen oder
+vollständig zufälligen Zielpunkt zu verwenden, wird der erlaubte Zielbereich
+in Abhängigkeit des Trainingsfortschritts schrittweise vergrößert. Als
+Fortschrittsmaß dient die Anzahl der bisher absolvierten Episoden. Ein
+normierter Schwierigkeitswert $d \in [0, 1]$ wird berechnet als:
+
+\begin{equation}
+    d = \min\!\left(1{,}0,\; \frac{N_{\text{ep}}}{500}\right)
+    \label{eq:difficulty}
+\end{equation}
+
+wobei $N_{\text{ep}}$ die Gesamtzahl der abgeschlossenen Episoden bezeichnet.
+Nach 500 Episoden ist der maximale Schwierigkeitsgrad erreicht.
+
+Die Zielgenerierung verwendet diesen Wert, um die maximale Abweichung vom
+Endeffektor in der Homeposition achsenweise zu skalieren:
+
+\begin{equation}
+    \Delta_{\max} = \begin{pmatrix} 0{,}05 + d \cdot 0{,}30 \\ 0{,}05 + d \cdot 0{,}25 \\ 0{,}05 + d \cdot 0{,}20 \end{pmatrix} \text{ [m]}
+    \label{eq:curriculum_delta}
+\end{equation}
+
+Zu Beginn des Trainings ($d = 0$) sind Zielpunkte auf einen Bereich von
+$\pm 5\,\text{cm}$ um die Homeposition beschränkt. Mit steigendem
+Schwierigkeitsgrad wächst dieser Bereich auf bis zu $\pm 35\,\text{cm}$
+in $x$-, $\pm 30\,\text{cm}$ in $y$- und $\pm 25\,\text{cm}$ in
+$z$-Richtung. Zusätzlich werden alle generierten Zielpunkte auf die
+definierten Workspace-Grenzen geclippt, um kinematisch unerreichbare
+Ziele auszuschließen.
+
+ \begin{figure}[h]
+     \centering
+     \includegraphics[width=0.85\textwidth]{training_latest.png}
+     \caption{Reward-Verlauf über die Trainingszeit mit Curriculum Learning.}
+     \label{fig:curriculum_reward}
+ \end{figure}
+
+Die Auswertung des Trainingslogs zeigt, dass der Agent auch unter
+den wachsenden Anforderungen des Curriculums in der Lage war, das Ziel
+regelmäßig zu erreichen. Im späteren Trainingsverlauf (ab ca.\ $t \approx
+88{.}000\,\text{s}$) treten wiederholt kurze erfolgreiche Episoden mit
+Rewards von über $+8$ auf, bei Episodenlängen von unter 20 Schritten.
+Gegenüber dem in Abschnitt~\ref{sec:fixed_target} beobachteten
+Trainingsverhalten ist bemerkenswert, dass erfolgreiche Episoden auch
+für räumlich variierte Zielpunkte auftreten, nicht nur für einen einzelnen
+festen Punkt.
+
+Ein direkter quantitativer Vergleich zwischen einem Training mit sofortigem
+vollem Workspace und dem hier beschriebenen Curriculum-Ansatz wurde nicht
+durchgeführt. Qualitativ legt der Trainingsverlauf jedoch nahe, dass die
+schrittweise Erweiterung des Zielbereichs dem Agenten ermöglicht, zunächst
+stabile Nahbereichs-Politiken zu erlernen, die anschließend auf größere
+Abstände generalisiert werden. Dieser Ansatz entspricht dem in der
+Reinforcement-Learning-Literatur beschriebenen Prinzip des Curriculum
+Learnings~\cite{curriculum_learning}, bei dem die Trainingsaufgaben in aufsteigender
+Schwierigkeit präsentiert werden, um die Lerneffizienz zu steigern.
+
+
+\subsection{Weiterführende Versuche}
+
+Die folgenden Versuchsansätze wurden im Rahmen dieser Arbeit nicht praktisch durchgeführt, stellen jedoch sinnvolle Erweiterungen der bisherigen Experimente dar. Beide Ansätze adressieren unterschiedliche Aspekte lernbasierter Robotik und könnten in zukünftigen Arbeiten weiter untersucht werden.
+
+\subsubsection{Policy Learning ohne Physiksimulation}
+
+Ein möglicher weiterführender Ansatz besteht in der Reduktion der Simulationsumgebung auf ein rein kinematisches Modell ohne vollständige Physiksimulation. Dabei würden ausschließlich mathematische Zusammenhänge zwischen Gelenkzuständen und Endeffektorposition betrachtet, während physikalische Effekte wie Kollisionen, Reibung oder Dynamik vollständig entfallen.
+
+Die Lernumgebung könnte stark vereinfacht aufgebaut werden. Der Agent würde lediglich Zielpositionen im Arbeitsraum erhalten und kontinuierliche Gelenkaktionen ausführen. Die Bewertung des Verhaltens könnte ausschließlich auf dem Abstand zwischen Endeffektor und Zielpunkt basieren.
+
+Eine derart minimalistische Umgebung besitzt mehrere Vorteile. Durch den Verzicht auf physikalische Berechnungen sinkt die Simulationskomplexität deutlich, wodurch wesentlich schnellere Trainingsdurchläufe möglich werden. Gleichzeitig erleichtert die reduzierte Umgebung das Debugging sowie die isolierte Untersuchung grundlegender Lernmechanismen. Fehlerquellen innerhalb der Physiksimulation würden entfallen, sodass der Fokus stärker auf dem eigentlichen Policy-Learning liegt.
+
+Demgegenüber steht jedoch der Nachteil eines geringeren Realismus. Da physikalische Wechselwirkungen nicht berücksichtigt werden, ist die Übertragbarkeit der erlernten Strategien auf realistische Simulationsumgebungen oder reale Robotersysteme eingeschränkt. Insbesondere Kontaktverhalten, Dynamik und Greifprozesse könnten in einem solchen Ansatz nicht sinnvoll abgebildet werden.
+
+Trotz dieser Einschränkungen kann eine reduzierte Lernumgebung insbesondere für erste Basisexperimente und Hyperparameterstudien sinnvoll sein.
+
+\subsubsection{Ansteuerung unter Hindernisbedingungen}
+
+Ein weiterer interessanter Erweiterungsansatz besteht in der Einführung statischer Hindernisse innerhalb der Simulationsumgebung. Beispielsweise könnte eine Kugel zwischen Start- und Zielposition platziert werden, sodass der Roboterarm nicht mehr ausschließlich eine direkte Bewegung zum Ziel ausführen kann.
+
+Für diesen Ansatz müsste die Reward-Funktion um zusätzliche Komponenten erweitert werden. Neben der bisherigen Distanzbewertung wären insbesondere Kollisionsstrafen sowie Belohnungen für das Einhalten eines Sicherheitsabstands relevant. Zusätzlich müsste die Observation um Informationen über Position und Abstand des Hindernisses ergänzt werden.
+
+Ein solcher Versuchsaufbau ermöglicht die Untersuchung komplexerer Verhaltensweisen innerhalb des Reinforcement Learnings. Von besonderem Interesse wäre dabei die Frage, ob emergentes Ausweichverhalten entsteht und der Agent eigenständig alternative Trajektorien erlernt. Ebenso könnte untersucht werden, ob der Roboterarm lernt, Umwege gezielt zur Kollisionsvermeidung einzusetzen.
+
+Darüber hinaus wäre eine Analyse der Auswirkungen auf Erfolgsrate und Trainingsdauer sinnvoll. Es ist zu erwarten, dass die zusätzliche Komplexität sowohl den Lernprozess verlängert als auch die Stabilität des Trainings beeinflusst. Ein direkter Vergleich zwischen Szenarien mit und ohne Hindernis könnte dabei wichtige Erkenntnisse über die Robustheit der erlernten Strategien liefern.
+
+Insbesondere im Vergleich zu klassischen kinematischen Ansätzen bietet ein solcher Versuchsaufbau das Potenzial, adaptive und flexible Bewegungsstrategien lernbasierter Verfahren sichtbar zu machen.
+
+\subsection{Bewertungsmatrix}
+\label{sec:bewertungsmatrix}
+
+Tabelle~\ref{tab:bewertung} fasst die sechs im Rahmen des IDPs untersuchten
+bzw.\ konzeptionell betrachteten Ansätze anhand einheitlicher Kriterien
+zusammen. Die Bewertungen der praktisch durchgeführten Versuche (Classical
+Planning, RL) basieren auf den im Kapitel~\ref{chap:experimente} dokumentierten
+Erfahrungen; die übrigen Einschätzungen stützen sich auf die einschlägige
+Literatur sowie auf konzeptionelle Überlegungen.
+
+\begin{table}[h]
+\centering
+\caption{Vergleichende Bewertung der untersuchten Lernansätze}
+\label{tab:bewertung}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccc}
+\hline
+\textbf{Kriterium}
+& \textbf{\shortstack{Classical\\Planning}}
+& \textbf{\shortstack{Drag-to-\\Teach}}
+& \textbf{RL}
+& \textbf{LfD}
+& \textbf{Hybrid}
+& \textbf{VLM} \\
+\hline
+Trainingsaufwand         & keiner        & minimal       & sehr hoch    & mittel       & mittel       & sehr hoch \\
+Datenbedarf              & keiner        & wenige Demo.  & Mio. Steps   & 10--100 Demo.& wenige Steps & hoch\\
+Sim-to-Real-Transfer     & nicht nötig   & nicht nötig   & schwierig    & mittel       & mittel       & unklar \\
+Robustheit (Lageabw.)    & keine         & keine         & hoch (DR)    & begrenzt     & mittel       & potenziell hoch \\
+Dobot-Kompatibilität     & hoch          & hoch          & mittel       & mittel       & mittel       & gering \\
+Implementierungsaufwand  & gering        & sehr gering   & hoch         & mittel       & hoch         & sehr hoch \\
+Eignung als BA-Basis     & bedingt       & bedingt       & ja           & ja           & ja           & nein \\
+\hline
+\end{tabular}%
+}
+\end{table}
+
+\paragraph{Classical Motion Planning.}
+Der IK-basierte Ansatz erwies sich als zuverlässige und reproduzierbare
+Referenzmethode. Die Wegpunktfolge in \texttt{pick\_cube.py} wurde stabil
+ausgeführt, und die Positionsfehler lagen innerhalb des Toleranzbereichs.
+Die einzige beobachtete Schwachstelle lag nicht in der Bewegungsplanung
+selbst, sondern in der physikalischen Simulation des Greifers, bei dem
+unzureichende Reibungskräfte ein zuverlässiges Halten des Würfels
+verhinderten. Für strukturierte Aufgaben mit bekannten Zielpositionen ist
+der Ansatz gut geeignet, bietet jedoch keine Anpassungsfähigkeit
+gegenüber Lageabweichungen oder unbekannten Objektpositionen.
+
+\paragraph{Reinforcement Learning.}
+Das RL-Training zeigte, dass ein Agent den Dobot Magician prinzipiell
+eigenständig zu einer Zielposition führen kann. Der Weg dahin war jedoch
+aufwendig: Selbst für einen festen Zielpunkt waren mehrere tausend Sekunden
+Trainingszeit nötig, bevor stabile Erfolge auftraten. Als wesentliche
+Einflussfaktoren erwiesen sich der Aktionsskalierungsfaktor
+\texttt{action\_scale}, die Qualität der Endeffektorpositionsbestimmung
+sowie die Struktur der Reward-Funktion. Eine überraschende Beobachtung war,
+dass SAC trotz der vergleichsweise rauen Simulationsumgebung (zeitliche
+Synchronisationsprobleme, langsame Schrittzeiten durch VMware) einen
+stabilen Durchbruch erzielte. Der Sim-to-Real-Transfer bleibt die
+offene Herausforderung: Die im Training verwendeten Domänenbedingungen
+weichen von einem realen Dobot-Betrieb ab und eine systematische
+Domain-Randomization wurde nicht durchgeführt.
+
+\paragraph{Übergreifende Einschätzung.}
+Zwei Befunde des IDPs verdienen besondere Hervorhebung. Erstens zeigte
+sich, dass die Wahl des Zielpunkts einen größeren Einfluss auf den
+Trainingserfolg hat als die Wahl des Algorithmus: Der Wechsel von einem
+zufälligen zu einem festen Zielpunkt ermöglichte erst den messbaren
+Lernerfolg, während der Wechsel von PPO zu SAC allein nicht ausreichte.
+Zweitens erwies sich die Infrastruktur (Ubuntu in VMware auf Apple~M5,
+ROS2-MuJoCo-Bridge, TF2-Synchronisation) als überraschend stabiler Stack,
+der trotz systemischer Einschränkungen funktionsfähige Experimente
+ermöglichte.
+
+Für eine weiterführende Bachelorarbeit erscheint der Hybridansatz am
+vielversprechendsten: Eine klassisch geplante Grobstrategie, ergänzt durch
+eine gelernte Feinkorrektur, kombiniert die Reproduzierbarkeit des
+IK-basierten Planens mit der Adaptivität lernbasierter Methoden. Reines RL
+eignet sich ebenfalls als Grundlage, setzt jedoch eine deutlich verbesserte
+Trainingsinfrastruktur und systematische Hyperparametersuche voraus. VLMs
+scheiden aufgrund des proprietären Charakters verfügbarer Modelle sowie
+des hohen Ressourcenbedarfs für den IDP-Kontext aus.
+
+\newpage
+
+\section{Fazit und begründete Empfehlung}
+\label{sec:fazit}
+
+\subsection*{Zusammenfassung der Erkenntnisse}
+
+Die im Rahmen dieses interdisziplinären Projekts durchgeführten Experimente
+liefern ein differenziertes Bild der Möglichkeiten und Grenzen verschiedener
+Steuerungsansätze für den Dobot Magician. Der klassische IK-basierte Ansatz
+erwies sich als stabil und reproduzierbar, bietet jedoch keine Adaptivität
+gegenüber unbekannten Objektpositionen oder Lageabweichungen. Das
+Reinforcement-Learning-Training zeigte, dass ein Agent prinzipiell in der
+Lage ist, einen Zielpunkt eigenständig anzufahren. Gleichzeitig offenbarten
+die Versuche eine ausgeprägte Empfindlichkeit gegenüber
+Hyperparameterwahl, Reward-Design und Trainingsinfrastruktur. Mehrere
+Einflussfaktoren, darunter Aktionsskalierung, Zielraumgröße und die Qualität
+der Endeffektorpositionsbestimmung, wirkten gleichzeitig auf den
+Trainingserfolg ein und konnten nicht isoliert bewertet werden.
+
+\subsection*{Limitationen der Experimente}
+
+Die Aussagekraft der RL-Experimente ist durch mehrere methodische
+Einschränkungen begrenzt. Vergleichsläufe zwischen einzelnen Varianten
+(z.\,B.\ approximierte FK gegenüber TF2, mit und ohne Reward Shaping)
+wurden nicht systematisch dokumentiert, sodass kausale Schlüsse über
+den Einfluss einzelner Änderungen nicht möglich sind. Darüber hinaus
+wurden Hyperparameter nicht systematisch gesucht, sondern überwiegend
+aus Standardkonfigurationen übernommen. Die Experimente sind daher als
+explorative Vorarbeit zu verstehen, nicht als abgeschlossene empirische
+Studie. Diese Einschränkungen sind charakteristisch für den
+Projektrahmen eines IDPs und bilden zugleich einen klaren
+Ausgangspunkt für die Bachelorarbeit.
+
+\subsection*{Begründete Empfehlung für die Bachelorarbeit}
+
+Auf Basis der gesammelten Erfahrungen wird für die Bachelorarbeit ein
+Hybridansatz empfohlen. Die Grundidee besteht darin, die Aufgabe in zwei
+Teilprobleme zu zerlegen, die jeweils mit dem geeigneten Verfahren gelöst
+werden. Ein kamerabasiertes System liefert zunächst eine grobe
+Schätzung der Zielposition im Arbeitsraum des Dobot Magician. Auf Basis
+dieser Schätzung plant eine klassische oder lernbasierte Grobsteuerung
+eine initiale Annäherungsbewegung. Eine RL-basierte Feinkorrektur übernimmt
+anschließend die präzise Positionierung und kompensiert dabei Ungenauigkeiten
+der Kamerakalibrierung, Objektlageabweichungen sowie Modellungenauigkeiten
+der Kinematik.
+
+Dieser Ansatz hat mehrere Vorteile gegenüber reinem RL. Die Exploration
+des Agenten wird auf einen kleinen Nahbereich um den grob angefahrenen
+Punkt beschränkt, was den Trainingsaufwand erheblich reduziert. Gleichzeitig
+entfällt die Notwendigkeit, den gesamten Arbeitsraum per RL abzudecken,
+was sich im IDP als die eigentliche Schwierigkeit herausgestellt hat.
+Die Kamerakomponente übernimmt die Generalisierung auf beliebige
+Objektpositionen, während der RL-Agent auf robuste Feinmotorik
+spezialisiert bleibt.
+
+Alternativ käme Imitation Learning, insbesondere der ACT-Algorithmus
+(Action Chunking with Transformers), als Grundlage für die Feinkorrektur
+in Betracht. ACT hat sich in der jüngeren Literatur für präzise
+Manipulationsaufgaben mit wenigen Demonstrationen als leistungsfähig
+erwiesen und könnte den Daten- und Trainingsaufwand gegenüber reinem
+RL weiter reduzieren \cite{zhao2023act}.
+
+\subsection*{Verbleibende Risiken}
+
+Drei Risiken sind für die Bachelorarbeit besonders relevant. Der
+Sim-to-Real-Transfer stellt die größte offene Frage dar: Die im IDP
+verwendete Simulationsumgebung weicht in Dynamik, Reibung und
+Sensorcharakteristik vom realen Dobot ab, und eine systematische
+Domain-Randomization wurde nicht durchgeführt. Zweitens hängt die
+Qualität der kamerabasierten Grobpositionierung stark von
+Kalibrierungsaufwand und Beleuchtungsbedingungen ab und muss in der
+Bachelorarbeit sorgfältig evaluiert werden. Drittens bleibt der
+Rechenaufwand für längere RL-Trainingsläufe eine praktische
+Einschränkung, solange keine dedizierte GPU-Infrastruktur verfügbar ist.
+
+\subsection*{Ausblick}
+
+In der Bachelorarbeit soll der Hybridansatz konkret implementiert und
+am realen Dobot Magician evaluiert werden. Dazu sind insbesondere
+folgende Schritte vorgesehen: Aufbau einer kalibrierten
+Kamera-Roboter-Konfiguration zur Zielpunktschätzung, systematisches
+RL-Training der Feinkorrekturkomponente mit verbesserter
+Hyperparameterstrategie sowie ein quantitativer Vergleich mit dem
+klassischen IK-basierten Ansatz als Baseline. 
+% TODO (Valentin): Konkrete Schritte ggf. anpassen sobald BA-Thema
+% offiziell angemeldet ist
+
+\newpage
+
+\printbibliography[heading=bibintoc,title=Literaturverzeichnis]
+
+\end{document}
