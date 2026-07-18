@@ -23,6 +23,7 @@
 ]{geometry}
 \usepackage{setspace}
 \usepackage{fancyhdr}
+\usepackage[locale=DE]{siunitx}
 % \usepackage{minted} for code
 
 %  Logo in der Ecke 
@@ -125,196 +126,231 @@ Die Weitergabe des Inhalts der Arbeit im Gesamten oder in Teilen sowie das Anfer
 \pagenumbering{arabic}
 
 \section{Einleitung}
+In diesem Kapitel wird der Kontext der vorliegenden Arbeit beschrieben uund das Thema begündet. Zunächst wird die Forschungsfrage und die Ziele der Arbeit erläutert. Anschließend wird die Methodik der Arbeit vorgestellt und die Aufbau der Arbeit erläutert.
+%Ausgangssituation, Forschungsfrage, Ziel der Arbeit, Methodische Vorgehensweise, Aufbau der Arbeit
 
-\subsection{Einstieg}
+%\subsection{Einstieg}
+\subsection{Ausgangssituation}
+Bekanntes 3-10 sätze Was gibt es bereits zum thema ?
+Definitionen 1-2 sätze pro Def. 
+relevante Details und aspekte 10-20 sätze. worum geht es, welche fragen, was spielt eine rolle
+
 Das manuelle Montieren und Demontieren von Bauteilen ist ein zentrales Element moderner Fertigungsprozesse, insbesondere bei der Montage von Elektronikkomponenten, der Automobilproduktion und der Luft- und Raumfahrt \cite{manuelle_montage}. Da manuelle Montageprozesse zeit- und kostenintensiv sind, ist deren Automatisierung ein zentrales Ziel in der Robotik \cite{automation_aufwand}, um Effizienz, Präzision und Sicherheit zu erhöhen. Roboterarme werden zunehmend eingesetzt, um diese Aufgaben zu übernehmen\cite{robotics_manufacturing_replacement}.
 
-Hierbei besteht die Herausforderung darin, dass Bauteile fertigungsbedingt stets Lage- und Orientierungstoleranzen aufweisen \cite{orientation_tolerances}. Selbst geringe Lageabweichungen können dazu führen, dass klassische, deterministische Programme versagen, da sie keine Mechanismen zur Lagekorrektur oder Fehlertoleranz besitzen \cite{orientation_tolerances}.
+Hierbei besteht die Herausforderung darin, dass XXXXX
 
-Diese Einschränkungen motivieren den Einsatz lernbasierter Verfahren wie Reinforcement Learning oder Imitation Learning, die sich an variierende Umgebungsbedingungen anpassen und vorgegebene Aufgaben dennoch zuverlässig ausführen können \cite{RL_continuous_control}.
-Da reale Experimente aufwendig und fehleranfällig sind, werden solche Verfahren häufig zunächst in physikbasierten Simulationsumgebungen entwickelt und evaluiert.
-Im Folgenden wird die daraus resultierende Problemstellung dieser Arbeit näher erläutert.
+Diese Einschränkungen motivieren den Einsatz XXXXXX 
+
+Im Folgenden wird die daraus resultierende Problemstellung und Motivaiton dieser Arbeit näher erläutert.
 	
-\subsection{Motivation und Problemstellung}
-Diese Vorarbeit verfolgt einen explorativen Ansatz: Anstatt einen einzelnen Algorithmus zu implementieren und zu evaluieren, werden bestehende Verfahren zur roboterbasierten Montage und Demontage systematisch untersucht und verglichen.
+\subsection{Forschungsfrage}
 
-Die zentrale technische Herausforderung liegt darin, dass klassische Steuerungsansätze an den unvermeidlichen Lage- und Orientierungstoleranzen realer Bauteile scheitern \cite{orientation_tolerances}, was den Einsatz adaptiverer Verfahren motiviert.
+\subsection{Ziel der Arbeit}
 
-Eine zusätzliche, strukturell eigenständige Herausforderung ergibt sich aus dem sogenannten Sim-to-Real-Gap: Verfahren, die in der Simulation erfolgreich trainiert oder erprobt werden, lassen sich häufig nicht direkt auf reale Systeme übertragen \cite{sim_to_real_gap}. Reibung, Sensorungenauigkeiten und mechanische Toleranzen erzeugen eine Diskrepanz zwischen Simulations- und Realverhalten \cite{sim_to_real_gap}, die eine gesonderte Behandlung erfordert. Lernbasierte Verfahren, insbesondere Reinforcement Learning und Imitation Learning, versprechen, beide Herausforderungen zu adressieren: Sie können sich an variierende Umgebungsbedingungen anpassen und prinzipiell in der Simulation trainiertes Verhalten auf reale Systeme übertragen \cite{RL_continuous_control}. Allerdings gehen sie mit erheblichem Implementierungsaufwand und hohem Datenbedarf einher \cite{RL_continuous_control}. 
-
-Um eine fundierte Entscheidung für die anschließende Bachelorarbeit treffen zu können, ist ein systematischer Vergleich der verfügbaren Ansätze anhand klar definierter Kriterien notwendig, darunter Adaptivität gegenüber Lageabweichungen, Implementierungsaufwand sowie Sim-to-Real-Fähigkeit.
-Ziel dieser Vorarbeit ist es, bestehende Ansätze systematisch zu vergleichen und denjenigen zu identifizieren, der sich am besten für den Einsatz an einem realen Roboterarm und eine vertiefte Untersuchung im Rahmen der Bachelorarbeit eignet.
-
-\subsection{Stand der Technik}
-Es existiert ein breites Spektrum an Verfahren zur roboterbasierten Montage und Demontage. Diese reichen von klassischen, planungsbasierten Ansätzen über lernbasierte Methoden bis hin zu neueren, modellbasierten Großarchitekturen. Alle Ansätze sind aktiver Forschungsgegenstand und werden kontinuierlich weiterentwickelt \cite[vgl. Kap.~2]{ecker2023interaktionsbasierte_verfahren}.
-
-Klassische Bewegungsplanungsverfahren, etwa auf Basis von RRT oder PRM, erzeugen kollisionsfreie Trajektorien in bekannten Umgebungen zuverlässig und nachvollziehbar \cite{Sampling-based}. 
-Ihre grundlegende Einschränkung besteht jedoch darin, dass sie eine vollständige und genaue Umgebungsrepräsentation voraussetzen. Das bedeutet sobald Bauteile von ihrer erwarteten Lage abweichen, liefern sie keine Korrekturmechanismen und scheitern \cite{orientation_tolerances}.
-
-Ein praxisnäherer Ansatz stellt das sogenannte Drag-to-Teach dar: Eine menschliche Fachkraft führt den Roboterarm manuell durch eine Aufgabe und die aufgezeichnete Trajektorie wird anschließend wiederholt \cite{drag_to_teach}.
-Dieses Verfahren erfordert keinerlei Programmierkenntnisse, ist jedoch grundsätzlich auf exakt reproduzierbare Umgebungsbedingungen angewiesen, sodass Lageabweichungen unmittelbar zum Versagen der aufgezeichneten Bewegung führen \cite{drag_to_teach_survey}.
-
-Lernbasierte Verfahren setzen an dieser Grenze an. Reinforcement Learning (RL) ermöglicht es einem Agenten, durch wiederholte Interaktion mit einer Umgebung eine Strategie zu erlernen, die eine vorgegebene Belohnungsfunktion maximiert \cite{RL_continuous_control}. 
-Herausforderungen bleiben jedoch der hohe Stichprobenbedarf, die aufwendige Gestaltung geeigneter Belohnungsfunktionen sowie der Transfer von der Simulation auf reale Systeme \cite{RL_continuous_control}. 
-
-Imitation Learning (IL), auch Learning from Demonstration genannt, umgeht den Bedarf an expliziter Belohnungsdefinition, indem aus menschlichen Demonstrationen direkt eine Strategie abgeleitet wird \cite{IL}.
-Erreichte Ergebnisse zeigen, dass IL als Alternative mit geringerem Datenbedarf an expliziter Belohnung untersucht wurde. IL umgeht die Belohnungsdefinition, verlagert den Datenbedarf jedoch auf die Demonstrationen selbst \cite{IL}. 
-
-Beiden Ansätzen gemeinsam ist das Problem des Sim-to-Real-Gaps: In der Simulation erlernte Strategien lassen sich aufgrund von Diskrepanzen in Dynamik, Reibung und Sensorverhalten häufig nicht direkt übertragen \cite{sim_to_real_gap}.
-
-Die jüngste Entwicklung in der robotischen Manipulation sind sogenannte Foundation Models und Vision-Language Models (VLMs): große, auf umfangreichen Datensätzen vortrainierte Modelle, die Wahrnehmung und Sprachverständnis kombinieren und Aufgaben auf Basis natürlichsprachlicher Anweisungen ausführen können \cite{openvlaopensourcevisionlanguageactionmodel}. 
-Ihr Potenzial liegt in der Generalisierung über Aufgaben und Objekte hinweg, ohne aufgabenspezifisches Neutraining \cite{openvlaopensourcevisionlanguageactionmodel}.
-Zum aktuellen Zeitpunkt befinden sich diese Ansätze noch im experimentellen Stadium: Latenz, Rechenanforderungen und Inferenzgeschwindigkeit schließen einen produktiven Einsatz unter realen Montagebedingungen derzeit aus; hinzu kommt die fehlende Integration in die Embedded-Controller kompakter, ressourcenbeschränkter Roboterarme \cite{openvlaopensourcevisionlanguageactionmodel}.
-
-Ein systematischer Vergleich dieser Ansätze (klassisch, lernbasiert und modellbasiert) speziell für kompakte Roboterarme mit Hardware-Einschränkungen unter realen Montagebedingungen ist nach aktuellem Kenntnisstand nicht umfassend dokumentiert. Bestehende Arbeiten evaluieren einzelne Verfahren überwiegend isoliert oder unter idealisierten Laborbedingungen; eine kriteriengeleitete Gegenüberstellung, die Adaptivität, Implementierungsaufwand und Sim-to-Real-Fähigkeit gleichzeitig berücksichtigt, liegt nach Kenntnis des Autors nicht vor. Diese Lücke motiviert den in Abschnitt 1.2 beschriebenen Ansatz dieser Vorarbeit.
+\subsection{Methodische Vorgehensweise}
 
 \subsection{Aufbau des Berichts}
+Welche inhalte finden sich im ersten kapitel?
+welche inhalte stehen im zweiten kapitel zum forschungsstand?
+welche aspekte werden im dritten kapitel behandelt?
+Welche inhalte finden sich im vierten kapitel, dem Ergebniskapitel?
+Welche inhalte werden im letzen Kapitel behandelt?
+
 Der vorliegende Bericht gliedert sich in vier Kapitel. Kapitel 2 legt die theoretischen Grundlagen dar: Es führt den Dobot Magician als Hardwareplattform ein, beschreibt die verwendete Simulationsumgebung und definiert zentrale Begriffe wie Flexibilität im Kontext roboterbasierter Montage. Kapitel 3 stellt die betrachteten Verfahren – klassische Planungsansätze, lernbasierte Methoden sowie Foundation Models – systematisch vor und bewertet sie anhand definierter Kriterien in einer Bewertungsmatrix. Kapitel 4 fasst die Ergebnisse des Vergleichs zusammen und leitet daraus eine begründete Empfehlung für die vertiefte Untersuchung im Rahmen der Bachelorarbeit ab.
 
 \newpage
 
-\section{Grundlagen und theoretischer Rahmen}
-Dieses Kapitel beschreibt die technischen und theoretischen Grundlagen der vorliegenden Arbeit. Zunächst wird der verwendete Roboterarm Dobot Magician als experimentelle Plattform vorgestellt. Anschließend werden die eingesetzte Simulationsumgebung sowie die Definition von Flexibilität im Kontext der Arbeit erläutert. Abschließend erfolgt eine Einordnung von Montage- und Demontageaufgaben als Robotikproblem. Die dargestellten Grundlagen bilden die Basis für die Entwicklung und Bewertung der eingesetzten Lernverfahren.
-
-\subsection{Der Dobot Magician als Plattform}
-\label{sec:dobot_magician-chapter2}
-Im folgenden Abschnitt werden die technischen Spezifikationen des Roboterarms vorgestellt und beschrieben. Diese Informationen sind entscheidend, um die Anforderungen an die im folgenden Kapiteln behandelten Lernansätze zu verstehen und bewerten. Die Spezifikationen wurden aus dem offiziellen Datenblatt des Dobot Magician entnommen und in Bezug auf die Anforderungen der Montage- und Demontageaufgaben analysiert.
-
-\subsubsection{Grundaufbau}
-Der Dobot Magician ist ein kompakter, vierachsiger Roboterarm, der häufig für Bildungszwecke und Forschungsaufgaben eingesetzt wird.
-
-Er verfügt über eine Tischmontage sowie eine integrierte Steuerung in der Basis. Der Arm besteht aus Aluminium und ABS-Kunststoff und besitzt ein Eigengewicht von 3,4\,kg (ohne Werkzeug beziehungsweise Endeffektor) \cite{dobot_datasheet}.
-
-Die vier Achsen des Roboterarms sind wie folgt konfiguriert: J1 (Basisrotation), J2 (Schultergelenk), J3 (Ellenbogengelenk) sowie J4 (Handgelenk beziehungsweise Greiferrotation). Diese Konfiguration ermöglicht ein breites Bewegungspektrum, das für Montage- und Demontageaufgaben relevant sind\cite{dobot_datasheet}. 
-
-\subsubsection{Bewegung \& Präzision}
-Die maximale Reichweite des Dobot Magician beträgt 320\,mm \cite{dobot_datasheet} und definiert damit den Arbeitsraum des Benchmark-Tasks.
-
-Die Lernansätze müssen in der Lage sein, innerhalb dieses Bereichs präzise zu agieren. 
-Die Wiederholgenauigkeit liegt bei ±0,2\,mm \cite{dobot_datasheet} und stellt damit die physikalische Obergrenze der erreichbaren sowie die untere Grenze der reproduzierbaren Positionsgenauigkeit des Systems dar.
-
-Daraus ergibt sich die Anforderung, dass alle Ansätze diese Toleranz einhalten oder übertreffen müssen, um sicherzustellen, dass die Hardware nicht zum limitierenden Faktor wird.
-Die maximale Gelenkgeschwindigkeit beträgt 320°/s bei einer Nutzlast von 250\,g, während das Rotationsservo bis zu 480°/s erreicht \cite{dobot_datasheet}. Diese dynamischen Grenzen bestimmen die Anforderungen an Stabilität und Reaktionsfähigkeit der eingesetzten Lernverfahren. 
-
-\subsubsection{Nutzlast \& Dynamik}
-\label{sec:dobot-nutzlast-dynamik}
-Die maximale Traglast des Dobot Magician beträgt 500\,g \cite{dobot_datasheet}. Bei einer Nutzlast von 250\,g wird die Höchstgeschwindigkeit erreicht, während  höhere Lasten die Dynamik des Systems reduzieren.
-
-Diese Einschränkung begrenzt die Auswahl geeigneter Benchmark-Objekte. Montage- und Demontageobjekte müssen innerhalb der spezifizierten Traglast liegen, um einen stabilen und reproduzierbaren Betrieb des Systems sicherzustellen. Objekte mit einer Masse oberhalb von 500\,g werden daher ausgeschlossen.
-
-\subsubsection{Schnittstellen \& Kommunikation}
-Angesteuert wird der Dobot Magician standardmäßig über USB. Kabellose Kommunikation via WLAN oder Bluetooth ist ausschließlich bei Modellen mit \enquote{Advanced Communication}-Erweiterung verfügbar \cite{dobot_datasheet}.
-
-Die I/O-Schnittstelle an der Basis stellt zwei schaltbare 12-V- und zwei 5-V-Ausgänge sowie vier 3,
-3-V-Ein-/Ausgänge bereit, von denen zwei als PWM-Ausgänge (Pulsweitenmodulation) und zwei als ADC-Eingänge (Analog-Digital-Converter) konfiguriert sind, zusätzlich sind drei RS232-Schnittstellen verfügbar \cite{dobot_datasheet}. Am Arm selbst stehen zwei schaltbare 12-V-Ausgänge sowie sieben 3,3-V-Ein-/Ausgänge zur Verfügung, davon drei PWM- und vier ADC-Kanäle \cite{dobot_datasheet}.
-
-Zur Steuerung wird standardmäßig die Software DOBOTStudio eingesetzt, die für Windows und macOS verfügbar ist \cite{dobot_datasheet}. Sie unterstützt grundlegende Programmierung und Bewegungssteuerung, bietet jedoch keine native Integration in Simulationsumgebungen oder Middleware-Frameworks wie ROS.
-
-\subsubsection{Betrieb \& Umgebung}
-Der Dobot Magician ist für den Laborbetrieb konzipiert und entspricht der Schutzklasse IP20. Daher ist er ist ausschließlich in trockenen Innenräumen zu betreiben \cite{dobot_datasheet}. Die zulässige Umgebungstemperatur liegt zwischen \SI{-10}{\degreeCelsius} bis \SI{60}{\degreeCelsius} \cite{dobot_datasheet}.
-
-Die Stromversorgung erfolgt über 100–240 V AC, der intern auf 12 V DC bei maximal 7 A gewandelt wird. Die maximale Leistungsaufnahme beträgt 60 W \cite{dobot_datasheet}.
-
-\subsection{Entwicklungs- und Simulationsumgebung}
-
-\subsubsection{Virtuelle Maschine \& Betriebssystem}
-Als Betriebssystem wird Ubuntu Server 22.04 LTS (Desktop-Version) für ARM eingesetzt, das in einer virtuellen Maschine per VMware Fusion auf einem MacBook Air mit Apple-M5-Prozessor betrieben wird. Die Wahl fiel auf diese Distribution, da sie sich aufgrund ihres umfangreichen Software-Ökosystems, der breiten Unterstützung gängiger Robotik-Frameworks wie ROS sowie der Kompatibilität mit Simulationsumgebungen wie MuJoCo als De-facto-Standard in der Robotikforschung etabliert hat \cite{quigley2009ros}.
-Die Verwendung der Desktop-Variante gegenüber der Server-Edition begründet sich in den grafischen Anforderungen der eingesetzten Simulationsumgebungen, die eine visuelle Ausgabe voraussetzen. Der Betrieb als virtuelle Maschine auf Apple-Silicon-Hardware erfolgt nativ auf ARM64-Basis, wodurch eine hohe Kompatibilität mit modernen Robotik-Paketen gewährleistet ist, die zunehmend für diese Architektur bereitgestellt werden.
-
-\subsubsection{ROS2 \& RViz}
-Bei ROS2 (Robot Operating System 2) handelt es sich um ein Open-Source-Middleware-Framework, das als Kommunikationsschicht zwischen Hardware, Sensoren und Softwarekomponenten in der Robotik dient. Entgegen seiner Bezeichnung ist ROS2 kein Betriebssystem im klassischen Sinne, sondern eine Abstraktionsschicht, die die Interaktion verschiedener Komponenten über sogenannte Topics, Services und Actions ermöglicht \cite{ros2__paper_overview}. 
-
-Die Kommunikation innerhalb ROS2 basiert auf dem Data Distribution Service (DDS), einem standardisierten Publish-Subscribe-Protokoll, das eine dezentrale, echtzeitfähige Datenkommunikation zwischen Knoten (Nodes) ermöglicht. Gegenüber seinem Vorgänger ROS1 bietet ROS2 damit verbesserte Echtzeiteigenschaften, eine robustere Multi-Roboter-Unterstützung sowie eine aktiv gepflegte Codebasis, da ROS1 im Jahr 2025 das offizielle End-of-Life erreichte \cite{ros2__paper_overview}.
-
-ROS2 spielt in diesem Setup eine zentrale Rolle, 
-da es die Kommunikation zwischen dem Dobot-Treiber, der MuJoCo-Simulation und der Steuerungslogik koordiniert. Über ROS2 werden Sensordaten, Befehle und Statusinformationen ausgetauscht, was eine nahtlose Integration der verschiedenen Komponenten ermöglicht.
-\\
-\\
-RViz (ROS Visualization) ist ein 3D-Visualisierungstool für ROS, das die Darstellung von Roboterzuständen, Gelenkwinkeln, Koordinatensystemen (TF-Frames) sowie geplanten Trajektorien in Echtzeit ermöglicht \cite{ros2_docs_rviz}. 
-Es dient hauptsächlich der Überprüfung von Kinematik, TF-Frames und geplanten Trajektorien vor der realen Ausführung, bietet jedoch keine physikalische Simulation, Kollisionsberechnung oder Lernumgebung \cite{ros2_docs_rviz}. RViz dient in dieser Arbeit somit primär als Visualisierungs- und Debugging-Tool, zur Verifikation kinematischer Zusammenhänge, der Überprüfung von TF-Frames sowie geplanten Bewegungspfaden vor der Ausführung auf realer Hardware.
- 
-\subsubsection{MuJoCo als Lernumgebung}
-MuJoCo (Multi-Joint dynamics with Contact) ist eine physikbasierte Simulationsumgebung, die auf präzise Kontakt- und Reibungsmodellierung spezialisiert ist und von DeepMind entwickelt sowie als Open-Source-Projekt bereitgestellt wird \cite{mujoco_overview}.
-
-Im Vergleich zu alternativen Simulationsumgebungen wie Gazebo, die primär auf vollständige Robotersystemsimulation ausgelegt sind, zeichnet sich MuJoCo durch eine höhere Recheneffizienz sowie eine für Reinforcement-Learning-Anwendungen optimierte Physik-Engine aus \cite{mujoco_overview}. Insbesondere die Genauigkeit der Kontaktkraftmodellierung macht MuJoCo zur bevorzugten Umgebung für das Training von Policies in Greif- und Montageaufgaben, bei denen Reibung, Gelenkmechanik und Kontaktkräfte eine zentrale Rolle spielen.
-
-Der Dobot Magician wird in MuJoCo über eine URDF-Modelldatei abgebildet, die Gelenke, Massen und Kollisionsgeometrien des Arms beschreibt. Das verwendete Modell stammt aus einem internen GitLab-Repository der HFT Stuttgart \cite{dobot_mujoco_repo}.
-
-MuJoCo wird in dieser Arbeit in Kombination mit Gymnasium, dem standardisierten Nachfolger der OpenAI-Gym-Bibliothek, verwendet \cite{openai_gym}. Gymnasium stellt eine einheitliche Schnittstelle für RL-Umgebungen bereit, über die Aktionsraum, Beobachtungs-raum sowie der Interaktionszyklus zwischen Agent und Umgebung (Observation, Action, Reward, Terminated) definiert werden. Diese Standardisierung ermöglicht die weitgehend modulare Austauschbarkeit von RL-Algorithmen und Simulationsumgebungen.
-
-Ein wesentlicher Vorteil von MuJoCo für RL-basierte Ansätze liegt in der Möglichkeit, 
-mehrere Simulationsinstanzen parallel auszuführen, wodurch ein erheblich beschleunigtes Training ohne Verschleiß physischer Hardware realisiert werden kann \cite{mujoco_rl_benefits}. Die Qualität des Sim-to-Real-Transfers hängt dabei maßgeblich davon ab, wie präzise die Simulation physikalische Eigenschaften wie Reibung, Trägheit und Kontaktkräfte abbildet, je realistischer das Simulationsmodell, desto robuster die Übertragung der trainierten Policy auf den echten Dobot Magician.
-
-\subsubsection{Konzept des Sim-to-Real-Transfer}
-\label{sec:sim-to-real}
-Der Sim-to-Real-Transfer bezeichnet die Übertragung einer in einer Simulationsumgebung trainierten Policy auf reale Hardware. Die Simulation dient dabei als kostengünstiger und risikofreier Trainingsraum, in dem eine nahezu unbegrenzte Anzahl von Trainingsepisoden ohne Verschleiß oder Sicherheitsrisiken durchgeführt werden kann \cite{sim_to_real_gap}.
-
-In der Praxis zeigt sich jedoch, dass in der Simulation erfolgreich trainierte Policies auf realer Hardware häufig deutlich schlechter abschneiden oder gänzlich versagen. Ursache hierfür ist die sogenannte \textit{Reality Gap}, also die Gesamtheit aller Unterschiede zwischen dem Simulationsmodell und der realen Welt \cite{reality_gap}. 
-Diese umfasst unter anderem ungenaue Massenverteilungen, nicht modellierte Gelenkreibung, Kameraverzeichnung sowie systembedingte Latenzen. Da kein Simulationsmodell die Realität vollständig abbilden kann, ist die Reality Gap ein fundamentales Problem des simulationsbasierten Lernens.
-
-Zur Überbrückung dieser Lücke haben sich in der Literatur mehrere Strategien etabliert \cite{domain_randomization_tobin}:\textit{Domain Randomization} variiert Simulationsparameter wie Masse, Reibungskoeffizienten, Beleuchtung und Texturen während des Trainings zufällig, sodass die Policy eine inhärente Robustheit gegenüber Parameterabweichungen entwickelt. \textit{Domain Adaptation} verfolgt den komplementären Ansatz, Simulation und Realität durch gezielte Kalibrierung des Simulationsmodells anhand realer Messdaten anzunähern \cite{domain_adaptation}. 
-Darüber hinaus existieren Methoden wie \textit{System Identification}, bei der reale physikalische Parameter systematisch gemessen und ins Modell eingespeist werden, sowie \textit{Residual Learning}, das einen klassischen Regler mit einem lernbasierten Korrekturterm kombiniert, um Modellungenauigkeiten zur Laufzeit zu kompensieren \cite{residual_learning}.
-
-Für Greif- und Montageaufgaben ist der Sim-to-Real-Transfer besonders anspruchsvoll, da diese Aufgaben in hohem Maße kontaktsensitiv sind. Bereits kleine Fehler in der Reibungsmodellierung können zu grundlegend abweichendem Greifverhalten in der Realität führen. Somit ist dies ein Aspekt, der die Wahl von MuJoCo als Simulationsumgebung mit präziser Kontaktmodellierung zusätzlich begründet (vgl. Abschnitt 2.2.3).
-
-Ein zusätzlicher, bei VLM-basierten Ansätzen besonders kritischer Aspekt ist der visuelle Sim-to-Real-Gap: Während Simulationen idealisierte, rauschfreie Bilder erzeugen, liefert das eingesetzte Vision-Kit in der Realität Bilder mit begrenzter Auflösung, Sensorrauschen und variierenden Lichtverhältnissen. Diese Diskrepanz kann die Erkennungsleistung von Vision-Language-Modellen wie OpenVLA erheblich beeinträchtigen \cite{vlm_sim_to_real}.
-
-Da alle in dieser Arbeit untersuchten Lernansätze (Reinforcement Learning, Imitation Learning sowie VLM-basierte Steuerung) zumindest teilweise in MuJoCo trainiert werden, stellt die Übertragbarkeit auf den echten Dobot Magician ein durchgängiges Bewertungskriterium dar und wird in der vergleichenden Analyse in Kapitel 3 explizit berücksichtigt.
-
-\subsection{Definition von Flexibilität im Kontext dieser Arbeit}
-
-Der Begriff \enquote{Flexibilität} wird in der Robotik nicht einheitlich verwendet \cite{flexibility} und bedarf daher im Kontext dieser Arbeit einer klaren Definition. Grundsätzlich lassen sich zwei Verständnisse unterscheiden: Zum einen die vollständige Generalisierung, also die Fähigkeit eines Systems, mit beliebigen unbekannten Objekten oder Aufgaben umzugehen \cite{kroemer2020reviewrobotlearningmanipulation}. Zum anderen die aufgabenbezogene Robustheit, die Fähigkeit, innerhalb eines bekannten Aufgabenraums trotz kleiner Abweichungen zuverlässig zu funktionieren \cite{robustness}.
-
-Im Rahmen dieser Arbeit wird Flexibilität im zweiten Sinne verstanden. Ein System gilt als flexibel, wenn es bekannte Bauteile in den folgenden drei Szenarien korrekt greifen und montieren kann, ohne manuelle Neuprogrammierung: (1) bei geometrischen Lageabweichungen, (2) bei veränderten visuellen Eigenschaften wie abweichender Farbe sowie (3) bei strukturellen Veränderungen wie Beschädigungen.
-
-Die geometrische Flexibilität, adressiert die erste und in der Praxis am häufigsten auftretende Dimension \cite{geometrische_flexi}: Ein Bauteil liegt 5–15 mm versetzt oder leicht verdreht auf der Arbeitsfläche. Der Roboter soll die Abweichung selbstständig erkennen und seine Greifposition entsprechend anpassen, ohne dass ein Bediener eingreifen oder die Trajektorie neu programmieren muss. Diese Dimension ist vergleichsweise gut handhabbar, da klassische Bildverarbeitung in vielen Fällen ausreicht, um Versatz oder Verdrehung zu detektieren und die Greifposition entsprechend anzupassen.
-
-Die zweite Dimension betrifft visuelle Veränderungen, konkret Farbabweichungen. Klassische Bildverarbeitungsansätze arbeiten häufig mit festen Farbschwellen~\cite{digital_image_processing} und würden bei einem andersfarbigen Bauteil nicht zuverlässig funktionieren~\cite{color_variation}.Ein flexibles System muss das Objekt stattdessen form- oder semantikbasiert identifizieren. Dies erfordert bereits ein tieferes, semantisches Verständnis des Objekts, da rein farbbasierte Erkennungsansätze hier versagen.
-
-Die dritte und anspruchsvollste Dimension ist strukturelle Flexibilität: Das Bauteil ist beschädigt, etwa verrostet, verformt oder verschmutzt. Hier reicht es nicht mehr aus, eine angepasste Greifposition zu berechnen, sondern das System muss beurteilen, ob ein Greifen überhaupt noch möglich ist, und eine definierte Fehlerbehandlung einleiten wie zum Beispiel das Bauteil als nicht greifbar klassifizieren und einen Fehler signalisieren. Dies ist die anspruchsvollste Dimension, da sich die Objektgeometrie selbst verändert und damit die Grundlage klassischer wie auch lernbasierter Erkennungsverfahren direkt betroffen ist.
-
-Diese drei Dimensionen orientieren sich an realen industriellen Anforderungen. Sie spiegeln Variationen wider, die in realen industriellen Montageprozessen regelmäßig auftreten~\cite{industrie_4}:
-Bauteile kommen selten exakt positioniert, immer gleich gefärbt und unbeschädigt an. Ein System, das nur unter Idealbedingungen funktioniert, ist für den praktischen Einsatz nicht ausreichend.
-
-Die vollständige Generalisierung auf beliebige, unbekannte Objekte oder Aufgaben liegt damit bewusst außerhalb des Rahmens dieser Arbeit. Dies begründet sich zum einen in den in Abschnitt~\ref{sec:dobot-nutzlast-dynamik} beschriebenen hardwareseitigen Grenzen des Dobot Magician, insbesondere hinsichtlich Nutzlast und Arbeitsraum, zum anderen darin, dass die drei definierten Dimensionen bereits einen für den Anwendungskontext praxisrelevanten Flexibilitätsbegriff abdecken.
-
-In Kapitel~3 dienen die drei Dimensionen als durchgängiges Bewertungskriterium für die untersuchten Lernansätze. Es wird explizit analysiert, inwieweit die verschiedenen Ansätze in der Lage sind, mit den jeweiligen Herausforderungen umzugehen und welche Grenzen sich dabei zeigen.
-
-\subsection{Montage und Demontage als Robotikproblem}
-
-%Greifplanung (Grasp Planning)
-Greifplanung (Grasp Planning) ist die algorithmische Berechnung einer stabilen Greifkonfiguration für den Roboter-Greifer. Sie bestimmt präzise die Kontaktpunkte, die Greifgeometrie sowie die Greifkräfte und -Momente, mit denen das Objekt gefasst werden soll. Ziel ist ein sicheres Halten und Manipulieren, das ein Abrutschen verhindert, oft unter Nutzung von Konzepten wie Formschluss oder Kraftschluss. Dies berücksichtigt Objektgeometrie, Oberflächenbeschaffenheit und die geplante Manipulationsaufgabe.
-
-Da die optimale Greifposition von Objektgeometrie, Masse, Schwerpunkt, Oberflächenbeschaffenheit und der nachfolgenden Aufgabe abhängt und all das gleichzeitig berücksichtigt werden muss, ist die Greifplanung nicht trivial. Es gibt analytische Methoden und lernbasierte Methoden, die aus Daten stabile Greifpositionen ableiten~\cite{grasp_synthesis_survey}. Bei Montageaufgaben ist Greifplanung besonders anspruchsvoll, weil das Bauteil nicht nur stabil gegriffen, sondern auch präzise positioniert und orientiert werden muss~\cite{grasp_planning_survey}. Zum Beispiel muss der Griff die nachfolgende Fügebewegung ermöglichen, ohne das Bauteil neu ausrichten zu müssen.
-
-%Kontakterkennung
-Die Fähigkeit des Systems, den Moment und die Art des physischen Kontakts zwischen Greifer und Objekt zu erkennen wird in der Robotik als Kontakterkennung bezeichnet. Dies erfolgt typischerweise über dedizierte Kraft- oder taktile Sensoren oder indirekt mittels Methoden wie der Strommessung der Motoren.
-Bei Montageaufgaben ist Kontakterkennung besonders kritisch, da kontrolliertes Fügen gefordert ist: Ein zu früher Kontakt birgt das Risiko von Kollisionen, ein zu später erfolgender Kontakt das Risiko einer Fehlpositionierung. Ohne zuverlässige Kontakterkennung bleibt das Fügen blind und fehleranfällig. Herausfordernd ist deshalb, dass der Dobot Magician über keine dedizierten Kraft- oder Taktilsensoren verfügt, siehe Abschnitt~\ref{sec:dobot_magician-chapter2}. Kontakt kann lediglich indirekt über erhöhte Motorströme oder positionsbasierte Abweichungen erkannt werden, was die Kontakterkennung erheblich erschwert.
-Als Alternativen zu direkter Kontakterkennung kommen Impedanzregelung, nachgiebige Greiferdesigns (compliant grippers) oder visuelle Schätzung des Kontakts anhand von Kameradaten infrage.
-
-%Kraft-Momenten-Steuerung
-Kraft-Momenten-Steuerung bezeichnet eine Regelungsstrategie, bei der nicht nur die Position des Endeffektors, sondern auch die auf den Roboter wirkenden Kräfte und Momente aktiv geregelt werden. Der Roboter erfasst dabei den mechanischen Widerstand seiner Umgebung und passt seine Bewegung entsprechend an.
-Bei Montageaufgaben ist diese Fähigkeit grundlegend notwendig, da Fügeoperationen kontrollierte Kontaktkräfte erfordern: Zu hohe Kräfte beschädigen das Bauteil oder die Aufnahme, während zu geringe Kräfte ein vollständiges Fügen verhindern. 
-Als etablierte Regelungsarten sind die Impedanzregelung (bei der Steifigkeit und Dämpfung vorgegeben werden), die Admittanzregelung (bei der Kraft als Eingang und Bewegung als Ausgang dient) sowie hybride Kraft-Position-Regelungsansätze zu nennen~\cite{siciliano2009robotics}. Der Dobot Magician verfügt jedoch über keine integrierte Kraft-Momenten-Sensorik (siehe Abschnitt~\ref{sec:dobot_magician-chapter2}), weshalb eine echte Kraft-Momenten-Steuerung ohne externe Sensorerweiterung nicht realisierbar ist. Dies stellt eine wesentliche Einschränkung bei Montageaufgaben mit engen Toleranzen dar.
-
-%Kollisionsvermeidung bei engen Toleranzen
-Kollisionsvermeidung bei engen Toleranzen bedeutet im Kontext von Montageaufgaben, dass der Roboter Bauteile präzise in enge Aufnahmen fügen muss, ohne dabei angrenzende Strukturen zu berühren. Bei Toleranzen im Millimeterbereich stellt dies eine erhebliche Herausforderung dar. 
-Klassische Methoden umfassen geometriebasierte Planungsverfahren wie RRT (Rapidly-exploring Random Trees)~\cite{RRT} oder PRM (Probabilistic Roadmap Methods)~\cite{PRM}, sowie potentialfeldbasierte Ansätze. Daneben existieren lernbasierte Ansätze, die Kollisionsvermeidung implizit aus Demonstrationen ableiten. Letztere sind bei engen Toleranzen jedoch problematisch, da lernbasierte Methoden grundsätzlich generalisieren und dabei Ungenauigkeiten entstehen können (siehe Abschnitt~\ref{sec:sim-to-real}), die klassische Planungsalgorithmen durch exakte geometrische Modellierung vermeiden.
-
-%Besonderheiten der Demontage
-Die Demontage stellt gegenüber der Montage eine grundlegend schwierigere Aufgabe dar. Während bei der Montage der Ausgangszustand bekannt und kontrollierbar ist, sind bei der Demontage die Verbindungszustände häufig unbekannt: Schrauben können festgerostet, Clips verformt oder Bauteile verklebt sein. 
-Konkret bedeutet dies, dass der Roboter weder weiß, ob eine Verbindung überhaupt lösbar ist, noch wie viel Kraft dafür aufgewendet werden muss oder ob das Bauteil nach dem Lösen frei beweglich oder noch anderweitig fixiert ist. 
-Verbindungen wie Clips, Presspassungen oder korrodierte Schrauben erfordern oft deutlich mehr Lösekraft als die ursprüngliche Fügekraft, wobei diese Kraft vorab in der Regel nicht bekannt ist. Unkontrollierte Demontage birgt daher das Risiko, Bauteile oder angrenzende Komponenten zu beschädigen, was besonders bei Recycling- oder Reparaturanwendungen kritisch ist, in denen Bauteile wiederverwendet werden sollen.
-
-Lernbasierte Systeme könnten diesem Problem durch taktiles Feedback, Kraftprofilanalyse (anhand charakteristischer Kraft-Weg-Kurven beim Lösen)~\cite{force-torque} begegnen oder durch eine Klassifikation des Verbindungstyps vor der Demontage begegnen. 
-
-Für VLM-basierte Ansätze ist die Demontage besonders interessant, da VLMs potenziell in der Lage sind, den Verbindungstyp direkt aus dem Kamerabild zu identifizieren und die Demontagestrategie semantisch abzuleiten beispielsweise indem der Verbindungstyp identifiziert und die Lösungsrichtung daraus ermittelt wird.
-Im industriellen Kontext gewinnt automatisierte Demontage durch Kreislaufwirtschaft, Recyclingpflichten und Reparierbarkeitsanforderungen (etwa die EU Right to Repair-Regulierung)~\cite{eu2024righttorepair} zunehmend an Bedeutung und ist ein aktives Forschungsfeld.
+\section{Stand der Forschung und Technik}
+\subsection{Robotische Montage und Demontage in der Praxis}
+\subsection{Computervision und automatische Objekterkennung in der Robotik}
+\subsection{Mensch-Roboter-Kollaboration und kooperative Fertigungsprozesse}
+\subsection{Forschungslücke und Zielstellung dieser Arbeit}
 
 \newpage
 
-\section{Fazit und begründete Empfehlung}
+\section{Grundlagen}
+Dieses Kapitel beschreibt die technischen und theoretischen Grundlagen der vorliegenden Arbeit. Zunächst wird der verwendete Roboterarm Dobot Magician als experimentelle Plattform vorgestellt. Anschließend werden 
+%todo:die eingesetzte Simulationsumgebung sowie die Definition von Flexibilität im Kontext der Arbeit erläutert. Abschließend erfolgt eine Einordnung von Montage- und Demontageaufgaben als Robotikproblem. 
+Die dargestellten Grundlagen bilden die Basis für die Entwicklung und Bewertung der eingesetzten Systems. %todo
+
+\subsection{Der Dobot Magician als Roboterplattform}
+\label{sec:dobot_magician-chapter2}
+Im folgenden Abschnitt werden die technischen Spezifikationen des Roboterarms vorgestellt und beschrieben. % todo: Diese Informationen sind entscheidend, um die Anforderungen an die im folgenden Kapiteln behandelten Lernansätze zu verstehen und bewerten.
+Die Spezifikationen wurden aus dem offiziellen Datenblatt des Dobot Magician entnommen und in Bezug auf die Anforderungen der Montage- und Demontageaufgaben analysiert.
+
+\subsubsection{Technische Spezifikationen und Fähigkeiten}
+Der Dobot Magician ist ein kompakter, vierachsiger Roboterarm, der häufig für Bildungszwecke und Forschungsaufgaben eingesetzt wird %todo \cite{}. 
+Er verfügt über eine Tischmontage sowie eine integrierte Steuerung in der Basis. Der Arm besteht aus Aluminium und ABS-Kunststoff und besitzt ein Eigengewicht von 3,4\,kg (ohne Werkzeug beziehungsweise Endeffektor) \cite{dobot_datasheet}. Die vier Achsen des Roboterarms sind wie folgt konfiguriert: J1 (Basisrotation), J2 (Schultergelenk), J3 (Ellenbogengelenk) sowie J4 (Handgelenk beziehungsweise Greiferrotation). Diese Konfiguration ermöglicht ein breites Bewegungspektrum, das für Montage- und Demontageaufgaben relevant ist \cite{dobot_datasheet}.
+
+Die maximale Reichweite des Dobot Magician beträgt 320\,mm \cite{dobot_datasheet} und definiert damit den Arbeitsraum des Benchmark-Tasks. 
+Die Wiederholgenauigkeit liegt bei $\pm$0,2\,mm \cite{dobot_datasheet} und stellt die Grenze der maximal erreichbaren Genauigkeit sowie der Reproduzierbarkeit des Systems dar. 
+%todo: Daraus ergibt sich die Anforderung, dass alle Lernansätze diese Toleranz einhalten oder übertreffen müssen, um innerhalb dieses Bereichs präzise zu agieren und sicherzustellen, dass die Hardware nicht zum limitierenden Faktor wird. 
+Die maximale Gelenkgeschwindigkeit beträgt 320°/s bei einer Nutzlast von 250\,g, während das Rotationsservo bis zu 480°/s erreicht \cite{dobot_datasheet}. 
+
+Die maximale Traglast des Roboterarms beträgt 500\,g \cite{dobot_datasheet}, wobei bei einer reduzierten Nutzlast von 250\,g die Höchstgeschwindigkeit und maximale Dynamik erreicht wird. 
+
+Angesteuert wird der Dobot Magician standardmäßig über eine USB-Verbindung. Zur Steuerung wird herstellerseitig die Software 
+%todo da DobotLab genutzt wird mitlerweiel: DOBOTStudio eingesetzt, die für Windows und macOS verfügbar ist und grundlegende Programmierung sowie Bewegungssteuerung unterstützt \cite{dobot_datasheet}. 
+Die I/O-Schnittstelle an der Basis stellt zwei schaltbare 12\,V- und zwei 5\,V-Ausgänge sowie vier 3,3\,V-Ein-/Ausgänge bereit, von denen zwei als PWM-Ausgänge (Pulsweitenmodulation) und zwei als ADC-Eingänge (Analog-Digital-Converter) konfiguriert sind; zusätzlich sind drei RS232-Schnittstellen verfügbar \cite{dobot_datasheet}. Am Arm selbst stehen zwei schaltbare 12\,V-Ausgänge sowie sieben 3,3\,V-Ein-/Ausgänge zur Verfügung, davon drei PWM- und vier ADC-Kanäle \cite{dobot_datasheet}.
+
+Für die Stromversorgung wird eine Spannung von 100–240\,V\,AC benötigt, die intern auf 12\,V\,DC bei maximal 7\,A gewandelt wird, was zu einer maximalen Leistungsaufnahme von 60\,W führt \cite{dobot_datasheet}. Die zulässige Umgebungstemperatur für den Betrieb liegt zwischen \SI{-10}{\degreeCelsius} und \SI{60}{\degreeCelsius} \cite{dobot_datasheet}.
+
+
+\subsubsection{Einschränkungen und Grenzen}
+\label{sec:dobot-einschraenkungen}
+Obwohl der Dobot Magician eine vielseitige Plattform darstellt, ergeben sich durch seine Hardware- und Softwarespezifikationen signifikante Einschränkungen für den Benchmark-Einsatz:
+
+\begin{itemize}
+    \item \textbf{Nutzlast und Dynamik:} Die strikte Obergrenze der Traglast von 500\,g begrenzt die Auswahl geeigneter Benchmark-Objekte direkt. Montage- und Demontageobjekte mit einer Masse oberhalb von 500\,g werden daher kategorisch ausgeschlossen. Zudem reduzieren höhere Lasten jenseits der optimalen 250\,g die Dynamik des Systems \cite{dobot_datasheet}.
+    \item \textbf{Konnektivität und Software-Integration:} Eine kabellose Kommunikation via WLAN oder Bluetooth ist standardmäßig nicht vorhanden und ausschließlich bei Modellen mit der \enquote{Advanced Communication}-Erweiterung verfügbar \cite{dobot_datasheet}. Auf Softwareebene 
+    %todo: bietet die Standardanwendung DOBOTStudio keine native Integration in Simulationsumgebungen oder gängige Middleware-Frameworks wie ROS, was den Aufwand für die Implementierung fortgeschrittener Lernansätze erhöht.
+    \item \textbf{Umgebungsbedingungen:} Der Roboterarm ist rein für den Laborbetrieb konzipiert und entspricht lediglich der Schutzklasse IP20. Er ist daher ausschließlich in trockenen Innenräumen zu betreiben \cite{dobot_datasheet} und gegen Staub oder Feuchtigkeit ungeschützt.
+\end{itemize}
+
+
+\subsection{Computervision Grundlagen}
+    \subsubsection{Kamera-Modell und Linsenverzerrung}
+    \subsubsection{Kamera-Modell und Linsen}
+    \subsubsection{Homographie und Pixel-zu-Roboterkoordinaten-Transformation}
+    \subsubsection{Kalibrierungsverfahren}
+
+\subsection{Objekterkennung in der Robotik}
+    \subsubsection{YOLOv8/HSV für schnelle Vordetektion}
+    \subsubsection{Grounding DINO für verfeinerte Erkennung}
+    \subsubsection{Coarse-to-Fine Ansatz}
+
+\subsection{Unified Planning für Aufgabenplanung}
+    \subsubsection{Grundkonzepte und Funktionsweise}
+    \subsubsection{Task-Definition und Optimierung}
+
+\subsection{Mensch-Roboter-Kollaboration}
+    \subsubsection{Anforderungen und Sicherheitsaspekte}
+    \subsubsection{Schnittstellen und Kommunikation}
+
+
+\newpage
+
+
+\section{Methoden}
+\subsection{Experimenteller Aufbau}
+    \subsubsection{Hardware-Setup (Kamera, Roboter, Workbench, Komponenten)}
+    \subsubsection{Kalibrierungsprozess und Validierung}
+    \subsubsection{Softwarestack und Implementierung (Python, Libraries, pydobotplus)}
+
+\subsection{Kamera-Verzerrungskorrektur und die Transformation von Pixel- in Roboterkoordinaten}
+    \subsubsection{Aufnahme und Verarbeitung der Kalibrierbilder}
+    \subsubsection{Berechnung der Distortionsmatrix}
+    \subsubsection{Homographie-Berechnung und Koordinatentransformation}
+    \subsubsection{Validierung der Kalibriergenauigkeit}
+
+\subsection{Detektion und Klassifizierung von Komponenten}
+    \subsubsection{YOLOv8 Vordetektion}
+    \subsubsection{Grounding DINO Verfeinerung und Objektklassifizierung}
+    \subsubsection{Generierung der Objektlisten mit Positionen und Klassen}
+
+\subsection{Unified Planning zur Generierung von Montage-Sequenzen}
+    \subsubsection{Definition der Szenarien [SZENARIO 1 / SZENARIO 2 / SZENARIO 3]}
+    \subsubsection{Task-Definition und Task-Labeling (Roboter vs. Mensch)}
+    \subsubsection{Plan-Generierung basierend auf erkannten Objekten}
+    \subsubsection{Validierung der Machbarkeit}
+
+\subsection{Definition und Umsetzung der Mensch-Aufgaben}
+    \subsubsection{Rotation des Fahrzeugs zur Ausrichtung}
+    \subsubsection{Werkzeugwechsel und Schraubenarbeiten}
+    \subsubsection{Validierung und Fehler-Feedback}
+    \subsubsection{Ad-hoc Aufgaben während der Durchführung}
+
+\subsection{Roboter-basierte Greif- und Montage-Operationen}
+    \subsubsection{Verfügbare Roboter-Skills und deren Parametrisierung}
+    \subsubsection{Greif- und Montagestrategien für verschiedene Komponentenklassen}
+
+ 4.6.2.1 Objektklassifizierung und Symmetrie-Analyse
+- Klassifizierung der zu montierenden Objekte (Schrauben, Räder, Bumper, Side Covers, Top Addons)
+- Symmetrie-Analyse: Welche Objekte sind rotationsinvariant, welche nicht?
+- Tabelle: Objekt → Symmetrie → Orientierungsanforderung
+
+ 4.6.2.2 2D-Pose Estimation aus Segmentierungsmaske
+- Extraktion der Segmentiermaske aus GDINO-Detektionen
+- Fitting von Ellipsen zur Bestimmung der Hauptachse
+- Berechnung des 2D-Orientierungswinkels (Yaw)
+- Confidence-Metriken basierend auf Aspekt-Verhältnis
+
+ 4.6.2.3 Strategie-Mapping pro Objektklasse
+- Tabelle: Objektklasse → Greif-Strategie → Parameter
+- Beispiele:
+  * Symmetrische Objekte (Schrauben, Räder): Position-basiert, keine Orientierung nötig
+  * Asymmetrische Objekte (Bumper, Side Cover, Top Addon): Position + 2D-Orientierung erforderlich
+- Höhen-Offsets für verschiedene Teile
+
+ 4.6.2.4 Integration in Manipulations-Pipeline
+- Workflow: Detection → Segmentierung → Pose Estimation → Gripper-Ausrichtung → Greifen
+- Pseudocode/Algorithmus
+- Fehlerbehandlung und Fallback-Strategien
+
+ 4.6.2.5 Ergebnisse und Validierung
+- Greif-Erfolgsraten pro Objektklasse
+- Orientierungs-Genauigkeit (Soll vs. Ist)
+- Visualisierungen: Beispiel-Greifposen mit Orientierungsvektoren
+
+    \subsubsection{Kommunikation mit dem Roboter via Python-Bibliothek}
+    \subsubsection{Koordination von Roboter- und Mensch-Aufgaben}
+    \subsubsection{Error-Handling und Optionen für Mensch-Einspringen}
+
+\subsection{Systemintegration und Gesamtablauf}
+    \subsubsection{Datenfluss und Pipeline-Architektur}
+    \subsubsection{Timing und Synchronisation zwischen Komponenten}
+    \subsubsection{Ablauf eines typischen Montage-Zyklus}
+
+
+\newpage
+
+
+\section{Ergebnisse und Evaluierung}
+
+\subsection{Gesamtsystem-Evaluation}
+    \subsubsection{[SZENARIO 1]: Erfolgsquote, Durchführungsdauer, kritische Punkte}
+    \subsubsection{[SZENARIO 2]: Erfolgsquote, Durchführungsdauer, kritische Punkte}
+    \subsubsection{[SZENARIO 3]: Erfolgsquote, Durchführungsdauer, kritische Punkte}
+    
+    \subsubsection{Robustheit und Flexibilität unter Variation}
+        \paragraph{Baseline-Bedingungen (optimale Objektplatzierung)}
+        \paragraph{Objekte am Workspace-Rand}
+        \paragraph{Veränderte Objektpositionen}
+        \paragraph{Kombinierte Variationen}
+        \paragraph{Tabellarische Zusammenfassung der Erfolgsquoten}
+
+\subsection{Komponenten-Einzelevaluierung}
+    \subsubsection{Detektor-Accuracy: GDINO-Performance pro Komponentenklasse}
+    \subsubsection{Kalibrierung: Fehleranalyse bei Pixel-zu-Roboter-Transformation}
+    \subsubsection{Roboter-Greifung: Erfolgsquote nach Komponentenklasse und Platzierung}
+    \subsubsection{Unified Planning: Plan-Generierungszeit und Task-Komplexität pro Szenario}
+
+\subsection{Analyse und Bottleneck-Identifikation}
+    \subsubsection{Hauptprobleme und deren Ursachen}
+    \subsubsection{Komponenten-Limitierungen und Auswirkungen auf das Gesamtsystem}
+    \subsubsection{Ad-hoc Aufgaben und praktische Erkenntnisse}
+
+\subsection{Fokus auf die Stärken des Systems}
+    \subsubsection{Funktionalität und End-to-End-Erfolg}
+    \subsubsection{Robustheit unter variierenden Bedingungen}
+    \subsubsection{Mehrwert der Mensch-Roboter-Kollaboration}
+
+\newpage
+
+\section{Fazit und Ausblick}
 \label{sec:fazit}
+
+\subsection{Zusammenfassung der Ergebnisse}
+\subsection{Beantwortung der Forschungsfrage}
+\subsection{Erfolgreiche Lösung des Gesamtsystems versus einzelne Komponenten-Schwächen}
+\subsection{Grenzen dieser Arbeit}
+
+\subsection{Zukünftige Arbeiten}
+    \subsubsection{Strukturiertes Error-Handling und Fallback-Mechanismen}
+    \subsubsection{Erweiterung auf weitere Szenarien und Komponenten-Klassen}
+    \subsubsection{Optimierung einzelner Komponenten (GDINO-Accuracy, Roboter-Präzision, Planung)}
+    \subsubsection{Steigerung der Automatisierung (Reduktion Mensch-Tasks)}
+
 
 \newpage
 
