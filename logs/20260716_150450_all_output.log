@@ -1,0 +1,132 @@
+2026-07-16 15:04:50,401 INFO     [root] [MainThread] Logging konfiguriert. Logdatei: /Users/v/Desktop/Coding_Workspaces/ba_code/gdino/src/logs/20260716_150450_all_output.log
+2026-07-16 15:04:50,401 INFO     [__main__] [MainThread] Starte System-Initialisierung...
+2026-07-16 15:04:51,144 INFO     [perception.vision_detector] [MainThread] Homographie-Matrix geladen.
+2026-07-16 15:04:51,144 INFO     [perception.vision_detector] [MainThread] Kamerakalibrierung ist laut Config deaktiviert. Fahre ohne Entzerrung fort.
+2026-07-16 15:04:51,517 DEBUG    [matplotlib] [MainThread] matplotlib data path: /Users/v/Desktop/Coding_Workspaces/ba_code/gdino/.venv/lib/python3.12/site-packages/matplotlib/mpl-data
+2026-07-16 15:04:51,519 DEBUG    [matplotlib] [MainThread] CONFIGDIR=/Users/v/.matplotlib
+2026-07-16 15:04:51,519 DEBUG    [matplotlib] [MainThread] interactive is False
+2026-07-16 15:04:51,519 DEBUG    [matplotlib] [MainThread] platform is darwin
+2026-07-16 15:04:51,530 DEBUG    [matplotlib] [MainThread] CACHEDIR=/Users/v/.matplotlib
+2026-07-16 15:04:51,532 DEBUG    [matplotlib.font_manager] [MainThread] Using fontManager instance from /Users/v/.matplotlib/fontlist-v3.11.0.json
+2026-07-16 15:04:52,216 INFO     [perception.vision_detector] [MainThread] Lade Modell auf CPU...
+2026-07-16 15:04:52,332 DEBUG    [urllib3.connectionpool] [MainThread] Starting new HTTPS connection (1): huggingface.co:443
+2026-07-16 15:04:52,548 DEBUG    [urllib3.connectionpool] [MainThread] https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2026-07-16 15:04:52,694 DEBUG    [urllib3.connectionpool] [MainThread] https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2026-07-16 15:04:52,817 DEBUG    [urllib3.connectionpool] [MainThread] https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2026-07-16 15:04:53,770 DEBUG    [perception.vision_detector] [MainThread] Modell geladen in 1.55s
+2026-07-16 15:04:53,770 INFO     [perception.vision_detector] [Thread-1 (_video_thread_loop)] Gestartet, lese Frames...
+2026-07-16 15:04:53,770 INFO     [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Gestartet, warte auf Frames...
+2026-07-16 15:04:53,773 INFO     [manipulation.robot_device] [MainThread] Verfügbare Ports: ['/dev/cu.debug-console', '/dev/cu.Bluetooth-Incoming-Port', '/dev/cu.usbserial-56980037641']
+2026-07-16 15:04:53,773 INFO     [manipulation.robot_device] [MainThread] Verbindungsversuch 1 von 3 auf Port /dev/cu.usbserial-56980037641...
+2026-07-16 15:04:53,830 INFO     [manipulation.robot_device] [MainThread] Verbindung zum Dobot erfolgreich hergestellt.
+2026-07-16 15:04:53,831 DEBUG    [manipulation.robot_device] [MainThread] User wird gefragt ob er die homing procedure ausführen will. Es wird gewartet
+2026-07-16 15:04:56,225 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.44
+2026-07-16 15:04:58,358 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.13
+2026-07-16 15:05:00,525 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.17
+2026-07-16 15:05:02,628 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.10
+2026-07-16 15:05:04,752 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.12
+2026-07-16 15:05:07,037 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.28
+2026-07-16 15:05:09,142 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.11
+2026-07-16 15:05:11,436 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.29
+2026-07-16 15:05:13,720 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.28
+2026-07-16 15:05:15,920 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.20
+2026-07-16 15:05:18,163 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.24
+2026-07-16 15:05:20,496 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.33
+2026-07-16 15:05:22,751 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.25
+2026-07-16 15:05:24,859 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.11
+2026-07-16 15:05:27,089 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.23
+2026-07-16 15:05:29,507 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.42
+2026-07-16 15:05:31,880 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.37
+2026-07-16 15:05:34,155 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.27
+2026-07-16 15:05:36,450 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.29
+2026-07-16 15:05:38,681 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.23
+2026-07-16 15:05:40,885 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.20
+2026-07-16 15:05:43,290 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.40
+2026-07-16 15:05:45,556 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.27
+2026-07-16 15:05:47,719 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.16
+2026-07-16 15:05:49,897 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.18
+2026-07-16 15:05:52,113 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.22
+2026-07-16 15:05:54,312 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.20
+2026-07-16 15:05:56,538 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.23
+2026-07-16 15:05:58,742 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.20
+2026-07-16 15:06:00,955 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.21
+2026-07-16 15:06:03,250 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.29
+2026-07-16 15:06:05,529 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.28
+2026-07-16 15:06:07,831 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.30
+2026-07-16 15:06:10,080 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.25
+2026-07-16 15:06:12,412 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.33
+2026-07-16 15:06:14,657 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.24
+2026-07-16 15:06:16,998 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.34
+2026-07-16 15:06:19,573 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.57
+2026-07-16 15:06:22,145 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.57
+2026-07-16 15:06:24,813 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.67
+2026-07-16 15:06:27,555 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.74
+2026-07-16 15:06:30,256 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.70
+2026-07-16 15:06:32,972 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 2.72
+2026-07-16 15:06:36,073 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.10
+2026-07-16 15:06:39,280 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.20
+2026-07-16 15:06:42,995 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.72
+2026-07-16 15:06:46,423 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.43
+2026-07-16 15:06:49,767 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.34
+2026-07-16 15:06:52,986 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.22
+2026-07-16 15:06:56,377 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.39
+2026-07-16 15:06:59,586 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.21
+2026-07-16 15:07:03,448 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.86
+2026-07-16 15:07:07,463 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 4.01
+2026-07-16 15:07:11,198 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.73
+2026-07-16 15:07:14,937 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.74
+2026-07-16 15:07:18,697 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.76
+2026-07-16 15:07:22,298 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.60
+2026-07-16 15:07:25,821 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.52
+2026-07-16 15:07:29,493 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.67
+2026-07-16 15:07:33,144 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.65
+2026-07-16 15:07:36,735 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.59
+2026-07-16 15:07:40,271 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.53
+2026-07-16 15:07:43,886 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.62
+2026-07-16 15:07:47,461 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.57
+2026-07-16 15:07:51,027 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.57
+2026-07-16 15:07:54,480 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.45
+2026-07-16 15:07:58,941 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 4.46
+2026-07-16 15:08:02,859 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.92
+2026-07-16 15:08:06,740 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.88
+2026-07-16 15:08:10,355 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.61
+2026-07-16 15:08:13,793 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.44
+2026-07-16 15:08:17,254 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.46
+2026-07-16 15:08:20,893 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.64
+2026-07-16 15:08:21,218 INFO     [manipulation.robot_device] [MainThread] Dobot bereit.
+2026-07-16 15:08:21,218 INFO     [__main__] [MainThread] System bereit für Plan-Ausführung!
+2026-07-16 15:08:21,219 INFO     [utils.utils] [MainThread] Plan erfolgreich importiert! (52 Schritte)
+2026-07-16 15:08:21,220 INFO     [__main__] [MainThread] 52 Schritte geladen.
+2026-07-16 15:08:21,220 INFO     [__main__] [Thread-3 (execute_plan)] [01] pick(blue_cover_ : None)
+2026-07-16 15:08:21,220 WARNING  [__main__] [Thread-3 (execute_plan)] Überspringe 'blue_cover_' erstmal...
+2026-07-16 15:08:21,220 INFO     [__main__] [Thread-3 (execute_plan)] [02] place_blue_cover(blue_cover_ : slot_master_)
+2026-07-16 15:08:21,220 WARNING  [__main__] [Thread-3 (execute_plan)] Überspringe 'blue_cover_' erstmal...
+2026-07-16 15:08:21,221 INFO     [__main__] [Thread-3 (execute_plan)] [03] pick(side_cover_2 : None)
+2026-07-16 15:08:21,221 WARNING  [__main__] [Thread-3 (execute_plan)] Überspringe 'side_cover_2' erstmal...
+2026-07-16 15:08:21,221 INFO     [__main__] [Thread-3 (execute_plan)] [04] place_side_cover_right(side_cover_2 : slot_right_2)
+2026-07-16 15:08:21,221 WARNING  [__main__] [Thread-3 (execute_plan)] Überspringe 'side_cover_2' erstmal...
+2026-07-16 15:08:21,221 INFO     [__main__] [Thread-3 (execute_plan)] [05] pick(screw_long_6 : None)
+2026-07-16 15:08:21,221 INFO     [__main__] [Thread-3 (execute_plan)] Suche gerade nach: screw
+2026-07-16 15:08:25,015 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 4.12
+2026-07-16 15:08:29,092 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 4.08
+2026-07-16 15:08:33,397 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 4.30
+2026-07-16 15:08:37,681 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 4.28
+2026-07-16 15:08:41,602 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.92
+2026-07-16 15:08:45,413 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 3.81
+2026-07-16 15:08:49,628 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 4.21
+2026-07-16 15:08:53,972 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 4.34
+2026-07-16 15:08:58,145 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 4.17
+2026-07-16 15:09:02,599 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 4.45
+2026-07-16 15:09:06,928 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 4.33
+2026-07-16 15:09:11,199 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 4.27
+2026-07-16 15:09:15,413 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 4.21
+2026-07-16 15:09:20,052 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 4.64
+2026-07-16 15:09:24,552 INFO     [__main__] [MainThread] Ctrl+C erkannt, fahre herunter...
+2026-07-16 15:09:24,552 INFO     [__main__] [MainThread] Fahre Systeme herunter...
+2026-07-16 15:09:24,553 INFO     [perception.vision_detector] [MainThread] Fahre Vision-System herunter...
+2026-07-16 15:09:24,553 INFO     [perception.vision_detector] [MainThread] Warte auf Video-Thread (max 3s)...
+2026-07-16 15:09:24,580 INFO     [perception.vision_detector] [MainThread] Warte auf Inference-Thread (max 3s)...
+2026-07-16 15:09:24,591 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon . wheel . bumper . black tires with yellow rims . screw . blue plastic car body top . side cover' war: 4.54
+2026-07-16 15:09:24,773 INFO     [perception.vision_detector] [MainThread] Erfolgreich heruntergefahren.
+2026-07-16 15:09:24,919 INFO     [manipulation.robot_device] [MainThread] Dobot erfolgreich geparkt und Verbindung geschlossen.
+2026-07-16 15:09:24,919 INFO     [__main__] [MainThread] Alle Systeme sauber heruntergefahren.

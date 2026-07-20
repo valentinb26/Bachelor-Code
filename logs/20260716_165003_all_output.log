@@ -1,0 +1,24 @@
+2026-07-16 16:50:03,851 INFO     [root] [MainThread] Logging konfiguriert. Logdatei: /Users/v/Desktop/Coding_Workspaces/ba_code/gdino/src/logs/20260716_165003_all_output.log
+2026-07-16 16:50:03,851 INFO     [__main__] [MainThread] Starte System-Initialisierung...
+2026-07-16 16:50:04,626 DEBUG    [perception.vision_detector] [MainThread] Master Prompt:  . small short red bolt . small black and yellow wheel . blue large cover . long grey metalic side piece . long red screw bolt . yellow long . yellow addon . orange tires
+2026-07-16 16:50:04,626 INFO     [perception.vision_detector] [MainThread] Homographie-Matrix geladen.
+2026-07-16 16:50:04,626 INFO     [perception.vision_detector] [MainThread] Kamerakalibrierung ist laut Config deaktiviert. Fahre ohne Entzerrung fort.
+2026-07-16 16:50:05,092 DEBUG    [matplotlib] [MainThread] matplotlib data path: /Users/v/Desktop/Coding_Workspaces/ba_code/gdino/.venv/lib/python3.12/site-packages/matplotlib/mpl-data
+2026-07-16 16:50:05,094 DEBUG    [matplotlib] [MainThread] CONFIGDIR=/Users/v/.matplotlib
+2026-07-16 16:50:05,095 DEBUG    [matplotlib] [MainThread] interactive is False
+2026-07-16 16:50:05,095 DEBUG    [matplotlib] [MainThread] platform is darwin
+2026-07-16 16:50:05,108 DEBUG    [matplotlib] [MainThread] CACHEDIR=/Users/v/.matplotlib
+2026-07-16 16:50:05,111 DEBUG    [matplotlib.font_manager] [MainThread] Using fontManager instance from /Users/v/.matplotlib/fontlist-v3.11.0.json
+2026-07-16 16:50:06,122 INFO     [perception.vision_detector] [MainThread] Lade Modell auf CPU...
+2026-07-16 16:50:06,237 DEBUG    [urllib3.connectionpool] [MainThread] Starting new HTTPS connection (1): huggingface.co:443
+2026-07-16 16:50:06,430 DEBUG    [urllib3.connectionpool] [MainThread] https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2026-07-16 16:50:06,587 DEBUG    [urllib3.connectionpool] [MainThread] https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2026-07-16 16:50:06,710 DEBUG    [urllib3.connectionpool] [MainThread] https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2026-07-16 16:50:07,572 DEBUG    [perception.vision_detector] [MainThread] Modell geladen in 1.45s
+2026-07-16 16:50:07,573 INFO     [perception.vision_detector] [Thread-1 (_video_thread_loop)] Gestartet, lese Frames...
+2026-07-16 16:50:07,573 INFO     [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Gestartet, warte auf Frames...
+2026-07-16 16:50:07,577 INFO     [manipulation.robot_device] [MainThread] Verfügbare Ports: ['/dev/cu.debug-console', '/dev/cu.Bluetooth-Incoming-Port', '/dev/cu.usbserial-56980037641']
+2026-07-16 16:50:07,577 INFO     [manipulation.robot_device] [MainThread] Verbindungsversuch 1 von 3 auf Port /dev/cu.usbserial-56980037641...
+2026-07-16 16:50:07,638 INFO     [manipulation.robot_device] [MainThread] Verbindung zum Dobot erfolgreich hergestellt.
+2026-07-16 16:50:07,639 DEBUG    [manipulation.robot_device] [MainThread] User wird gefragt ob er die homing procedure ausführen will. Es wird gewartet
+2026-07-16 16:50:10,031 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small short red bolt . small black and yellow wheel . blue large cover . long grey metalic side piece . long red screw bolt . yellow long . yellow addon . orange tires' war: 2.43

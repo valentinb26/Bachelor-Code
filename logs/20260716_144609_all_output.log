@@ -1,0 +1,41 @@
+2026-07-16 14:46:09,337 INFO     [root] [MainThread] Logging konfiguriert. Logdatei: /Users/v/Desktop/Coding_Workspaces/ba_code/gdino/src/logs/20260716_144609_all_output.log
+2026-07-16 14:46:09,337 INFO     [__main__] [MainThread] Starte System-Initialisierung...
+2026-07-16 14:46:10,223 INFO     [perception.vision_detector] [MainThread] Homographie-Matrix geladen.
+2026-07-16 14:46:10,223 INFO     [perception.vision_detector] [MainThread] Kamerakalibrierung ist laut Config deaktiviert. Fahre ohne Entzerrung fort.
+2026-07-16 14:46:10,678 DEBUG    [matplotlib] [MainThread] matplotlib data path: /Users/v/Desktop/Coding_Workspaces/ba_code/gdino/.venv/lib/python3.12/site-packages/matplotlib/mpl-data
+2026-07-16 14:46:10,680 DEBUG    [matplotlib] [MainThread] CONFIGDIR=/Users/v/.matplotlib
+2026-07-16 14:46:10,680 DEBUG    [matplotlib] [MainThread] interactive is False
+2026-07-16 14:46:10,680 DEBUG    [matplotlib] [MainThread] platform is darwin
+2026-07-16 14:46:10,694 DEBUG    [matplotlib] [MainThread] CACHEDIR=/Users/v/.matplotlib
+2026-07-16 14:46:10,697 DEBUG    [matplotlib.font_manager] [MainThread] Using fontManager instance from /Users/v/.matplotlib/fontlist-v3.11.0.json
+2026-07-16 14:46:11,655 INFO     [perception.vision_detector] [MainThread] Lade Modell auf CPU...
+2026-07-16 14:46:11,767 DEBUG    [urllib3.connectionpool] [MainThread] Starting new HTTPS connection (1): huggingface.co:443
+2026-07-16 14:46:12,074 DEBUG    [urllib3.connectionpool] [MainThread] https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2026-07-16 14:46:12,241 DEBUG    [urllib3.connectionpool] [MainThread] https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2026-07-16 14:46:12,370 DEBUG    [urllib3.connectionpool] [MainThread] https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2026-07-16 14:46:12,915 DEBUG    [perception.vision_detector] [MainThread] Modell geladen in 1.26s
+2026-07-16 14:46:12,915 INFO     [perception.vision_detector] [Thread-1 (_video_thread_loop)] Gestartet, lese Frames...
+2026-07-16 14:46:12,915 INFO     [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Gestartet, warte auf Frames...
+2026-07-16 14:46:12,918 INFO     [manipulation.robot_device] [MainThread] Verfügbare Ports: ['/dev/cu.debug-console', '/dev/cu.Bluetooth-Incoming-Port', '/dev/cu.usbserial-56980037641']
+2026-07-16 14:46:12,918 INFO     [manipulation.robot_device] [MainThread] Verbindungsversuch 1 von 3 auf Port /dev/cu.usbserial-56980037641...
+2026-07-16 14:46:12,978 INFO     [manipulation.robot_device] [MainThread] Verbindung zum Dobot erfolgreich hergestellt.
+2026-07-16 14:46:12,978 DEBUG    [manipulation.robot_device] [MainThread] User wird gefragt ob er die homing procedure ausführen will. Es wird gewartet
+2026-07-16 14:46:14,755 INFO     [manipulation.robot_device] [MainThread] Dobot bereit.
+2026-07-16 14:46:14,755 INFO     [__main__] [MainThread] System bereit für Plan-Ausführung!
+2026-07-16 14:46:14,759 INFO     [utils.utils] [MainThread] Plan erfolgreich importiert! (52 Schritte)
+2026-07-16 14:46:14,760 INFO     [__main__] [MainThread] 52 Schritte geladen.
+2026-07-16 14:46:14,760 INFO     [__main__] [Thread-3 (execute_plan)] [01] pick(blue_cover_ : None)
+2026-07-16 14:46:14,760 WARNING  [__main__] [Thread-3 (execute_plan)] Überspringe 'blue_cover_' erstmal...
+2026-07-16 14:46:14,760 INFO     [__main__] [Thread-3 (execute_plan)] [02] place_blue_cover(blue_cover_ : slot_master_)
+2026-07-16 14:46:14,760 WARNING  [__main__] [Thread-3 (execute_plan)] Überspringe 'blue_cover_' erstmal...
+2026-07-16 14:46:14,760 INFO     [__main__] [Thread-3 (execute_plan)] [03] pick(side_cover_2 : None)
+2026-07-16 14:46:14,760 WARNING  [__main__] [Thread-3 (execute_plan)] Überspringe 'side_cover_2' erstmal...
+2026-07-16 14:46:14,760 INFO     [__main__] [Thread-3 (execute_plan)] [04] place_side_cover_right(side_cover_2 : slot_right_2)
+2026-07-16 14:46:14,760 WARNING  [__main__] [Thread-3 (execute_plan)] Überspringe 'side_cover_2' erstmal...
+2026-07-16 14:46:14,760 INFO     [__main__] [Thread-3 (execute_plan)] [05] pick(screw_long_6 : None)
+2026-07-16 14:46:14,760 INFO     [__main__] [Thread-3 (execute_plan)] Suche gerade nach: screw
+2026-07-16 14:46:16,662 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'addon, side cover, bumper, black tires with yellow rims, screw, blue plastic car body top, wheel' war: 3.72
+2026-07-16 14:46:18,179 INFO     [display.window_display] [MainThread] Display beendet.
+2026-07-16 14:46:18,179 INFO     [__main__] [MainThread] Fenster geschlossen, warte auf Plan-Ausführung...
+2026-07-16 14:46:20,370 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 3.71
+2026-07-16 14:46:23,181 WARNING  [__main__] [MainThread] Plan-Thread antwortet nicht, fahre dennoch herunter.

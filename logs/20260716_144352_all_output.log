@@ -1,0 +1,93 @@
+2026-07-16 14:43:52,290 INFO     [root] [MainThread] Logging konfiguriert. Logdatei: /Users/v/Desktop/Coding_Workspaces/ba_code/gdino/src/logs/20260716_144352_all_output.log
+2026-07-16 14:43:52,290 INFO     [__main__] [MainThread] Starte System-Initialisierung...
+2026-07-16 14:43:53,193 INFO     [perception.vision_detector] [MainThread] Homographie-Matrix geladen.
+2026-07-16 14:43:53,193 INFO     [perception.vision_detector] [MainThread] Kamerakalibrierung ist laut Config deaktiviert. Fahre ohne Entzerrung fort.
+2026-07-16 14:43:53,678 DEBUG    [matplotlib] [MainThread] matplotlib data path: /Users/v/Desktop/Coding_Workspaces/ba_code/gdino/.venv/lib/python3.12/site-packages/matplotlib/mpl-data
+2026-07-16 14:43:53,680 DEBUG    [matplotlib] [MainThread] CONFIGDIR=/Users/v/.matplotlib
+2026-07-16 14:43:53,681 DEBUG    [matplotlib] [MainThread] interactive is False
+2026-07-16 14:43:53,681 DEBUG    [matplotlib] [MainThread] platform is darwin
+2026-07-16 14:43:53,696 DEBUG    [matplotlib] [MainThread] CACHEDIR=/Users/v/.matplotlib
+2026-07-16 14:43:53,698 DEBUG    [matplotlib.font_manager] [MainThread] Using fontManager instance from /Users/v/.matplotlib/fontlist-v3.11.0.json
+2026-07-16 14:43:54,667 INFO     [perception.vision_detector] [MainThread] Lade Modell auf CPU...
+2026-07-16 14:43:54,797 DEBUG    [urllib3.connectionpool] [MainThread] Starting new HTTPS connection (1): huggingface.co:443
+2026-07-16 14:43:54,986 DEBUG    [urllib3.connectionpool] [MainThread] https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2026-07-16 14:43:55,143 DEBUG    [urllib3.connectionpool] [MainThread] https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2026-07-16 14:43:55,271 DEBUG    [urllib3.connectionpool] [MainThread] https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2026-07-16 14:43:56,253 DEBUG    [perception.vision_detector] [MainThread] Modell geladen in 1.59s
+2026-07-16 14:43:56,253 INFO     [perception.vision_detector] [Thread-1 (_video_thread_loop)] Gestartet, lese Frames...
+2026-07-16 14:43:56,253 INFO     [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Gestartet, warte auf Frames...
+2026-07-16 14:43:56,256 INFO     [manipulation.robot_device] [MainThread] Verfügbare Ports: ['/dev/cu.debug-console', '/dev/cu.Bluetooth-Incoming-Port', '/dev/cu.usbserial-56980037641']
+2026-07-16 14:43:56,256 INFO     [manipulation.robot_device] [MainThread] Verbindungsversuch 1 von 3 auf Port /dev/cu.usbserial-56980037641...
+2026-07-16 14:43:56,322 INFO     [manipulation.robot_device] [MainThread] Verbindung zum Dobot erfolgreich hergestellt.
+2026-07-16 14:43:56,322 DEBUG    [manipulation.robot_device] [MainThread] User wird gefragt ob er die homing procedure ausführen will. Es wird gewartet
+2026-07-16 14:43:58,528 INFO     [manipulation.robot_device] [MainThread] Dobot bereit.
+2026-07-16 14:43:58,528 INFO     [__main__] [MainThread] System bereit für Plan-Ausführung!
+2026-07-16 14:43:58,532 INFO     [utils.utils] [MainThread] Plan erfolgreich importiert! (52 Schritte)
+2026-07-16 14:43:58,532 INFO     [__main__] [MainThread] 52 Schritte geladen.
+2026-07-16 14:43:58,532 INFO     [__main__] [Thread-3 (execute_plan)] [01] pick(blue_cover_ : None)
+2026-07-16 14:43:58,533 WARNING  [__main__] [Thread-3 (execute_plan)] Überspringe 'blue_cover_' erstmal...
+2026-07-16 14:43:58,533 INFO     [__main__] [Thread-3 (execute_plan)] [02] place_blue_cover(blue_cover_ : slot_master_)
+2026-07-16 14:43:58,533 WARNING  [__main__] [Thread-3 (execute_plan)] Überspringe 'blue_cover_' erstmal...
+2026-07-16 14:43:58,533 INFO     [__main__] [Thread-3 (execute_plan)] [03] pick(side_cover_2 : None)
+2026-07-16 14:43:58,533 WARNING  [__main__] [Thread-3 (execute_plan)] Überspringe 'side_cover_2' erstmal...
+2026-07-16 14:43:58,533 INFO     [__main__] [Thread-3 (execute_plan)] [04] place_side_cover_right(side_cover_2 : slot_right_2)
+2026-07-16 14:43:58,533 WARNING  [__main__] [Thread-3 (execute_plan)] Überspringe 'side_cover_2' erstmal...
+2026-07-16 14:43:58,533 INFO     [__main__] [Thread-3 (execute_plan)] [05] pick(screw_long_6 : None)
+2026-07-16 14:43:58,533 INFO     [__main__] [Thread-3 (execute_plan)] Suche gerade nach: screw
+2026-07-16 14:43:58,663 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'blue plastic car body top, side cover, bumper, screw, wheel, black tires with yellow rims, addon' war: 2.37
+2026-07-16 14:44:01,064 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.40
+2026-07-16 14:44:03,377 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.31
+2026-07-16 14:44:05,700 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.32
+2026-07-16 14:44:07,886 INFO     [display.window_display] [MainThread] Display beendet.
+2026-07-16 14:44:07,887 INFO     [__main__] [MainThread] Fenster geschlossen, warte auf Plan-Ausführung...
+2026-07-16 14:44:08,002 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.30
+2026-07-16 14:44:10,088 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.09
+2026-07-16 14:44:12,171 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.08
+2026-07-16 14:44:12,888 WARNING  [__main__] [MainThread] Plan-Thread antwortet nicht, fahre dennoch herunter.
+2026-07-16 14:44:14,250 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.08
+2026-07-16 14:44:16,341 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.09
+2026-07-16 14:44:18,424 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.08
+2026-07-16 14:44:20,497 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.07
+2026-07-16 14:44:22,583 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.09
+2026-07-16 14:44:24,656 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.07
+2026-07-16 14:44:26,765 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.11
+2026-07-16 14:44:28,840 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.07
+2026-07-16 14:44:30,940 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.10
+2026-07-16 14:44:33,042 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.10
+2026-07-16 14:44:35,165 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.12
+2026-07-16 14:44:37,281 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.12
+2026-07-16 14:44:39,369 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.09
+2026-07-16 14:44:41,495 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.13
+2026-07-16 14:44:43,597 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.10
+2026-07-16 14:44:45,756 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.16
+2026-07-16 14:44:47,875 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.12
+2026-07-16 14:44:50,024 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.15
+2026-07-16 14:44:52,158 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.13
+2026-07-16 14:44:54,279 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.12
+2026-07-16 14:44:56,421 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.14
+2026-07-16 14:44:58,699 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.28
+2026-07-16 14:45:00,904 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.20
+2026-07-16 14:45:03,122 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.22
+2026-07-16 14:45:05,319 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.20
+2026-07-16 14:45:07,518 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.20
+2026-07-16 14:45:09,634 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.12
+2026-07-16 14:45:11,789 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.16
+2026-07-16 14:45:13,978 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.19
+2026-07-16 14:45:16,207 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.23
+2026-07-16 14:45:18,938 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.73
+2026-07-16 14:45:21,376 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.44
+2026-07-16 14:45:23,687 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.31
+2026-07-16 14:45:26,070 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.38
+2026-07-16 14:45:28,389 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.32
+2026-07-16 14:45:30,758 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.37
+2026-07-16 14:45:33,292 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.53
+2026-07-16 14:45:35,868 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.58
+2026-07-16 14:45:38,426 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.56
+2026-07-16 14:45:41,085 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.66
+2026-07-16 14:45:43,835 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.75
+2026-07-16 14:45:46,760 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 2.92
+2026-07-16 14:45:49,950 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 3.19
+2026-07-16 14:45:53,148 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 3.20
+2026-07-16 14:45:56,696 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 3.55
+2026-07-16 14:46:00,093 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 3.40
+2026-07-16 14:46:03,387 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für 'screw' war: 3.29

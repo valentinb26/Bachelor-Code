@@ -1,0 +1,89 @@
+2026-07-16 16:54:14,266 INFO     [root] [MainThread] Logging konfiguriert. Logdatei: /Users/v/Desktop/Coding_Workspaces/ba_code/gdino/src/logs/20260716_165414_all_output.log
+2026-07-16 16:54:14,266 INFO     [__main__] [MainThread] Starte System-Initialisierung...
+2026-07-16 16:54:15,063 DEBUG    [perception.vision_detector] [MainThread] Master Prompt:  . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires
+2026-07-16 16:54:15,064 INFO     [perception.vision_detector] [MainThread] Homographie-Matrix geladen.
+2026-07-16 16:54:15,064 INFO     [perception.vision_detector] [MainThread] Kamerakalibrierung ist laut Config deaktiviert. Fahre ohne Entzerrung fort.
+2026-07-16 16:54:15,477 DEBUG    [matplotlib] [MainThread] matplotlib data path: /Users/v/Desktop/Coding_Workspaces/ba_code/gdino/.venv/lib/python3.12/site-packages/matplotlib/mpl-data
+2026-07-16 16:54:15,479 DEBUG    [matplotlib] [MainThread] CONFIGDIR=/Users/v/.matplotlib
+2026-07-16 16:54:15,480 DEBUG    [matplotlib] [MainThread] interactive is False
+2026-07-16 16:54:15,480 DEBUG    [matplotlib] [MainThread] platform is darwin
+2026-07-16 16:54:15,493 DEBUG    [matplotlib] [MainThread] CACHEDIR=/Users/v/.matplotlib
+2026-07-16 16:54:15,495 DEBUG    [matplotlib.font_manager] [MainThread] Using fontManager instance from /Users/v/.matplotlib/fontlist-v3.11.0.json
+2026-07-16 16:54:16,400 INFO     [perception.vision_detector] [MainThread] Lade Modell auf CPU...
+2026-07-16 16:54:16,541 DEBUG    [urllib3.connectionpool] [MainThread] Starting new HTTPS connection (1): huggingface.co:443
+2026-07-16 16:54:16,734 DEBUG    [urllib3.connectionpool] [MainThread] https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/tokenizer_config.json HTTP/1.1" 200 0
+2026-07-16 16:54:16,911 DEBUG    [urllib3.connectionpool] [MainThread] https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2026-07-16 16:54:17,067 DEBUG    [urllib3.connectionpool] [MainThread] https://huggingface.co:443 "HEAD /bert-base-uncased/resolve/main/config.json HTTP/1.1" 200 0
+2026-07-16 16:54:17,962 DEBUG    [perception.vision_detector] [MainThread] Modell geladen in 1.56s
+2026-07-16 16:54:17,962 INFO     [perception.vision_detector] [Thread-1 (_video_thread_loop)] Gestartet, lese Frames...
+2026-07-16 16:54:17,962 INFO     [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Gestartet, warte auf Frames...
+2026-07-16 16:54:17,963 INFO     [manipulation.robot_device] [MainThread] Verfügbare Ports: ['/dev/cu.debug-console', '/dev/cu.Bluetooth-Incoming-Port', '/dev/cu.usbserial-56980037641']
+2026-07-16 16:54:17,964 INFO     [manipulation.robot_device] [MainThread] Verbindungsversuch 1 von 3 auf Port /dev/cu.usbserial-56980037641...
+2026-07-16 16:54:18,022 INFO     [manipulation.robot_device] [MainThread] Verbindung zum Dobot erfolgreich hergestellt.
+2026-07-16 16:54:18,023 DEBUG    [manipulation.robot_device] [MainThread] User wird gefragt ob er die homing procedure ausführen will. Es wird gewartet
+2026-07-16 16:54:19,436 INFO     [manipulation.robot_device] [MainThread] Arm wird gehomed, bitte warten...
+2026-07-16 16:54:20,332 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.35
+2026-07-16 16:54:22,594 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.26
+2026-07-16 16:54:24,801 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.21
+2026-07-16 16:54:26,961 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.16
+2026-07-16 16:54:29,121 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.16
+2026-07-16 16:54:31,267 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.15
+2026-07-16 16:54:33,406 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.14
+2026-07-16 16:54:35,585 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.18
+2026-07-16 16:54:37,763 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.18
+2026-07-16 16:54:39,920 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.16
+2026-07-16 16:54:41,485 DEBUG    [manipulation.robot_device] [MainThread] Homing procedure beendet.
+2026-07-16 16:54:42,083 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.16
+2026-07-16 16:54:43,132 INFO     [manipulation.robot_device] [MainThread] Dobot bereit.
+2026-07-16 16:54:43,132 INFO     [__main__] [MainThread] System bereit für Plan-Ausführung!
+2026-07-16 16:54:43,134 INFO     [utils.utils] [MainThread] Plan erfolgreich importiert! (52 Schritte)
+2026-07-16 16:54:43,134 INFO     [__main__] [MainThread] 52 Schritte geladen.
+2026-07-16 16:54:43,134 INFO     [__main__] [Thread-3 (execute_plan)] [01] pick(blue_cover_ : None)
+2026-07-16 16:54:43,134 WARNING  [__main__] [Thread-3 (execute_plan)] Überspringe 'blue_cover_' erstmal...
+2026-07-16 16:54:43,134 INFO     [__main__] [Thread-3 (execute_plan)] [02] place_blue_cover(blue_cover_ : slot_master_)
+2026-07-16 16:54:43,134 WARNING  [__main__] [Thread-3 (execute_plan)] Überspringe 'blue_cover_' erstmal...
+2026-07-16 16:54:43,134 INFO     [__main__] [Thread-3 (execute_plan)] [03] pick(side_cover_2 : None)
+2026-07-16 16:54:43,134 WARNING  [__main__] [Thread-3 (execute_plan)] Überspringe 'side_cover_2' erstmal...
+2026-07-16 16:54:43,134 INFO     [__main__] [Thread-3 (execute_plan)] [04] place_side_cover_right(side_cover_2 : slot_right_2)
+2026-07-16 16:54:43,134 WARNING  [__main__] [Thread-3 (execute_plan)] Überspringe 'side_cover_2' erstmal...
+2026-07-16 16:54:43,134 INFO     [__main__] [Thread-3 (execute_plan)] [05] pick(screw_long_6 : None)
+2026-07-16 16:54:43,135 INFO     [__main__] [Thread-3 (execute_plan)] Suche gerade nach: long red screw bolt
+2026-07-16 16:54:44,441 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.36
+2026-07-16 16:54:46,867 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.43
+2026-07-16 16:54:49,324 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.46
+2026-07-16 16:54:51,831 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.51
+2026-07-16 16:54:54,374 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.54
+2026-07-16 16:54:56,941 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.57
+2026-07-16 16:54:59,476 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.53
+2026-07-16 16:55:02,281 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.80
+2026-07-16 16:55:04,895 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.61
+2026-07-16 16:55:07,407 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.51
+2026-07-16 16:55:08,637 INFO     [perception.vision_detector] [Thread-3 (execute_plan)]     -> Gefunden: long red screw bolt (0.38) bei Pixel (909,566) -> Roboter (164.8, -8.1)
+2026-07-16 16:55:09,964 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.56
+2026-07-16 16:55:10,236 INFO     [__main__] [Thread-3 (execute_plan)] [06] screw(screw_long_6 : side_cover_2)
+2026-07-16 16:55:12,570 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.61
+2026-07-16 16:55:15,192 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.62
+2026-07-16 16:55:17,854 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.66
+2026-07-16 16:55:20,568 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.71
+2026-07-16 16:55:23,353 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.78
+2026-07-16 16:55:26,244 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 2.89
+2026-07-16 16:55:29,397 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 3.15
+2026-07-16 16:55:30,132 ERROR    [manipulation.robot_device] [Thread-3 (execute_plan)] Keine bekannte Position fuer Slot 'slot_right_1'.
+2026-07-16 16:55:30,132 ERROR    [__main__] [Thread-3 (execute_plan)] Aktion fehlgeschlagen: RuntimeError: Schnittstellen-Rückmeldung war negativ (False).
+2026-07-16 16:55:32,477 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 3.08
+2026-07-16 16:55:34,492 INFO     [__main__] [Thread-3 (execute_plan)] [07] pick(screw_long_5 : None)
+2026-07-16 16:55:34,492 INFO     [__main__] [Thread-3 (execute_plan)] Suche gerade nach: long red screw bolt
+2026-07-16 16:55:35,686 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 3.21
+2026-07-16 16:55:37,511 INFO     [perception.vision_detector] [Thread-3 (execute_plan)]     -> Gefunden: long red screw bolt (0.37) bei Pixel (909,566) -> Roboter (164.8, -8.1)
+2026-07-16 16:55:39,008 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 3.32
+2026-07-16 16:55:39,445 INFO     [__main__] [Thread-3 (execute_plan)] [08] screw(screw_long_5 : side_cover_2)
+2026-07-16 16:55:42,411 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 3.40
+2026-07-16 16:55:42,933 INFO     [__main__] [MainThread] Ctrl+C erkannt, fahre herunter...
+2026-07-16 16:55:42,933 INFO     [__main__] [MainThread] Fahre Systeme herunter...
+2026-07-16 16:55:42,933 INFO     [perception.vision_detector] [MainThread] Fahre Vision-System herunter...
+2026-07-16 16:55:42,933 INFO     [perception.vision_detector] [MainThread] Warte auf Video-Thread (max 3s)...
+2026-07-16 16:55:42,967 INFO     [perception.vision_detector] [MainThread] Warte auf Inference-Thread (max 3s)...
+2026-07-16 16:55:45,533 DEBUG    [perception.vision_detector] [Thread-2 (_inference_thread_loop)] Zeit für ' . small black and yellow wheel . yellow long . yellow addon . blue large cover . small short red bolt . long red screw bolt . long grey metalic side piece . orange tires' war: 3.12
+2026-07-16 16:55:45,695 INFO     [perception.vision_detector] [MainThread] Erfolgreich heruntergefahren.
+2026-07-16 16:55:47,333 INFO     [manipulation.robot_device] [MainThread] Dobot erfolgreich geparkt und Verbindung geschlossen.
+2026-07-16 16:55:47,333 INFO     [__main__] [MainThread] Alle Systeme sauber heruntergefahren.
