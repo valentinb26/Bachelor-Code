@@ -10,3 +10,6 @@
 *.bin
 *.onnx
 weights/
+
+# lokale logs
+logs/

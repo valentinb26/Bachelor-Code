@@ -23,15 +23,15 @@ PLAN_PATH = DATA_DIR / "plan.json"
 USE_CALIBRATION = False
 
 # Roboter-Höhen (in mm)
-Z_GROUND = -33 # wo ist der Boden
+Z_GROUND = -34 # wo ist der Boden
 Z_SAFE = 80 # abstand vom Arm am Target
-Z_LIFT = 33 + Z_SAFE # relativer abstand (Z_GROUND + Z_GROUND = höhe)
+Z_LIFT = -(Z_GROUND) + Z_SAFE 
 DOBOT_RETRIES = 3
 DOBOT_TIMEOUT = 5 #sek
 
 # Vision-Schwellwerte
-BOX_THRESHOLD = 0.30
-TEXT_THRESHOLD = 0.25
+BOX_THRESHOLD = 0.35
+TEXT_THRESHOLD = 0.3
 
 
 # TODO: Vorrübergehende Lösung!
@@ -44,7 +44,7 @@ SLOT_POSITIONS = {
     "slot_top_2":          (200, 0, 0),
     "slot_top_3":          (200, 0, 0),
     "slot_left_1":         (200, 0, 0),
-    "slot_right_1":        (200, 0, 0),
+    "slot_right_1":        (72.5, -194, 53),
     "slot_right_2":        (200, 0, 0),
     "slot_side_cover_1":   (200, 0, 0),
     "slot_side_cover_2":   (200, 0, 0),
@@ -90,48 +90,53 @@ GRASP_STRATEGIES = {
     }
 }
 
-OBJECT_HEIGHTS = {
-    "bumper": 50,      # mm
-    "screw": 10,       # mm
-    "plate": 5         # mm
-}
 
 # Map für Objekte mit deren prompt und optinalen festen Position
 OBJECT_CONFIG = {
     "blue_cover": {
         "prompt": "blue large cover",
-        "pos": (200, 0, 10)
+        "height": 0,
+        "pos": None #(200, 0, 10),
+        
     },
     "side_cover": {
-        "prompt": "long grey metalic side piece",
+        #"prompt": "long grey metalic side piece",,
+        "height": 0,
         "pos": None
     },
     "screw_long": {
         "prompt": "long red screw bolt",
-        "pos": None #(200, 0, 0)
+        "height": 26, 
+        "pos": (-25.5, 201, 18, 95)
     },
     "screw_short": {
-        "prompt": "small short red bolt",
+        #"prompt": "small short red bolt",,
+        "height": 0,
         "pos": None #(200, 0, 0)
     },
     "wheel_big": {
-        "prompt": "orange tires",
+        #"prompt": "orange tires",,
+        "height": 0,
         "pos": None
     },
     "wheel_small": {
-        "prompt": "small black and yellow wheel",
+        "prompt": "small black wheel",
+        "height": 0,
         "pos": None
     },
     "addon": {
-        "prompt": "yellow long . yellow addon",
+        #"prompt": "yellow long . yellow addon",
+        "height": 0,
         "pos": None
     },
     "bumper_front": {
         "prompt": "",
+        "height": 0,
         "pos": None
     },
     "bumper_back": {
         "prompt": "",
+        "height": 0,
         "pos": None
     },
 }

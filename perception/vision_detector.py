@@ -11,7 +11,7 @@ from PIL import Image
 from typing import Tuple, Optional, Dict, Any
 
 from utils.utils import (
-    filter_oversized_detections, pixel_to_robot, find_candidates
+    filter_oversized_detections, pixel_to_robot, find_candidates, get_object_config
 )
 from config.config import (
     GROUNDING_DINO_CONFIG, 
@@ -22,8 +22,7 @@ from config.config import (
     BOX_THRESHOLD,
     TEXT_THRESHOLD,
     Z_GROUND,
-    GRASP_STRATEGIES,
-    OBJECT_HEIGHTS
+    GRASP_STRATEGIES
     )
 
 logger = logging.getLogger(__name__)
@@ -172,7 +171,7 @@ class VisionDetector:
 # ---------------------------------------------------------------------------     
 
     
-    def get_robot_coordinates_for_object(self, expected_label: str, timeout: float = 10.0, poll_interval: float = 0.3) -> Optional[Tuple[float, float]]:
+    def get_robot_coordinates_for_object(self, expected_label: str, timeout: float = 10.0, poll_interval: float = 0.3, center: bool = False ) -> Optional[Tuple[float, float]]:
         """Wartet bis ein passendes Objekt im aktuellen Frame gefunden wird.
         Prompt muss vorher mit set_prompt() gesetzt sein."""
         # Rechnet bei Erfolg Pixel in Roboter-Millimeter um 
@@ -220,9 +219,16 @@ class VisionDetector:
                 #return grasp_pose  # <-- Komplette Pose, nicht nur XY
 
                 # KOMMT WEG
-                # Mittelpunkt der Bounding Box
+                
+                
                 x1, y1, x2, y2 = box
-                cx, cy = int((x1 + x2) // 2), int(y2)
+                if center:
+                    # Mittelpunkt der Bounding Box
+                    cx, cy = int((x1 + x2) // 2), int((y1 +y2) // 2)
+                else:
+                    # Mittelpunkt untere Höhe
+                    cx, cy = int((x1 + x2) // 2), int(y2)
+                
 
                 if self.homography_matrix is None:
                     logger.error("Keine Homographie-Matrix geladen. Transformation unmöglich!")
@@ -441,7 +447,7 @@ class VisionDetector:
         # 3. Z-Koordinate: Z_GROUND + Objekthöhe
         bbox = detection["bbox"]
         #obj_height_px = bbox[3] - bbox[1]  # Pixel-Höhe
-        z_mm = Z_GROUND + OBJECT_HEIGHTS[object_class]
+        z_mm = Z_GROUND + get_object_config(object_class).get("height", 20)  # Fallback 20mm
         #z_mm = Z_GROUND + (obj_height_px * MM_PER_PIXEL)  # deine Kalibrierung
         
         # 4. Gripper-Rotation (wenn Teil nicht symmetrisch)
@@ -460,6 +466,11 @@ class VisionDetector:
             "strategy_desc": strategy["description"],
             "confidence": detection["confidence"]
         }
+
+
+    def _get_object_height(self, object_name: str) -> float:
+        """Ermittelt die feste Position aus der Objekt-Konfiguration für einen Objekt-Namen."""
+        return self._get_object_config(object_name).get("height")  # Gibt die Höhe in mm zurück
 
 
     def shutdown(self):

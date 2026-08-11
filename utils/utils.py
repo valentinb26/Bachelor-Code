@@ -6,6 +6,7 @@ import re
 import json
 import numpy as np
 import cv2
+from config.config import OBJECT_CONFIG
 
 logger = logging.getLogger(__name__)
 
@@ -78,3 +79,9 @@ def find_candidates(result: dict, expected_label: str) -> list:
         if expected_label.lower() in label.lower() or label.lower() in expected_label.lower():
             candidates.append((box, score, label))
     return candidates
+
+
+def get_object_config(object_name: str):
+    """Holt das Config-Dict für das Objekt, standardmäßig ein leeres Dict {}."""
+    base_name = strip_instance(object_name)
+    return OBJECT_CONFIG.get(base_name, {})

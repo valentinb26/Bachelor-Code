@@ -16,6 +16,11 @@ class WindowDisplay:
     def __init__(self, detector):
         self.detector = detector
         self._stop_requested = False
+        
+        self.screen_x = 0
+        self.screen_y = 1440
+        self._window_moved = False
+
 
     def stop(self):
         """Kann aus jedem Thread aufgerufen werden (z. B. aus shutdown())."""
@@ -34,6 +39,10 @@ class WindowDisplay:
             if frame is not None:
                 display_frame = self._draw_overlay(frame, result, error_msg)
                 cv2.imshow(self.WINDOW_NAME, display_frame)
+                
+                if not self._window_moved:
+                    cv2.moveWindow(self.WINDOW_NAME, self.screen_x, self.screen_y)
+                    self._window_moved = True
 
             key = cv2.waitKey(1) & 0xFF
             if key == ord("q"):
@@ -70,9 +79,12 @@ class WindowDisplay:
             # Bottom-Edge-Fix: Mittelpunkt sitzt auf der Unterkante, nicht in der Box-Mitte
             # (korrigiert Parallaxe-Fehler durch die schräge Kamera-Perspektive)
             cx, cy = int((x1 + x2) // 2), int(y2)
+            
+            cx2, cy2 = int((x1 + x2) // 2), int((y1 +y2) // 2)
 
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
             cv2.circle(frame, (cx, cy), 5, (0, 0, 255), -1)
+            cv2.circle(frame, (cx2, cy2), 5, (0, 0, 255), -1)
             cv2.putText(
                 frame,
                 f"{label} {score:.2f}",
