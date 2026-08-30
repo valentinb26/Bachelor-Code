@@ -20,9 +20,7 @@ from config.config import (
     USE_CALIBRATION,
     CALIBRATION_PATH,
     BOX_THRESHOLD,
-    TEXT_THRESHOLD,
-    Z_GROUND,
-    GRASP_STRATEGIES
+    TEXT_THRESHOLD
     )
 
 logger = logging.getLogger(__name__)
@@ -191,36 +189,6 @@ class VisionDetector:
                 best_candidate = max(candidates, key=lambda c: c[1])
                 box, score, label = best_candidate
                 
-                # 1. Segmentiermaske
-                #mask, bbox = self.get_segmentation_mask(
-                #    frame, 
-                #    result["boxes_xyxy"],  # <-- numpy arrays aus result
-                #    result["scores"],
-                #    result["labels"],
-                #    expected_label
-                #)
-                
-                # 2. Orientierung
-                #angle_deg, conf = self.estimate_2d_orientation(mask, bbox)
-
-                # 3. Komplette Pose
-                #detection_dict = {
-                #    "bbox": bbox,
-                #    "class": label,
-                #    "confidence": score,
-                #    "image_point": (int((box[0] + box[2]) // 2), int(box[3]))  # Centroid
-                #}
-                
-                #grasp_pose = self.compute_grasp_pose(detection_dict, mask, label)
-            
-                #logger.info(f"Pose: x={grasp_pose['x_mm']:.1f}, y={grasp_pose['y_mm']:.1f}, "
-                #       f"z={grasp_pose['z_mm']:.1f}, rot={grasp_pose['gripper_rotation_deg']:.1f}°")
-                
-                #return grasp_pose  # <-- Komplette Pose, nicht nur XY
-
-                # KOMMT WEG
-                
-                
                 x1, y1, x2, y2 = box
                 if center:
                     # Mittelpunkt der Bounding Box
@@ -315,163 +283,6 @@ class VisionDetector:
             "inference_ms": inference_ms,
             "num_detections": len(phrases),
         }
-
-
-    def get_segmentation_mask(image, boxes, logits, phrases, target_phrase):
-        """
-        Extrahiere Segmentiermaske für ein erkanntes Objekt.
-        
-        Args:
-            image: PIL Image oder numpy array (H, W, 3)
-            boxes: tensor (N, 4) in normalized coordinates [x1, y1, x2, y2]
-            logits: tensor (N,) confidence scores
-            phrases: list of str, erkannte Klassen
-            target_phrase: str, z.B. "bumper"
-        
-        Returns:
-            mask: numpy array (H, W) binary mask
-            bbox: (x1, y1, x2, y2) in Pixel
-        """
-        if isinstance(image, Image.Image):
-            img_np = np.array(image)
-        else:
-            img_np = image
-        
-        H, W = img_np.shape[:2]
-        
-        # Finde Index des target Objekts
-        idx = None
-        for i, phrase in enumerate(phrases):
-            if target_phrase.lower() in phrase.lower():
-                idx = i
-                break
-        
-        if idx is None:
-            return None, None
-        
-        # Denormalize bbox
-        box = boxes[idx]  # [x1, y1, x2, y2] normalized
-        x1, y1, x2, y2 = int(box[0] * W), int(box[1] * H), int(box[2] * W), int(box[3] * H)
-        
-        # Einfache binäre Maske aus BBox (crude, aber funktioniert für Szenario A)
-        mask = np.zeros((H, W), dtype=np.uint8)
-        mask[y1:y2, x1:x2] = 255
-        
-        # Optional: Morphological operations für bessere Maske
-        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
-        mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
-        
-        return mask, (x1, y1, x2, y2)
-    
-    
-    def estimate_2d_orientation(mask, bbox):
-        """
-        Schätze 2D-Orientierung (Winkel um Z-Achse) aus Segmentiermaske.
-        
-        Args:
-            mask: binary mask (H, W)
-            bbox: (x1, y1, x2, y2)
-        
-        Returns:
-            angle_deg: float, Winkel in Grad (0-360)
-            confidence: float (0-1), wie sicher die Schätzung ist
-        """
-        # Konturen finden
-        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        
-        if not contours or len(contours[0]) < 5:
-            # Zu kleine Maske, fallback auf BBox-Winkel
-            return 0.0, 0.1
-        
-        # Größte Kontur nehmen
-        cnt = max(contours, key=cv2.contourArea)
-        
-        # Fitting ellipse (gibt längste Achse)
-        if len(cnt) < 5:
-            return 0.0, 0.1
-        
-        ellipse = cv2.fitEllipse(cnt)
-        # ellipse = (center, (major_axis, minor_axis), angle)
-        center, axes, angle = ellipse
-        
-        # Angle ist schon in Grad, aber relativ zur Bildachse
-        # Normalisiere auf 0-360
-        angle_deg = float(angle) % 360
-        
-        # Confidence basierend auf Achsen-Verhältnis
-        # Je deutlicher die Asymmetrie, desto sicherer die Orientierung
-        major, minor = axes
-        if major > 0:
-            aspect_ratio = minor / major
-            confidence = min(1.0, 1.0 - aspect_ratio)  # 0 = rund, 1 = lang
-        else:
-            confidence = 0.1
-        
-        return angle_deg, confidence
-
-
-    def compute_grasp_pose(self, detection, mask, object_class):
-        """
-        Berechne Greif-Pose basierend auf Objekt-Klasse und Strategie.
-        
-        Args:
-            detection: {
-                "bbox": (x1, y1, x2, y2),
-                "class": str (z.B. "bumper"),
-                "confidence": float,
-                "image_point": (cx, cy)  # Centroid aus GDINO
-            }
-            mask: binary segmentation mask
-            object_class: str, Klassen-Name
-        
-        Returns:
-            grasp_pose: {
-                "x_mm": float,
-                "y_mm": float,
-                "z_mm": float,
-                "gripper_rotation_deg": float,
-                "strategy": str
-            }
-        """
-        strategy = GRASP_STRATEGIES.get(object_class.lower())
-        if not strategy:
-            return None
-        
-        # 1. Position: Centroid aus Detection (in Pixel)
-        cx, cy = detection["image_point"]
-        
-        # 2. Homographie anwenden (deine bestehende 8-point Kalibrierung)
-        # (diese Funktion hast du bereits)
-        x_mm, y_mm = pixel_to_robot(cx, cy)
-        
-        # 3. Z-Koordinate: Z_GROUND + Objekthöhe
-        bbox = detection["bbox"]
-        #obj_height_px = bbox[3] - bbox[1]  # Pixel-Höhe
-        z_mm = Z_GROUND + get_object_config(object_class).get("height", 20)  # Fallback 20mm
-        #z_mm = Z_GROUND + (obj_height_px * MM_PER_PIXEL)  # deine Kalibrierung
-        
-        # 4. Gripper-Rotation (wenn Teil nicht symmetrisch)
-        if strategy["use_orientation"]:
-            angle_deg, confidence = self.estimate_2d_orientation(mask, bbox)
-            gripper_rotation = angle_deg
-        else:
-            gripper_rotation = strategy["gripper_rotation"]
-        
-        return {
-            "x_mm": x_mm,
-            "y_mm": y_mm,
-            "z_mm": z_mm,
-            "gripper_rotation_deg": gripper_rotation,
-            "strategy_name": strategy["name"],
-            "strategy_desc": strategy["description"],
-            "confidence": detection["confidence"]
-        }
-
-
-    def _get_object_height(self, object_name: str) -> float:
-        """Ermittelt die feste Position aus der Objekt-Konfiguration für einen Objekt-Namen."""
-        return self._get_object_config(object_name).get("height")  # Gibt die Höhe in mm zurück
-
 
     def shutdown(self):
         """Räumt alle Ressourcen sauber auf."""

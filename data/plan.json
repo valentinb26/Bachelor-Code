@@ -4,6 +4,68 @@
     "actions": [
         {
             "action": "pick",
+            "object": "wheel_small_3",
+            "slots": []
+        },
+        {
+            "action": "place",
+            "object": "wheel_small_3",
+            "slots": [
+                "slot_right_1"
+            ]
+        },
+        {
+            "action": "pick",
+            "object": "screw_long_7",
+            "slots": []
+        },
+        {
+            "action": "screw",
+            "object": "screw_long_7",
+            "slots": [
+                "wheel_small_3",
+                "slot_right_1"
+            ]
+        },
+        {
+            "action": "pick",
+            "object": "wheel_small_2",
+            "slots": []
+        },
+        {
+            "action": "place",
+            "object": "wheel_small_2",
+            "slots": [
+                "slot_right_2"
+            ]
+        },
+        {
+            "action": "pick",
+            "object": "screw_long_2",
+            "slots": []
+        },
+        {
+            "action": "screw",
+            "object": "screw_long_2",
+            "slots": [
+                "wheel_small_2",
+                "slot_right_2"
+            ]
+        },
+        {
+            "action": "pick",
+            "object": "wheel_small_4",
+            "slots": []
+        },
+        {
+            "action": "place",
+            "object": "wheel_small_4",
+            "slots": [
+                "slot_left_1"
+            ]
+        },
+        {
+            "action": "pick",
             "object": "wheel_small_1",
             "slots": []
         },
@@ -11,20 +73,33 @@
             "action": "place",
             "object": "wheel_small_1",
             "slots": [
-                "slot_right_1"
+                "slot_left_2"
             ]
         },
         {
             "action": "pick",
-            "object": "screw_long_1",
+            "object": "screw_long_5",
             "slots": []
         },
         {
             "action": "screw",
-            "object": "screw_long_1",
+            "object": "screw_long_5",
             "slots": [
                 "wheel_small_1",
-                "slot_right_1"
+                "slot_left_2"
+            ]
+        },
+        {
+            "action": "pick",
+            "object": "screw_long_4",
+            "slots": []
+        },
+        {
+            "action": "screw",
+            "object": "screw_long_4",
+            "slots": [
+                "wheel_small_4",
+                "slot_left_1"
             ]
         }
     ]

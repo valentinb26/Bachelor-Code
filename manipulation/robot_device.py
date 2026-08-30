@@ -13,8 +13,10 @@ from config.config import (
     Z_GROUND, 
     Z_SAFE, 
     Z_LIFT, 
+    Z_DIP,
     DOBOT_RETRIES, 
-    DOBOT_TIMEOUT
+    DOBOT_TIMEOUT,
+    SCREW_ROTATIONS
     )
 
 class DobotController:
@@ -145,27 +147,30 @@ class DobotController:
             
             _check_alarms(self.dobot, x, y, target_z)
             
+            _idle(self.dobot)
+            
             return True
         except Exception as e:
             logger.error(f"Place-Aktion fehlgeschlagen: {e}")
         return False
   
 
-    def screw(self, object_name: str, slot_name: str) -> bool:
+    def screw(self, object_name: str, object_height: float, target_slot: str) -> bool:
         # Erhält name des Objekts und den Slot auf welchem es platziert werden soll
         # Holt die Position des Slots aus self.placed_positions und führt Schraubvorgang aus
-        position = self.placed_positions.get(slot_name)
+        position = self.placed_positions.get(target_slot)
         if position is None:
-            logger.error(f"Keine bekannte Position fuer Slot '{slot_name}'.")
+            logger.error(f"Keine bekannte Position fuer Slot '{target_slot}'.")
             return False
 
         x, y, z = position
         
-        object_height = 32
-
         try:
-            logger.info(f"   -> Schraube '{object_name}' in '{slot_name}' bei ({x:.1f}, {y:.1f}, {z:.1f})")
+            logger.info(f"   -> Schraube '{object_name}' in '{target_slot}' bei ({x:.1f}, {y:.1f}, {z:.1f})")
             # todo:
+            # x - offset der schraube = mitte der radnarbe. Wenn auto immer senkrecht platziert wird
+            # sollte es passen
+            # BZW move_rel um x offsset wie im dobotlab! (12.5mm)
             # quasi die place aktion
             self.dobot.move_to(x, y, Z_SAFE)
             time.sleep(0.5)
@@ -176,15 +181,15 @@ class DobotController:
             time.sleep(0.5)
 
             # kleine schraub animation
-            self.dobot.move_rel(0, 0, 10, r=90)
-            for _ in range(1):
-                self.dobot.move_rel(r=-180)
-                self.dobot.move_rel(r=180)
-            self.dobot.move_rel(r=-90)
-
-            self.dobot.move_rel(0, 0, Z_LIFT, 0)
+            self.dobot.move_rel(0, 0, -10, r=45)
+            for _ in range(SCREW_ROTATIONS):
+                self.dobot.move_rel(r=-90)
+                self.dobot.move_rel(r=90)
+            self.dobot.move_rel(r=-45)
             
             _check_alarms(self.dobot, x, y, z)
+            
+            _idle(self.dobot)
             
             return True
         except Exception as e:
@@ -193,19 +198,17 @@ class DobotController:
         
     def human_action(self, robot_x: float, robot_y: float) -> bool:
         """
-        Roboter hebt ein Objekt auf.
+        Roboter zeigt eine HRC Animation an.
         """
         try:
-            self.dobot.clear_alarms()    # Parameter für den Ablauf
-            Z_HOVER = 80      # Zeige-Höhe über dem Bauteil (ohne Kollisionsgefahr)
-            Z_NOD_DIP = -20   # Nick-Tiefe in mm
+            self.dobot.clear_alarms()
 
             # 1. Anfahren über das Zielbauteil
             self.dobot.move_to(robot_x, robot_y, Z_SAFE)
             time.sleep(0.1)
 
             # 2. Auf Zeige-Höhe absenken
-            self.dobot.move_to(robot_x, robot_y, Z_HOVER)
+            self.dobot.move_to(robot_x, robot_y, Z_SAFE)
             
             # 3. Greifer VOLL ÖFFNEN als visuelle Freigabe ("Hier zugreifen")
             self.dobot.grip(enable=False)
@@ -213,9 +216,9 @@ class DobotController:
 
             # 4. Doppeltes Nicken (Aufmerksamkeit des Werkers auf das Bauteil lenken)
             for _ in range(2):
-                self.dobot.move_rel(0, 0, Z_NOD_DIP, 0)
+                self.dobot.move_rel(0, 0, Z_DIP, 0)
                 time.sleep(0.15)
-                self.dobot.move_rel(0, 0, -Z_NOD_DIP, 0)
+                self.dobot.move_rel(0, 0, -Z_DIP, 0)
                 time.sleep(0.15)
 
             # 5. Kurze Denkpause für die Wahrnehmung des Werkers
@@ -227,10 +230,12 @@ class DobotController:
             
             
             _check_alarms(self.dobot, robot_x, robot_y, Z_SAFE)
+            
+            _idle(self.dobot)
                 
             return True
         except Exception as e:
-            logger.error(f"Pick-Aktion fehlgeschlagen: {e}")
+            logger.error(f"Werker-Aktion fehlgeschlagen: {e}")
         return False
   
 # Interne Hilfsmethoden
@@ -239,6 +244,7 @@ def _homing(dobot):
     # --- Homing procedure ---
     logger.debug("User wird gefragt ob er die homing procedure ausführen will. Es wird gewartet")
     cont = input("      Homing durchführen? (j/n): ")
+    
     if cont.lower() == "j":
         logger.info("Arm wird gehomed, bitte warten...")
         dobot.clear_alarms()
@@ -257,11 +263,14 @@ def _homing(dobot):
 def _idle(dobot):
     # Roboter fährt an eine Stelle in welcher er nicht im Weg steht
     try:
-        x,y,z,r = dobot.pose()[:4]
+        pose = dobot.get_pose()
+        x, y, z, r = pose.position
+        z_diff = Z_SAFE - z
+        
         dobot.clear_alarms()
         dobot.grip(enable=False)
         dobot.suck(False)
-        dobot.move_to(x,y,Z_SAFE,r)
+        dobot.move_rel(0, 0, z_diff, 0)
         dobot.move_to(-140,-210,140,0)
     except Exception as e:
         logger.error(f"Fehler bei der Idle-Aktion: {e}")

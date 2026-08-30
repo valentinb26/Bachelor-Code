@@ -24,14 +24,16 @@ USE_CALIBRATION = False
 
 # Roboter-Höhen (in mm)
 Z_GROUND = -34 # wo ist der Boden
-Z_SAFE = 80 # abstand vom Arm am Target
+Z_SAFE = 100 # abstand vom Arm am Target
+Z_DIP = -20 # Nick-Tiefe in mm
 Z_LIFT = -(Z_GROUND) + Z_SAFE 
 DOBOT_RETRIES = 3
 DOBOT_TIMEOUT = 5 #sek
+SCREW_ROTATIONS = 1
 
 # Vision-Schwellwerte
-BOX_THRESHOLD = 0.35
-TEXT_THRESHOLD = 0.3
+BOX_THRESHOLD = 0.4
+TEXT_THRESHOLD = 0.4
 
 
 # TODO: Vorrübergehende Lösung!
@@ -43,9 +45,10 @@ SLOT_POSITIONS = {
     "slot_top_1":          (200, 0, 0),
     "slot_top_2":          (200, 0, 0),
     "slot_top_3":          (200, 0, 0),
-    "slot_left_1":         (200, 0, 0),
-    "slot_right_1":        (72.5, -194, 53),
-    "slot_right_2":        (200, 0, 0),
+    "slot_left_1":         (70, -192, 53),
+    "slot_left_2":         (154, -188, 53),
+    "slot_right_1":        (70, -192, 53),
+    "slot_right_2":        (154, -188, 53),
     "slot_side_cover_1":   (200, 0, 0),
     "slot_side_cover_2":   (200, 0, 0),
     "slot_side_cover_3":   (200, 0, 0),
@@ -106,7 +109,7 @@ OBJECT_CONFIG = {
     },
     "screw_long": {
         "prompt": "long red screw bolt",
-        "height": 26, 
+        "height": 32, 
         "pos": (-25.5, 201, 18, 95)
     },
     "screw_short": {

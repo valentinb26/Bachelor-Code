@@ -19,7 +19,7 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 setup_logging(LOGS_DIR)
 logger = logging.getLogger(__name__)
 
-class PlanExecutor:
+class MainController:
     def __init__(self):
         logger.info("Starte System-Initialisierung...")
         
@@ -42,10 +42,7 @@ class PlanExecutor:
         
         logger.info("System bereit für Plan-Ausführung!")
 
-# Hilfsfunktionen um auf Objekt-Konfiguration zuzugreifen
-
-
-
+    # Hilfsfunktionen um auf Objekt-Konfiguration zuzugreifen
     def _get_prompt_for_object(self, object_name: str):
         """Ermittelt den Suchprompt aus der Objekt-Konfiguration für einen Objekt-Namen."""
         return get_object_config(object_name).get("prompt")
@@ -58,49 +55,97 @@ class PlanExecutor:
         """Ermittelt die feste Position aus der Objekt-Konfiguration für einen Objekt-Namen."""
         return get_object_config(object_name).get("height")  # Gibt die Höhe in mm zurück
 
+    # weitere Hilfsfunktionen
+    def _check_side_switch(self, slots: list, last_side: str) -> str:
+        """
+        Prüft, ob ein Seitenwechsel vorliegt, fordert ggf. zum Drehen auf
+        und gibt die aktuelle Seite zurück.
+        """
+        if not slots:
+            return last_side
+
+        target_slot = str(slots[0])
+        current_side = None
+
+        if "slot_right" in target_slot:
+            current_side = "right"
+        elif "slot_left" in target_slot:
+            current_side = "left"
+
+        # Wechsel erkennen und Nutzer auffordern
+        if last_side and current_side and current_side != last_side:
+            logger.warning(f"🔄 SEITENWECHSEL ERKANNT: Wechsel von '{last_side}' auf '{current_side}'!")
+            input(
+                f"\n=========================================================\n"
+                f"  ACHTUNG: Bitte das Auto JETZT auf die andere Seite drehen!\n"
+                f"  (Wechsel von {last_side.upper()} zu {current_side.upper()})\n"
+                f"=========================================================\n"
+                f"  Drücke ENTER, sobald das Auto gedreht wurde..."
+            )
+
+        # Gibt die neue Seite zurück (oder die alte, falls kein Side-Slot vorlag)
+        return current_side if current_side else last_side
+    
+    def _is_human_object(self, obj: str) -> bool:
+        """Prüft, ob das Objekt anhand seines Namens an den Menschen delegiert werden muss."""
+        human_objects = ("blue_cover_", "side_cover", "bumper")
+        return any(keyword in obj for keyword in human_objects)
+    
+    def _timed_robot_call(self, func, *args, **kwargs):
+        """Führt eine Roboter-Aktion aus und misst die reine Ausführungszeit,
+        auch wenn währenddessen eine Exception geworfen wird."""
+        t0 = time.perf_counter()
+        try:
+            return func(*args, **kwargs)
+        finally:
+            self._robot_time_ms += (time.perf_counter() - t0) * 1000
+
+# ---------------------------------------------------------------------------
+# HAUPTFUNKTION
+# ---------------------------------------------------------------------------
 
     def execute_plan(self, steps: list) -> bool:
         """Arbeitet eine Liste von Schritten nacheinander ab."""
-
-        blacklist = ("blue_cover_", "side_cover", "bumper")
-        #blacklist = ("side_cover", "bumper")
+        t_start_full = time.perf_counter()# Messung
+        self._robot_time_ms = 0.0  # NEU
+        
+        
+        last_side = None
         i = 1
+        
         while i <= len(steps):
             action_name, obj, slots = steps[i - 1]
         #for i, (action_name, obj, slots) in enumerate(steps, 1):
             logger.info(f"[{i:02d}] {action_name}({obj} : {slots[0] if slots else 'None'})")
 
-
-            # macht gerade zu viel ärger erstmal skippen
-            #if any(keyword in obj for keyword in blacklist):
-            #    logger.warning(f"Überspringe '{obj}' erstmal...")
-            #    continue
-
-            # Prompt nur bei pick setzen
-            if action_name == "pick":
-                expected_label = self._get_prompt_for_object(obj)
-                if expected_label:
-                    # später ggf relevant
-                    #self.detector.set_prompt(expected_label)
-                    logger.info(f"Suche gerade nach: {expected_label}")
+            # Seitenwechsel prüfen und Zustand aktualisieren
+            last_side = self._check_side_switch(slots, last_side)
 
             try:        
                 input("      Enter zum Ausfuehren, Ctrl+C zum Abbrechen...\n") 
 
                 if action_name == "pick":
-                    if any(keyword in obj for keyword in blacklist):
-                        success = self._handle_human_action(obj, slots)
+                    if self._is_human_object(obj):
+                        success = self._handle_human_action(obj, slots[0] if slots else None)
                     else:
-                        success = self._handle_pick(obj)
+                        #success = self._handle_pick(obj)
+                        success = self._timed_robot_call(self._handle_pick, obj)
                     
                 elif action_name == "place":
-                    success = self._handle_place(obj, slots[0] if slots else None)
+                    if self._is_human_object(obj):
+                        success = self._handle_human_action(obj, slots[0] if slots else None)
+                    else:
+                        #success = self._handle_place(obj, slots[0] if slots else None)
+                        success = self._timed_robot_call(self._handle_place, obj, slots[0] if slots else None)
+
                     
                 elif action_name == "screw":
-                    success = self._handle_screw(obj, slots[1] if len(slots) > 1 else None)
+                    #success = self._handle_screw(obj, slots[1] if len(slots) > 1 else None)
+                    success = self._timed_robot_call(self._handle_screw, obj, slots[1] if len(slots) > 1 else None)
                     
                 elif action_name in ("place_blue_cover", "place_side_cover_right", "place_side_cover_left"):
-                    success = self._handle_human_action(obj, slots)
+                    
+                    success = self._handle_human_action(obj, slots[0] if slots else None)
                     
                 else:
                     logger.warning(f"Unbekannte Aktion '{action_name}', wird uebersprungen.")
@@ -131,12 +176,15 @@ class PlanExecutor:
             time.sleep(0.5)  # Kurze Pause zwischen den Schritten
             
         logger.info("Der gesamte Plan wurde erfolgreich ausgeführt! 🎉")
+        full_time = (time.perf_counter() - t_start_full) * 1000 # Messung
+        logger.info(f"Gesamtzeit dieses Durchlaufs: {full_time:.2f} ms")
+        logger.info(f"Reine Roboterzeit (pick/place/screw): {self._robot_time_ms:.2f} ms")
         self.shutdown()
         return True
 
-    # ---------------------------------------------------------------------------
-    # AKTIONSHANDLER (Schnittstelle zwischen Vision und Robot)
-    # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# AKTIONSHANDLER (Schnittstelle zwischen Vision und Robot)
+# ---------------------------------------------------------------------------
     
     def _handle_pick(self, object_name: str) -> bool:
         """Lässt den Roboter das Objekt greifen (entweder über feste Position oder Kamera)."""
@@ -153,6 +201,8 @@ class PlanExecutor:
             if not expected_label:
                 logger.error(f"Kein Prompt-Mapping für '{strip_instance(object_name)}' in config.py gefunden.")
                 return False
+            
+            logger.info(f"Suche gerade nach: {expected_label}")
                 
             # 4. Kamera nach Koordinaten fragen (holt x, y in Roboter-mm)
             coords = self.detector.get_robot_coordinates_for_object(expected_label)
@@ -182,37 +232,44 @@ class PlanExecutor:
         
         return self.robot.place(object_name, slot_name, slot_pos, object_height=obj_height)
 
-    def _handle_screw(self, screw_name: str, target_name: str) -> bool:
+    def _handle_screw(self, screw_name: str, target_slot: str) -> bool:
         """Führt den Schraubvorgang an der Position des Ziel-Objekts aus."""
-        return self.robot.screw(screw_name, target_name)
+        object_height = self._get_object_height_for_object(screw_name)
+        return self.robot.screw(screw_name, object_height, target_slot)
     
     def _handle_human_action(self, object_name:str, slot_name:str) -> bool:
-        
-        # 1. Prüfen, ob eine feste Position hinterlegt ist
-        fixed_pos = self._get_fixed_position_for_object(object_name)
-        
-        if fixed_pos is not None:
-            logger.info(f"Feste Position für '{object_name}' gefunden: {fixed_pos}")
-            # Nutze die x- und y-Koordinaten aus dem 3D-Tupel (x, y, z)
-            robot_x, robot_y = fixed_pos[0], fixed_pos[1], fixed_pos[2]
-            
+        # 0. Prüfen ob slot übergeben wurde
+        if slot_name is not None:
+            slot_pos = SLOT_POSITIONS.get(slot_name)
+            robot_x, robot_y = slot_pos[:2]
         else:
-            # 2. Keine feste Position -> Kamera-Erkennung nutzen
-            logger.info(f"Keine feste Position für '{object_name}'. Starte Kamera-Erkennung...")
+            # 1. Prüfen, ob eine feste Position hinterlegt ist
+            fixed_pos = self._get_fixed_position_for_object(object_name)
             
-        # 3. Prompt ermitteln (z.B. "blue_cover_1" -> "blue_cover" -> "blue plastic cover")
-        expected_label = self._get_prompt_for_object(object_name)
-        
-        if not expected_label:
-            logger.error(f"Kein Prompt-Mapping für '{strip_instance(object_name)}' in config.py gefunden.")
-            return False
+            if fixed_pos is not None:
+                logger.info(f"Feste Position für '{object_name}' gefunden: {fixed_pos}")
+                robot_x, robot_y = fixed_pos[0], fixed_pos[1]
+                
+            else:
+                # 2. Keine feste Position -> Kamera-Erkennung nutzen
+                logger.info(f"Keine feste Position für '{object_name}'. Starte Kamera-Erkennung...")
+                
+                # 3. Prompt ermitteln (z.B. "blue_cover_1" -> "blue_cover" -> "blue plastic cover")
+                expected_label = self._get_prompt_for_object(object_name)
             
-        # 4. Kamera nach Koordinaten fragen (holt x, y in Roboter-mm)
-        coords = self.detector.get_robot_coordinates_for_object(expected_label, center=True)
-        if coords is None:
-            return False
-        
-        robot_x, robot_y = coords
+                if not expected_label:
+                    logger.error(f"Kein Prompt-Mapping für '{strip_instance(object_name)}' in config.py gefunden.")
+                    return False
+                
+                logger.info(f"Suche gerade nach: {expected_label}")
+                
+                # 4. Kamera nach Koordinaten fragen (holt x, y in Roboter-mm)
+                coords = self.detector.get_robot_coordinates_for_object(expected_label, center=True)
+                if coords is None:
+                    return False
+            
+                robot_x, robot_y = coords
+            
         return self.robot.human_action(robot_x, robot_y)
 
     def shutdown(self):
@@ -231,29 +288,29 @@ class PlanExecutor:
 
 
 # ===============================================================================
-# HAUPTPROGRAMM (Beispielhafte Nutzung)
+# HAUPTPROGRAMM 
 # ===============================================================================
 if __name__ == "__main__":
-    executor = PlanExecutor()
+    controller = MainController()
     try:
         #steps = parse_plan(PLAN_TEXT)
         steps = load_plan_from_json(PLAN_PATH)
         logger.info(f"{len(steps)} Schritte geladen.")
         # Die Plan-Ausführung (inkl. input()-Bestätigung) läuft im Hintergrund-Thread.
         # Der Main-Thread bleibt frei für das Fenster, da cv2-Fenster nur dort laufen dürfen.
-        exec_thread = threading.Thread(target=executor.execute_plan, args=(steps,), daemon=True)
+        exec_thread = threading.Thread(target=controller.execute_plan, args=(steps,), daemon=True)
         exec_thread.start()
  
         # Blockierende Fenster-Schleife im Main-Thread
-        executor.window.run()
+        controller.window.run()
 
         # Blockierende Fenster-Schleife im Main-Thread. Endet über 'q' oder shutdown().
         logger.info("Fenster geschlossen, fahre System herunter")
-        executor.shutdown()
+        controller.shutdown()
  
     except KeyboardInterrupt:
         logger.info("Ctrl+C erkannt, fahre herunter...")
-        executor.shutdown()
+        controller.shutdown()
     except Exception as e:
         logger.error(f"Fehler bei der Planausführung: {e}", exc_info=True)
-        executor.shutdown()
+        controller.shutdown()

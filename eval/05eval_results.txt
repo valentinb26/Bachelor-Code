@@ -1,0 +1,217 @@
+ERGEBNISSE für thresholds 0.5
+{
+  "wheel_small": {
+    "gt": 50,
+    "korrekt": 9,
+    "erkannt_gesamt": 10
+  },
+  "screw_long": {
+    "gt": 17,
+    "korrekt": 2,
+    "erkannt_gesamt": 4
+  },
+  "blue_cover": {
+    "gt": 21,
+    "korrekt": 19,
+    "erkannt_gesamt": 31
+  }
+}
+
+
+bild1.jpg
+  Erkannt (roh): [('small black wheel', 0.82)]
+  wheel_small: GT=1, erkannt=1
+
+bild2.jpg
+  Erkannt (roh): [('blue large cover', 0.73)]
+  wheel_small: GT=1, erkannt=0
+  blue_cover: GT=0, erkannt=1
+
+bild3.jpg
+  Erkannt (roh): [('blue large cover', 0.69)]
+  wheel_small: GT=1, erkannt=0
+  blue_cover: GT=0, erkannt=1
+
+bild4.jpg
+  Erkannt (roh): []
+  wheel_small: GT=2, erkannt=0
+
+bild5.jpg
+  Erkannt (roh): []
+  wheel_small: GT=2, erkannt=0
+
+bild6.jpg
+  Erkannt (roh): [('blue large cover', 0.67)]
+  wheel_small: GT=3, erkannt=0
+  blue_cover: GT=0, erkannt=1
+
+bild7.jpg
+  Erkannt (roh): [('bolt', 0.59)]
+  wheel_small: GT=3, erkannt=0
+  screw_long: GT=0, erkannt=1
+
+bild8.jpg
+  Erkannt (roh): [('bolt', 0.6)]
+  wheel_small: GT=4, erkannt=0
+  screw_long: GT=0, erkannt=1
+
+bild9.jpg
+  Erkannt (roh): []
+  wheel_small: GT=4, erkannt=0
+
+bild10.jpg
+  Erkannt (roh): [('large cover', 0.58)]
+  wheel_small: GT=4, erkannt=0
+  blue_cover: GT=0, erkannt=1
+
+bild11.jpg
+  Erkannt (roh): []
+  wheel_small: GT=4, erkannt=0
+
+bild12.jpg
+  Erkannt (roh): [('blue large cover', 0.66)]
+  blue_cover: GT=1, erkannt=1
+
+bild13.jpg
+  Erkannt (roh): [('blue large cover', 0.74)]
+  blue_cover: GT=1, erkannt=1
+
+bild14.jpg
+  Erkannt (roh): [('blue large cover', 0.66)]
+  blue_cover: GT=1, erkannt=1
+
+bild15.jpg
+  Erkannt (roh): [('large cover', 0.55)]
+  blue_cover: GT=1, erkannt=1
+
+bild16.jpg
+  Erkannt (roh): [('blue large cover', 0.75)]
+  blue_cover: GT=1, erkannt=1
+
+bild17.jpg
+  Erkannt (roh): [('large cover', 0.58)]
+  blue_cover: GT=1, erkannt=1
+
+bild18.jpg
+  Erkannt (roh): [('blue large cover', 0.68)]
+  blue_cover: GT=1, erkannt=1
+
+bild19.jpg
+  Erkannt (roh): [('large', 0.56)]
+  blue_cover: GT=1, erkannt=1
+
+bild20.jpg
+  Erkannt (roh): [('large cover', 0.59)]
+  blue_cover: GT=1, erkannt=1
+
+bild21.jpg
+  Erkannt (roh): [('blue large cover', 0.65)]
+  blue_cover: GT=1, erkannt=1
+
+bild22.jpg
+  Erkannt (roh): []
+  blue_cover: GT=1, erkannt=0
+
+bild23.jpg
+  Erkannt (roh): [('blue large cover', 0.75)]
+  screw_long: GT=1, erkannt=0
+  blue_cover: GT=0, erkannt=1
+
+bild24.jpg
+  Erkannt (roh): [('bolt', 0.58), ('blue large cover', 0.74)]
+  screw_long: GT=1, erkannt=1
+  blue_cover: GT=0, erkannt=1
+
+bild25.jpg
+  Erkannt (roh): [('blue large cover', 0.72)]
+  screw_long: GT=1, erkannt=0
+  blue_cover: GT=0, erkannt=1
+
+bild26.jpg
+  Erkannt (roh): [('blue large cover', 0.75)]
+  screw_long: GT=1, erkannt=0
+  blue_cover: GT=0, erkannt=1
+
+bild27.jpg
+  Erkannt (roh): [('blue large cover', 0.73)]
+  screw_long: GT=1, erkannt=0
+  blue_cover: GT=0, erkannt=1
+
+bild28.jpg
+  Erkannt (roh): [('blue large cover', 0.75)]
+  screw_long: GT=1, erkannt=0
+  blue_cover: GT=0, erkannt=1
+
+bild29.jpg
+  Erkannt (roh): [('blue large cover', 0.75), ('small black', 0.55)]
+  wheel_small: GT=0, erkannt=1
+  screw_long: GT=1, erkannt=0
+  blue_cover: GT=0, erkannt=1
+
+bild30.jpg
+  Erkannt (roh): [('blue large cover', 0.7)]
+  screw_long: GT=1, erkannt=0
+  blue_cover: GT=0, erkannt=1
+
+bild31.jpg
+  Erkannt (roh): [('small black wheel', 0.73)]
+  wheel_small: GT=1, erkannt=1
+  blue_cover: GT=1, erkannt=0
+
+bild32.jpg
+  Erkannt (roh): [('small black wheel', 0.76), ('large cover', 0.57)]
+  wheel_small: GT=1, erkannt=1
+  blue_cover: GT=1, erkannt=1
+
+bild33.jpg
+  Erkannt (roh): [('large cover', 0.58), ('small black wheel', 0.68)]
+  wheel_small: GT=1, erkannt=1
+  blue_cover: GT=1, erkannt=1
+
+bild34.jpg
+  Erkannt (roh): [('large cover', 0.6), ('small black wheel', 0.74)]
+  wheel_small: GT=1, erkannt=1
+  screw_long: GT=1, erkannt=0
+  blue_cover: GT=1, erkannt=1
+
+bild35.jpg
+  Erkannt (roh): [('large cover', 0.57), ('small black wheel', 0.61)]
+  wheel_small: GT=2, erkannt=1
+  blue_cover: GT=1, erkannt=1
+
+bild36.jpg
+  Erkannt (roh): [('blue large cover', 0.63), ('small black wheel', 0.69), ('red bolt', 0.56)]
+  wheel_small: GT=2, erkannt=1
+  screw_long: GT=1, erkannt=1
+  blue_cover: GT=1, erkannt=1
+
+bild37.jpg
+  Erkannt (roh): [('blue large cover', 0.62), ('small black wheel', 0.75)]
+  wheel_small: GT=2, erkannt=1
+  screw_long: GT=1, erkannt=0
+  blue_cover: GT=1, erkannt=1
+
+bild38.jpg
+  Erkannt (roh): [('blue large cover', 0.67), ('small black wheel', 0.73)]
+  wheel_small: GT=3, erkannt=1
+  screw_long: GT=2, erkannt=0
+  blue_cover: GT=1, erkannt=1
+
+bild39.jpg
+  Erkannt (roh): [('blue large cover', 0.64)]
+  wheel_small: GT=4, erkannt=0
+  screw_long: GT=2, erkannt=0
+  blue_cover: GT=1, erkannt=1
+
+bild40.jpg
+  Erkannt (roh): [('blue large cover', 0.62)]
+  wheel_small: GT=4, erkannt=0
+  screw_long: GT=2, erkannt=0
+  blue_cover: GT=1, erkannt=1
+
+==================================================
+GESAMTERGEBNIS
+==================================================
+wheel_small: Recall=0.18 (9/50), Precision=0.90 (9/10)
+screw_long: Recall=0.12 (2/17), Precision=0.50 (2/4)
+blue_cover: Recall=0.90 (19/21), Precision=0.61 (19/31)
